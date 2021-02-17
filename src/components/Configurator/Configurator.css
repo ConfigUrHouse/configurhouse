@@ -1,0 +1,58 @@
+.configurator .row div .content{
+    -webkit-box-shadow: 4px 4px 5px 0px rgba(0,0,0,0.06);
+    -moz-box-shadow: 4px 4px 5px 0px rgba(0,0,0,0.06);
+    box-shadow: 4px 4px 5px 0px rgba(0,0,0,0.06);
+    border-radius: 20px;
+    background-color: #fff;
+    padding:  15px 20px;
+}
+.configurator .row .col{
+    padding: 10px;
+}
+.configurator h3, h5{
+    color: rgb(87, 87, 87);
+}
+.options{
+    color:#fff;
+    background: rgb(19,91,100);
+    background: -moz-linear-gradient(45deg, rgba(19,91,100,1) 0%, rgba(41,136,137,1) 100%);
+    background: -webkit-linear-gradient(45deg, rgba(19,91,100,1) 0%, rgba(41,136,137,1) 100%);
+    background: linear-gradient(45deg, rgba(19,91,100,1) 0%, rgba(41,136,137,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#135b64",endColorstr="#298889",GradientType=1);
+}
+.devis h6{
+    color: var(--main-green);
+    font-weight: bold;
+}
+.devis p{
+    color: rgb(87, 87, 87);
+    margin-bottom: 0;
+}
+.devis .total{
+    background-color: lightgray;
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 15px;
+    font-weight: bold;
+    color: rgb(87, 87, 87);
+
+}
+.conso p{
+    font-size: 0.8rem;
+}
+.next .content{
+    min-height: 100%;
+}
+.next Button{
+    background: rgb(19,91,100);
+    background: -moz-linear-gradient(45deg, rgba(19,91,100,1) 0%, rgba(41,136,137,1) 100%);
+    background: -webkit-linear-gradient(45deg, rgba(19,91,100,1) 0%, rgba(41,136,137,1) 100%);
+    background: linear-gradient(45deg, rgba(19,91,100,1) 0%, rgba(41,136,137,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#135b64",endColorstr="#298889",GradientType=1);
+    border: none;
+    border-radius: 15px !important;
+    padding: 10px 20px !important;
+    display: block;
+    margin: 0 auto;
+    margin-top: 50px;
+}

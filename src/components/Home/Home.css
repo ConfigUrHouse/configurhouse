@@ -1,0 +1,20 @@
+.cover-container{
+    height: 90vh;
+    background-color: var(--main-lightgreen);
+}
+.cover-container .title{
+    margin-top: 14%;
+}
+.wave.rotate{
+    transform: rotate(180deg);
+    margin-top: -1px;
+}
+.footer li{
+    list-style-type: none;
+    margin-top: 5px;
+}
+.footer hr{
+    width: 30%;
+    background-color: var(--main-green);
+    height: 1px;
+}
