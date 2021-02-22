@@ -1,21 +1,21 @@
-.pro-sidebar{
-    height: 100vh !important;
-    color: var(--main-green) !important;
+.pro-sidebar {
+  height: 100vh !important;
+  color: var(--main-green) !important;
 }
-.pro-sidebar *{
-    background-color: #fff;
+.pro-sidebar * {
+  background-color: #fff;
 }
-.pro-sidebar .title{
-    font-weight: bold;
-    color: #000;
-    margin: 30px;
+.pro-sidebar .title {
+  font-weight: bold;
+  color: #000;
+  margin: 30px;
 }
-.pro-sidebar li{
-    list-style-type: none !important;
+.pro-sidebar li {
+  list-style-type: none !important;
 }
-.pro-sidebar .title span{
-    color: var(--main-green) !important;
+.pro-sidebar .title span {
+  color: var(--main-green) !important;
 }
-.pro-inner-item:focus{
-    outline: none !important;
+.pro-inner-item:focus {
+  outline: none !important;
 }

@@ -1,58 +1,101 @@
-.configurator .row div .content{
-    -webkit-box-shadow: 4px 4px 5px 0px rgba(0,0,0,0.06);
-    -moz-box-shadow: 4px 4px 5px 0px rgba(0,0,0,0.06);
-    box-shadow: 4px 4px 5px 0px rgba(0,0,0,0.06);
-    border-radius: 20px;
-    background-color: #fff;
-    padding:  15px 20px;
+.configurator .row div .content {
+  -webkit-box-shadow: 4px 4px 5px 0px rgba(0, 0, 0, 0.06);
+  -moz-box-shadow: 4px 4px 5px 0px rgba(0, 0, 0, 0.06);
+  box-shadow: 4px 4px 5px 0px rgba(0, 0, 0, 0.06);
+  border-radius: 20px;
+  background-color: #fff;
+  padding: 15px 20px;
+  min-height: 100%;
 }
-.configurator .row .col{
-    padding: 10px;
+.configurator .row .col {
+  padding: 10px;
 }
-.configurator h3, h5{
-    color: rgb(87, 87, 87);
+.configurator h3,
+.configurator h5,
+.configurator h4 {
+  color: rgb(87, 87, 87);
 }
-.options{
-    color:#fff;
-    background: rgb(19,91,100);
-    background: -moz-linear-gradient(45deg, rgba(19,91,100,1) 0%, rgba(41,136,137,1) 100%);
-    background: -webkit-linear-gradient(45deg, rgba(19,91,100,1) 0%, rgba(41,136,137,1) 100%);
-    background: linear-gradient(45deg, rgba(19,91,100,1) 0%, rgba(41,136,137,1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#135b64",endColorstr="#298889",GradientType=1);
+.options {
+  color: #fff;
+  background: rgb(19, 91, 100);
+  background: -moz-linear-gradient(
+    45deg,
+    rgba(19, 91, 100, 1) 0%,
+    rgba(41, 136, 137, 1) 100%
+  );
+  background: -webkit-linear-gradient(
+    45deg,
+    rgba(19, 91, 100, 1) 0%,
+    rgba(41, 136, 137, 1) 100%
+  );
+  background: linear-gradient(
+    45deg,
+    rgba(19, 91, 100, 1) 0%,
+    rgba(41, 136, 137, 1) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#135b64",endColorstr="#298889",GradientType=1);
 }
-.devis h6{
-    color: var(--main-green);
-    font-weight: bold;
+.devis h6 {
+  color: var(--main-green);
+  font-weight: bold;
 }
-.devis p{
-    color: rgb(87, 87, 87);
-    margin-bottom: 0;
+.devis p {
+  color: rgb(87, 87, 87);
+  margin-bottom: 0;
 }
-.devis .total{
-    background-color: lightgray;
-    display: inline-block;
-    padding: 8px 20px;
-    border-radius: 15px;
-    font-weight: bold;
-    color: rgb(87, 87, 87);
+.devis .total {
+  background-color: lightgray;
+  display: inline-block;
+  padding: 8px 20px;
+  border-radius: 15px;
+  font-weight: bold;
+  color: rgb(87, 87, 87);
+}
+.conso p {
+  font-size: 0.8rem;
+}
 
+.next Button {
+  background: rgb(19, 91, 100);
+  background: -moz-linear-gradient(
+    45deg,
+    rgba(19, 91, 100, 1) 0%,
+    rgba(41, 136, 137, 1) 100%
+  );
+  background: -webkit-linear-gradient(
+    45deg,
+    rgba(19, 91, 100, 1) 0%,
+    rgba(41, 136, 137, 1) 100%
+  );
+  background: linear-gradient(
+    45deg,
+    rgba(19, 91, 100, 1) 0%,
+    rgba(41, 136, 137, 1) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#135b64",endColorstr="#298889",GradientType=1);
+  border: none;
+  border-radius: 15px !important;
+  padding: 10px 20px !important;
+  display: block;
+  margin: 0 auto;
+  margin-top: 50px;
 }
-.conso p{
-    font-size: 0.8rem;
+
+.models-choice .col-md-6 {
+  padding: 30px;
 }
-.next .content{
-    min-height: 100%;
+.models-choice .model {
+  cursor: pointer;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 20px;
+  -webkit-box-shadow: 4px 4px 5px 0px rgba(0, 0, 0, 0.06);
+  -moz-box-shadow: 4px 4px 5px 0px rgba(0, 0, 0, 0.06);
+  box-shadow: 4px 4px 5px 0px rgba(0, 0, 0, 0.06);
 }
-.next Button{
-    background: rgb(19,91,100);
-    background: -moz-linear-gradient(45deg, rgba(19,91,100,1) 0%, rgba(41,136,137,1) 100%);
-    background: -webkit-linear-gradient(45deg, rgba(19,91,100,1) 0%, rgba(41,136,137,1) 100%);
-    background: linear-gradient(45deg, rgba(19,91,100,1) 0%, rgba(41,136,137,1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#135b64",endColorstr="#298889",GradientType=1);
-    border: none;
-    border-radius: 15px !important;
-    padding: 10px 20px !important;
-    display: block;
-    margin: 0 auto;
-    margin-top: 50px;
+.models-choice .model.selected {
+  border: 3px solid var(--main-green);
+}
+.models-choice .model h4 {
+  text-align: center;
 }
