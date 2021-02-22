@@ -43,7 +43,7 @@ function Home() {
               adipisci facilis. Omnis numquam at possimus incidunt atque
               quisquam quos ipsam nesciunt magnam alias.
             </h5>
-            <div className="row justify-content-center mt-5">
+            <div className="row justify-content-center m-0 mt-5">
               <div className="col-md-2">
                 <div className="btn btn-primary w-100 btn-green">
                   Let's go !
@@ -71,7 +71,7 @@ function Home() {
         </svg>
       </ScrollAnimation>
       <ScrollAnimation animateIn="fadeIn">
-        <Row className="justify-content-md-center mt-5 mb-5">
+        <Row className="justify-content-md-center m-0 mt-5 mb-5">
           <Col md={4}>
             <h1 className="font-weight-bold mt-3">
               Visualiser en direct vos configurations en 3D et 2D
@@ -100,7 +100,7 @@ function Home() {
             fill="#a8cfcf"
           ></path>
         </svg>
-        <Row className="justify-content-md-center pt-5 pb-5 bg-lightgreen">
+        <Row className="justify-content-md-center m-0 pt-5 pb-5 bg-lightgreen">
           <Col md={5}>
             <img src={home_devis} alt="Home Devis" className="w-100" />
           </Col>
@@ -129,7 +129,7 @@ function Home() {
         </svg>
       </ScrollAnimation>
       <ScrollAnimation animateIn="fadeIn">
-        <Row className="justify-content-md-center mt-5 mb-5">
+        <Row className="justify-content-md-center m-0 mt-5 mb-5">
           <Col md={5}>
             <img src={home_conso} alt="Home conso" className="w-100" />
           </Col>
@@ -146,7 +146,7 @@ function Home() {
         </Row>
       </ScrollAnimation>
       <div className="footer bg-lightgreen p-5">
-        <Row className="justify-content-md-center text-green text-center">
+        <Row className="justify-content-md-center text-green text-center m-0">
           <Col>
             <h4>
               <FontAwesomeIcon icon={faEnvelopeOpenText} /> Nous contacter
