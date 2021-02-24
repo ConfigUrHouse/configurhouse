@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.34",
+    "@fortawesome/free-solid-svg-icons": "^5.15.2",
+    "@fortawesome/react-fontawesome": "^0.1.14",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -10,8 +13,13 @@
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "bootstrap": "^4.6.0",
     "react": "^17.0.1",
+    "react-animate-on-scroll": "^2.1.5",
+    "react-bootstrap": "^1.4.3",
     "react-dom": "^17.0.1",
+    "react-pro-sidebar": "^0.6.0",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.2",
     "typescript": "^4.1.2",
     "web-vitals": "^1.0.1"
@@ -39,5 +47,12 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "typeRoots": [
+    "../node_modules/@types",
+    "../@types"
+  ],
+  "devDependencies": {
+    "@types/react-router-dom": "^5.1.7"
   }
 }

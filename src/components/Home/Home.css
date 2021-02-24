@@ -1,0 +1,43 @@
+.cover-container {
+  height: 90vh;
+  position: relative;
+  background-color: var(--main-lightgreen);
+}
+.cover-container .title {
+  margin-top: 14%;
+}
+.cover-container-content {
+  z-index: 3;
+}
+.wave.rotate {
+  transform: rotate(180deg);
+  margin-top: -1px;
+}
+.footer li {
+  list-style-type: none;
+  margin-top: 5px;
+}
+.footer hr {
+  width: 30%;
+  background-color: var(--main-green);
+  height: 1px;
+}
+video {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  width: 100%;
+  top: 0;
+}
+.overlay {
+  z-index: 2;
+  background-color: var(--main-lightgreen);
+  opacity: 0.8;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+}

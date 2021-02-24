@@ -1,38 +1,145 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap");
+
+* {
+  font-family: Roboto;
+  box-sizing: border-box;
+}
 .App {
+  display: flex;
+}
+main {
+  margin-left: 270px;
+}
+:root {
+  --main-green: #1a7c7d;
+  --main-lightgreen: #a8cfcf;
+}
+a {
+  text-decoration: none !important;
+  color: var(--main-green) !important;
+}
+.text-green {
+  color: var(--main-green) !important;
+}
+.bg-lightgreen {
+  background-color: var(--main-lightgreen) !important;
+}
+table thead {
+  background-color: var(--main-green) !important;
+  color: #fff;
+}
+.table-striped tbody tr:nth-of-type(odd),
+.table .sub {
+  background-color: var(--main-lightgreen) !important;
+}
+.table .sub {
+  font-weight: bold;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.circle1 {
+  background-color: #ebebeb;
+  width: 800px;
+  height: 800px;
+  position: fixed;
+  z-index: -1;
+  border-radius: 400px;
+  top: -400px;
+  left: 0;
+}
+.circle2 {
+  background-color: #ebebeb;
+  width: 1000px;
+  height: 1000px;
+  position: fixed;
+  z-index: -1;
+  border-radius: 500px;
+  right: -500px;
+  bottom: -500px;
+}
+.btn {
+  border-radius: 60px !important;
+  padding: 10px !important;
+  transition: 0.3s;
+}
+.btn-green {
+  background-color: var(--main-green) !important;
+  border: 2px solid var(--main-green) !important;
+}
+.btn-green:hover {
+  border: 2px solid var(--main-green) !important;
+  background: transparent !important;
+  color: var(--main-green) !important;
+}
+.btn-outline-green {
+  border: 2px solid var(--main-green) !important;
+  background: transparent !important;
+  color: var(--main-green) !important;
+}
+.btn-outline-green:hover {
+  background-color: var(--main-green) !important;
+  color: #fff !important;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.fadeIn {
+  animation: fadeIn ease 20s;
+  -webkit-animation: fadeIn ease 20s;
+  -moz-animation: fadeIn ease 20s;
+  -o-animation: fadeIn ease 20s;
+  -ms-animation: fadeIn ease 20s;
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translate3D(0, -5%, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3D(0, 0, 0);
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+@-moz-keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translate3D(0, -5%, 0);
   }
-  to {
-    transform: rotate(360deg);
+  100% {
+    opacity: 1;
+    transform: translate3D(0, 0, 0);
+  }
+}
+
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translate3D(0, -5%, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3D(0, 0, 0);
+  }
+}
+
+@-o-keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translate3D(0, -5%, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3D(0, 0, 0);
+  }
+}
+
+@-ms-keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translate3D(0, -5%, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3D(0, 0, 0);
   }
 }
