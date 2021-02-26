@@ -3,9 +3,11 @@ import "./App.css";
 import Home from "./components/Home/Home";
 import Sidebar from "./components/Sidebar/Sidebar";
 import Configurator from "./components/Configurator/Configurator";
+import Policies from "./components/Policies/Policies";
 
 import { Container, Row, Col } from "react-bootstrap";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Mentions from "./components/Mentions/Mentions";
 
 function App() {
   return (
@@ -19,6 +21,12 @@ function App() {
           </Route>
           <Route path="/contact">
             <h1>Test</h1>
+          </Route>
+          <Route path="/policies">
+            <Policies />
+          </Route>
+          <Route path="/mentions">
+            <Mentions />
           </Route>
           <Route path="/">
             <Home />
