@@ -1,16 +1,18 @@
-export interface UsersProps {
-    
-}
-
 export interface UsersState {
-    users: User[]
+  users: User[];
+  firstName: string;
+  lastName: string;
+  id: string;
+  type: string;
+  currentPage: number;
+  totalPages: number;
 }
 
 export interface User {
-    id: number,
-    firstname: string,
-    lastname: string,
-    email: string,
-    password: string,
-    active: number
+  id: number;
+  firstname: string;
+  lastname: string;
+  email: string;
+  password: string;
+  active: number;
 }
