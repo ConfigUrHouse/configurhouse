@@ -2,33 +2,91 @@ import React from "react";
 import { InputGroup, FormControl,Row,Col,Button } from "react-bootstrap";
 import "./Contact.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser,faAt, faComment,faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { faUser,faAt, faComment,faPaperPlane, faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
+import ReactDOMServer from 'react-dom/server';
+import { Formik } from "formik";
+import { Form, Pagination, Table } from "react-bootstrap";
+import { FormValues } from "./Models";
+
+import * as Yup from "yup";
 
 class Contact extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
-   this.state = {
+    this.state = {
        firstname:"",
        lastname:"",
         email:"",
         subject:"",
-        content: ""
+        content: "",
+        success: 0
    }
    this.handleChange = this.handleChange.bind(this);
    this.sendEmail = this.sendEmail.bind(this);
+
   }
+  schema = Yup.object().shape({
+    firstname: Yup.string().min(2, "Trop court !").required("Le prénom est requis"),
+    lastname: Yup.string().min(2, "Trop court !"),
+    content: Yup.string().min(10, "Trop court !"),
+    subject: Yup.string().min(5, "Trop court !"),
+    email: Yup.string().email("L'email doit avoir un format valide"),
+  });
+  initialValues: FormValues = {
+    firstname: "",
+    lastname: "",
+    content:"",
+    subject:"",
+    email:""
+  };
   handleChange(event : any) {
     let nam = event.target.name;
     let val = event.target.value;
     this.setState({[nam]: val});
   }
-  sendEmail(){
-    fetch(process.env.REACT_APP_API_URL+'utils/sendEmail', {
+  sendEmail(values: FormValues){
+    fetch('http://localhost:7000/utils/sendEmail', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(this.state)
-    }).then(response => console.log(response.json()));
+        body: JSON.stringify({
+            email : values.email,
+            content : this.htmlMail(values.firstname,values.lastname,values.email,values.subject,values.content)
+        })
+    }).then(
+        (result) => {
+            this.setState({success: 1})
+        },
+        // Remarque : il est important de traiter les erreurs ici
+        // au lieu d'utiliser un bloc catch(), pour ne pas passer à la trappe
+        // des exceptions provenant de réels bugs du composant.
+        (error) => {
+            this.setState({success: -1})
+        });
 
+  }
+
+  htmlMail(firstname :string,lastname :string,email :string,subject :string,content :string){
+      return ReactDOMServer.renderToString(
+        <div>
+            <h2>
+                ConfigUr
+                <br />
+                <span style={{color: "#1a7c7d"}}>house.</span>
+            </h2>
+            <p>Un utilisateur a envoyé un email avec le formulaire de contact de l'application ConfigUrHouse</p>
+            <h4 style={{color: "#1a7c7d"}}>Informations du contact :</h4>
+
+                <ul>
+                    <li>Nom/Prénom : {firstname} {lastname}</li>
+                    <li>Email : {email}</li>
+                    <li>Sujet : {subject}</li>
+                </ul>                    
+
+
+            <h4 style={{color: "#1a7c7d"}}>Contenu du message :</h4>
+            <p>{content}</p>
+        </div>
+      )
   }
 
   render() {
@@ -38,10 +96,30 @@ class Contact extends React.Component<any, any> {
         <div className="circle2"></div>
         <div className="p-5 form w-75 mx-auto">
             <h3 className="mb-2"><FontAwesomeIcon className="mr-2" icon={faPaperPlane}/> Nous contacter</h3>
-            <p className="mb-5">
+            <p className="mb-4">
                 Vous pouvez nous contacter à travers ce formulaire dans le cas d'un problème, d'une question ou de toute autres demandes. Nous nous engageons à vous répondre au plus vite.
             </p>
-            <Row>
+            {
+                this.state.success == 1 ? <div className="alert alert-success mb-4"><FontAwesomeIcon icon={faCheck}  /> Email envoyé avec succès, nous vous reponderons au plus vite.</div>
+                : this.state.success == -1 ? <div className="alert alert-danger m-4"><FontAwesomeIcon icon={faTimes}  /> Une erreur est survenue lors de l'envoi du mail, veuillez réessayer plus tard.</div>
+                :''
+            }
+            <Formik
+          validationSchema={this.schema}
+          onSubmit={this.sendEmail}
+          initialValues={this.initialValues}
+        >
+          {({
+            handleSubmit,
+            handleChange,
+            handleBlur,
+            values,
+            touched,
+            isValid,
+            errors,
+          }) => (
+        <Form noValidate onSubmit={handleSubmit}>
+        <Row>
                 <Col md={6}>
                     <InputGroup className="mb-3">
                         <InputGroup.Prepend>
@@ -50,10 +128,16 @@ class Contact extends React.Component<any, any> {
                         <FormControl
                         placeholder="Prénom"
                         name="firstname"
-                        aria-describedby="FirstnameIcon"
-                        value={this.state.firstname} 
-                        onChange={this.handleChange}
+                        value={values.firstname}
+                  onChange={(e) => {
+                    this.setState({ formValues: values });
+                    handleChange(e);
+                  }}
+                  isInvalid={!!errors.firstname}
                         />
+                         <Form.Control.Feedback type="invalid">
+                  {errors.firstname}
+                </Form.Control.Feedback>
                     </InputGroup>
                 </Col>
                 <Col md={6}>
@@ -62,12 +146,18 @@ class Contact extends React.Component<any, any> {
                         <InputGroup.Text id="LastnameIcon"><FontAwesomeIcon icon={faUser} /></InputGroup.Text>
                         </InputGroup.Prepend>
                         <FormControl
-                        placeholder="Nom de famille"
-                        name="lastname"
-                        aria-describedby="LastnameIcon"
-                        value={this.state.lastname} 
-                        onChange={this.handleChange}
+                             placeholder="Nom de famille"
+                             name="lastname"
+                             value={values.lastname}
+                       onChange={(e) => {
+                         this.setState({ formValues: values });
+                         handleChange(e);
+                       }}
+                       isInvalid={!!errors.lastname}
                         />
+                         <Form.Control.Feedback type="invalid">
+                  {errors.lastname}
+                </Form.Control.Feedback>
                     </InputGroup>
                 </Col>
             </Row>
@@ -77,29 +167,58 @@ class Contact extends React.Component<any, any> {
                         <InputGroup.Text id="MailIcon"><FontAwesomeIcon icon={faAt} /></InputGroup.Text>
                         </InputGroup.Prepend>
                         <FormControl
-                        placeholder="Adresse email"
-                        name="email"
-                        aria-describedby="MailIcon"
-                        value={this.state.email} 
-                        onChange={this.handleChange}
+                           placeholder="Adresse email"
+                           name="email"
+                           value={values.email}
+                     onChange={(e) => {
+                       this.setState({ formValues: values });
+                       handleChange(e);
+                     }}
+                     isInvalid={!!errors.email}
                         />
+                         <Form.Control.Feedback type="invalid">
+                  {errors.email}
+                </Form.Control.Feedback>
             </InputGroup>
             <InputGroup className="mb-3">
                         <InputGroup.Prepend>
                         <InputGroup.Text id="SubjectIcon"><FontAwesomeIcon icon={faComment} /></InputGroup.Text>
                         </InputGroup.Prepend>
                         <FormControl
-                        placeholder="Sujet"
-                        name="subject"
-                        aria-describedby="SubjectIcon"
-                        value={this.state.subject} 
-                        onChange={this.handleChange}
+                           placeholder="Sujet"
+                           name="subject"
+                           value={values.subject}
+                     onChange={(e) => {
+                       this.setState({ formValues: values });
+                       handleChange(e);
+                     }}
+                     isInvalid={!!errors.subject}
                         />
+                         <Form.Control.Feedback type="invalid">
+                  {errors.subject}
+                </Form.Control.Feedback>
             </InputGroup>
 
 
-            <FormControl as="textarea" name="content" placeholder="Votre message"  value={this.state.content} onChange={this.handleChange}/>    
-            <Button className="mx-auto mt-4 d-block pl-4 pr-4" onClick={this.sendEmail}>ENVOYER LE MESSAGE <FontAwesomeIcon className="ml-2" icon={faPaperPlane}/></Button>
+            <FormControl as="textarea" placeholder="Votre message"  
+              name="content"
+              value={values.content}
+        onChange={(e) => {
+          this.setState({ formValues: values });
+          handleChange(e);
+        }}
+        isInvalid={!!errors.content}
+            />    
+            <Form.Control.Feedback type="invalid">
+                  {errors.content}
+                </Form.Control.Feedback>            
+              <Button variant="primary" className="d-block mx-auto mt-3 p-3" type="submit">
+              ENVOYER LE MESSAGE <FontAwesomeIcon className="ml-2" icon={faPaperPlane}/>
+              </Button>
+            </Form>
+          )}
+        </Formik>
+       
         </div>
       </main>
     );

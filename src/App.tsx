@@ -9,6 +9,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { UsersList } from './components/UsersList/UsersList';
 import Mentions from './components/Mentions/Mentions';
+import Contact from './components/Contact/Contact';
 
 function App() {
   return (
@@ -24,7 +25,7 @@ function App() {
             <Configurator />
           </Route>
           <Route path="/contact">
-            <h1>Test</h1>
+            <Contact />
           </Route>
           <Route path="/policies">
             <Policies />

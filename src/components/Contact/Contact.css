@@ -9,3 +9,6 @@
     color: rgb(87, 87, 87);
 
 }
+main{
+    min-height: 100vh;
+}
