@@ -1,9 +1,6 @@
 export interface UsersState {
+  formValues: FormValues;
   users: User[];
-  firstName: string;
-  lastName: string;
-  id: string;
-  type: string;
   currentPage: number;
   totalPages: number;
 }
@@ -13,6 +10,11 @@ export interface User {
   firstname: string;
   lastname: string;
   email: string;
-  password: string;
   active: number;
+}
+
+export interface FormValues {
+  firstName: string;
+  lastName: string;
+  type: string;
 }

@@ -1,11 +1,16 @@
 import React from "react";
+import { Formik } from "formik";
+import * as Yup from "yup";
 import { Button, Form, Pagination, Table } from "react-bootstrap";
-import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCheck,
+  faTimes,
+  faPen,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PaginatedResponse } from "../../utils/pagination";
-import { User, UsersState } from "./Models";
-
-const defaultType = "Tous";
+import { User, UsersState, FormValues } from "./Models";
 
 export class UsersList extends React.Component<{}, UsersState> {
   constructor(props: {}) {
@@ -13,162 +18,156 @@ export class UsersList extends React.Component<{}, UsersState> {
     this.fetchUsers = this.fetchUsers.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.submitSearch = this.submitSearch.bind(this);
 
     this.state = {
+      formValues: this.initialValues,
       users: [],
-      firstName: "",
-      lastName: "",
-      id: "",
-      type: defaultType,
       currentPage: 0,
       totalPages: 0,
     };
   }
 
+  defaultType = "Tous";
+
+  schema = Yup.object().shape({
+    firstName: Yup.string().min(2, "Trop court !"),
+    lastName: Yup.string(),
+    type: Yup.string().oneOf(
+      ["Utilisateur", "Administrateur", "Tous"],
+      "Le type doit être Utilisateur ou Administrateur ou Tous"
+    ),
+  });
+
+  initialValues: FormValues = {
+    firstName: "",
+    lastName: "",
+    type: this.defaultType,
+  };
+
   componentDidMount() {
-    this.fetchUsers();
+    this.fetchUsers(this.initialValues);
   }
 
-  fetchUsers() {
-    if (this.state.id) {
-      fetch(`${process.env.REACT_APP_API_URL}user/${this.state.id}`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      }).then(async (response) => {
-        this.setState({ users: [(await response.json()) as User] });
-      });
-    } else {
-      const queryParams = [
-        `${this.state.firstName ? `firstname=${this.state.firstName}` : ""}`,
-        `${this.state.lastName ? `lastname=${this.state.lastName}` : ""}`,
-        `${this.state.type !== defaultType ? `type=${this.state.type}` : ""}`,
-        `page=${this.state.currentPage}`,
-        `size=10`,
-      ]
-        .filter((param) => {
-          if (param) return param;
-        })
-        .join("&");
-      fetch(`${process.env.REACT_APP_API_URL}user?${queryParams}`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
+  fetchUsers(values: FormValues) {
+    const queryParams = [
+      `${values.firstName ? `firstname=${values.firstName}` : ""}`,
+      `${values.lastName ? `lastname=${values.lastName}` : ""}`,
+      `${values.type !== this.defaultType ? `type=${values.type}` : ""}`,
+      `page=${this.state.currentPage}`,
+      `size=10`,
+    ]
+      .filter((param) => {
+        if (param) return param;
       })
-        .then(async (response) => {
-          const data = (await response.json()) as PaginatedResponse<User>;
-          this.setState({
-            users: data.items,
-            currentPage: data.currentPage,
-            totalPages: data.totalPages,
-          });
-        })
-        .catch((_response) => {
-          this.setState({ users: [] });
+      .join("&");
+    fetch(`${process.env.REACT_APP_API_URL}user?${queryParams}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then(async (response) => {
+        const data = (await response.json()) as PaginatedResponse<User>;
+        this.setState({
+          users: data.items,
+          currentPage: data.currentPage,
+          totalPages: data.totalPages,
         });
-    }
+      })
+      .catch((_response) => {
+        this.setState({ users: [] });
+      });
   }
 
   handleEdit() {}
 
   handleDelete() {}
 
-  handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const target: EventTarget & HTMLInputElement = event.target;
-    const value: string = target.value;
-    const name: string = target.name;
-    switch (name) {
-      case "firstname":
-        this.setState({
-          firstName: value,
-        });
-        break;
-      case "lastname":
-        this.setState({
-          lastName: value,
-        });
-        break;
-      case "id":
-        this.setState({
-          id: value,
-        });
-        break;
-      case "type":
-        this.setState({
-          type: value,
-        });
-        break;
-      default:
-        throw new Error("incorrect value");
-    }
-  }
-
   handlePageChange(event: React.MouseEvent, value: number) {
     this.setState(
       {
         currentPage: value,
       },
-      this.fetchUsers
+      () => {
+        this.fetchUsers(this.state.formValues);
+      }
     );
-  }
-
-  submitSearch(event: React.FormEvent) {
-    event.preventDefault();
-    this.fetchUsers();
   }
 
   render() {
     return (
       <main className="users">
-        <Form>
-          <Form.Group controlId="formSearchId">
-            <Form.Label>ID</Form.Label>
-            <Form.Control
-              type="number"
-              min={0}
-              placeholder="Entrez un ID"
-              name="id"
-              value={this.state.id}
-              onChange={this.handleInputChange}
-            />
-          </Form.Group>
-          <Form.Group controlId="formSearchFirstName">
-            <Form.Label>Prénom</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Entrez un prénom"
-              name="firstname"
-              value={this.state.firstName}
-              onChange={this.handleInputChange}
-            />
-          </Form.Group>
-          <Form.Group controlId="formSearchLastName">
-            <Form.Label>Nom</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Entrez un nom"
-              name="lastname"
-              value={this.state.lastName}
-              onChange={this.handleInputChange}
-            />
-          </Form.Group>
-          <Form.Group controlId="formSearchType">
-            <Form.Label>Type d'utilisateur</Form.Label>
-            <Form.Control
-              as="select"
-              name="type"
-              value={this.state.type}
-              onChange={this.handleInputChange}
-            >
-              <option>Tous</option>
-              <option>Utilisateur</option>
-              <option>Administrateur</option>
-            </Form.Control>
-          </Form.Group>
-          <Button variant="primary" onClick={this.submitSearch} type="submit">
-            Rechercher
-          </Button>
-        </Form>
+        <Formik
+          validationSchema={this.schema}
+          onSubmit={this.fetchUsers}
+          initialValues={this.initialValues}
+        >
+          {({
+            handleSubmit,
+            handleChange,
+            handleBlur,
+            values,
+            touched,
+            isValid,
+            errors,
+          }) => (
+            <Form noValidate onSubmit={handleSubmit}>
+              <Form.Group>
+                <Form.Label>Prénom</Form.Label>
+                <Form.Control
+                  id="firstName"
+                  type="text"
+                  placeholder="Entrez un prénom"
+                  value={values.firstName}
+                  onChange={(e) => {
+                    this.setState({ formValues: values });
+                    handleChange(e);
+                  }}
+                  isInvalid={!!errors.firstName}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.firstName}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Nom</Form.Label>
+                <Form.Control
+                  id="lastName"
+                  type="text"
+                  placeholder="Entrez un nom"
+                  value={values.lastName}
+                  onChange={(e) => {
+                    this.setState({ formValues: values });
+                    handleChange(e);
+                  }}
+                  isInvalid={!!errors.lastName}
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Type d'utilisateur</Form.Label>
+                <Form.Control
+                  id="type"
+                  as="select"
+                  name="type"
+                  value={values.type}
+                  onChange={(e) => {
+                    this.setState({ formValues: values });
+                    handleChange(e);
+                  }}
+                  isInvalid={!!errors.type}
+                >
+                  <option>Tous</option>
+                  <option>Utilisateur</option>
+                  <option>Administrateur</option>
+                </Form.Control>
+                <Form.Control.Feedback type="invalid">
+                  {errors.type}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Button variant="primary" type="submit">
+                Rechercher
+              </Button>
+            </Form>
+          )}
+        </Formik>
         <Pagination>
           <Pagination.First
             disabled={this.state.currentPage === 0}
@@ -213,7 +212,12 @@ export class UsersList extends React.Component<{}, UsersState> {
                   <td>{user.firstname}</td>
                   <td>{user.lastname}</td>
                   <td>{user.email}</td>
-                  <td>{user.active ? "Oui" : "Non"}</td>
+                  <td>
+                    <FontAwesomeIcon
+                      icon={user.active ? faCheck : faTimes}
+                      color={user.active ? "green" : "red"}
+                    />
+                  </td>
                   <td>
                     <FontAwesomeIcon icon={faPen} onClick={this.handleEdit} />
                     <FontAwesomeIcon
