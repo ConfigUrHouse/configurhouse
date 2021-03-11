@@ -4,7 +4,7 @@ import home_3D from "../../assets/images/home_3D.png";
 import home_conso from "../../assets/images/home_conso.png";
 import home_video from "../../assets/images/home_video.mp4";
 import "./Home.css";
-
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBuilding,
@@ -184,16 +184,13 @@ function Home() {
             </h4>
             <ul className="mt-3 p-0">
               <hr />
-              <li>
+              <Link to="/mentions"><li>
                 <FontAwesomeIcon icon={faFileContract} /> Mentions légales
-              </li>
-              <li>
+              </li></Link>
+              <Link to="/policies"><li>
                 <FontAwesomeIcon icon={faUserShield} /> Politique de
                 confidentialité
-              </li>
-              <li>
-                <FontAwesomeIcon icon={faFileSignature} /> CGV
-              </li>
+              </li></Link>
             </ul>
           </Col>
         </Row>
