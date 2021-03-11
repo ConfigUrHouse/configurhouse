@@ -1,0 +1,16 @@
+.mentions{
+    -webkit-box-shadow: 4px 4px 5px 0px rgba(0, 0, 0, 0.06);
+    -moz-box-shadow: 4px 4px 5px 0px rgba(0, 0, 0, 0.06);
+    box-shadow: 4px 4px 5px 0px rgba(0, 0, 0, 0.06);
+    border-radius: 20px;
+    width: 95%;
+    margin: 0 auto;    
+    background-color: #fff;
+}
+.mentions h5,.mentions h4{
+    color: var(--main-green)
+}
+
+main{
+    background-color: #f0f0f0;
+}
