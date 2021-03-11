@@ -16,5 +16,5 @@ export interface User {
 export interface FormValues {
   firstName: string;
   lastName: string;
-  type: string;
+  role: string;
 }

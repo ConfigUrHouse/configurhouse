@@ -27,21 +27,21 @@ export class UsersList extends React.Component<{}, UsersState> {
     };
   }
 
-  defaultType = "Tous";
+  defaultRole = "Tous";
 
   schema = Yup.object().shape({
     firstName: Yup.string().min(2, "Trop court !"),
     lastName: Yup.string(),
-    type: Yup.string().oneOf(
+    role: Yup.string().oneOf(
       ["Utilisateur", "Administrateur", "Tous"],
-      "Le type doit être Utilisateur ou Administrateur ou Tous"
+      "Le rôle doit être Utilisateur ou Administrateur ou Tous"
     ),
   });
 
   initialValues: FormValues = {
     firstName: "",
     lastName: "",
-    type: this.defaultType,
+    role: this.defaultRole,
   };
 
   componentDidMount() {
@@ -49,10 +49,13 @@ export class UsersList extends React.Component<{}, UsersState> {
   }
 
   fetchUsers(values: FormValues) {
+    const firstNameParam = `firstname=${values.firstName}`;
+    const lastNameParam = `lastname=${values.lastName}`;
+    const typeParam = `type=${values.role}`;
     const queryParams = [
-      `${values.firstName ? `firstname=${values.firstName}` : ""}`,
-      `${values.lastName ? `lastname=${values.lastName}` : ""}`,
-      `${values.type !== this.defaultType ? `type=${values.type}` : ""}`,
+      `${values.firstName ? firstNameParam : ""}`,
+      `${values.lastName ?  lastNameParam : ""}`,
+      `${values.role !== this.defaultRole ? typeParam : ""}`,
       `page=${this.state.currentPage}`,
       `size=10`,
     ]
@@ -77,9 +80,13 @@ export class UsersList extends React.Component<{}, UsersState> {
       });
   }
 
-  handleEdit() {}
+  handleEdit() {
+    console.log("Edit");
+  }
 
-  handleDelete() {}
+  handleDelete() {
+    console.log("Delete");
+  }
 
   handlePageChange(event: React.MouseEvent, value: number) {
     this.setState(
@@ -142,24 +149,23 @@ export class UsersList extends React.Component<{}, UsersState> {
                 />
               </Form.Group>
               <Form.Group>
-                <Form.Label>Type d'utilisateur</Form.Label>
+                <Form.Label>Rôle</Form.Label>
                 <Form.Control
                   id="type"
                   as="select"
-                  name="type"
-                  value={values.type}
+                  value={values.role}
                   onChange={(e) => {
                     this.setState({ formValues: values });
                     handleChange(e);
                   }}
-                  isInvalid={!!errors.type}
+                  isInvalid={!!errors.role}
                 >
                   <option>Tous</option>
                   <option>Utilisateur</option>
                   <option>Administrateur</option>
                 </Form.Control>
                 <Form.Control.Feedback type="invalid">
-                  {errors.type}
+                  {errors.role}
                 </Form.Control.Feedback>
               </Form.Group>
               <Button variant="primary" type="submit">
