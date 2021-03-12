@@ -37,6 +37,12 @@ function App() {
           <Route path="/mentions">
             <Mentions />
           </Route>
+          <Route path="/policies">
+            <Policies />
+          </Route>
+          <Route path="/mentions">
+            <Mentions />
+          </Route>
           <Route path="/">
             <Home />
           </Route>
