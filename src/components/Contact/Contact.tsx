@@ -44,6 +44,7 @@ class Contact extends React.Component<any, any> {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             email : values.email,
+            subject: 'Formulaire de contact test',
             content : this.htmlMail(values.firstname,values.lastname,values.email,values.subject,values.content)
         })
     }).then(

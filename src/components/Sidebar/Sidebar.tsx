@@ -9,6 +9,7 @@ import {
   faAddressBook,
   faBars,
   faSignOutAlt,
+  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -47,12 +48,12 @@ function Sidebar() {
         </MenuItem>
       </SidebarContent>
       <SidebarFooter>
-        <Menu iconShape="square">
+      <Link to="/account"><Menu iconShape="square">
           <MenuItem>
-            <FontAwesomeIcon icon={faSignOutAlt} size="lg" className="mr-2" />
-            Me déconnecter
+            <FontAwesomeIcon icon={faUser} size="lg" className="mr-2" />
+            Mon compte
           </MenuItem>
-        </Menu>
+        </Menu></Link>
       </SidebarFooter>
     </ProSidebar>
   );
