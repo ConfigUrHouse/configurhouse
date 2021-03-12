@@ -7,18 +7,12 @@ import ReactDOMServer from 'react-dom/server';
 import { Formik } from "formik";
 import { Form, Pagination, Table } from "react-bootstrap";
 import { FormValues } from "./Models";
-
 import * as Yup from "yup";
 
 class Contact extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-       firstname:"",
-       lastname:"",
-        email:"",
-        subject:"",
-        content: "",
         success: 0
    }
    this.handleChange = this.handleChange.bind(this);
@@ -56,9 +50,6 @@ class Contact extends React.Component<any, any> {
         (result) => {
             this.setState({success: 1})
         },
-        // Remarque : il est important de traiter les erreurs ici
-        // au lieu d'utiliser un bloc catch(), pour ne pas passer à la trappe
-        // des exceptions provenant de réels bugs du composant.
         (error) => {
             this.setState({success: -1})
         });
@@ -97,25 +88,31 @@ class Contact extends React.Component<any, any> {
         <div className="p-5 form w-75 mx-auto">
             <h3 className="mb-2"><FontAwesomeIcon className="mr-2" icon={faPaperPlane}/> Nous contacter</h3>
             <p className="mb-4">
-                Vous pouvez nous contacter à travers ce formulaire dans le cas d'un problème, d'une question ou de toute autres demandes. Nous nous engageons à vous répondre au plus vite.
+                Vous pouvez nous contacter à travers ce formulaire dans le cas d'un problème, d'une question ou de toutes autres demandes. Nous nous engageons à vous répondre au plus vite.
             </p>
             {
-                this.state.success == 1 ? <div className="alert alert-success mb-4"><FontAwesomeIcon icon={faCheck}  /> Email envoyé avec succès, nous vous reponderons au plus vite.</div>
+                this.state.success == 1 ? <div className="alert alert-success mb-4"><FontAwesomeIcon icon={faCheck}  /> Email envoyé avec succès, nous vous réponderons au plus vite.</div>
                 : this.state.success == -1 ? <div className="alert alert-danger m-4"><FontAwesomeIcon icon={faTimes}  /> Une erreur est survenue lors de l'envoi du mail, veuillez réessayer plus tard.</div>
                 :''
             }
             <Formik
           validationSchema={this.schema}
-          onSubmit={this.sendEmail}
+          onSubmit={(values, {resetForm}) => {
+            this.sendEmail(values);
+            resetForm({values :{
+                firstname: "",
+                lastname: "",
+                content:"",
+                subject:"",
+                email:""
+            }})
+          }}
           initialValues={this.initialValues}
         >
           {({
             handleSubmit,
             handleChange,
-            handleBlur,
             values,
-            touched,
-            isValid,
             errors,
           }) => (
         <Form noValidate onSubmit={handleSubmit}>
