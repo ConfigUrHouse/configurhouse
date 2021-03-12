@@ -143,3 +143,56 @@ table thead {
     transform: translate3D(0, 0, 0);
   }
 }
+
+.input-group input{
+    border: 2px solid var(--main-green);
+    border-left: 0;
+    height: 50px;
+    border-radius: 0px 30px 30px 0 !important;
+}
+textarea{
+    border: 2px solid var(--main-green) !important;
+    border-radius:30px !important;
+    height: 200px !important;
+    padding: 15px !important;
+}
+.input-group input:focus{
+    outline: none !important;
+    box-shadow: none !important;
+    border: 2px solid var(--main-green);
+    border-left: 0;
+
+}
+.input-group-prepend .input-group-text{
+    background-color: transparent;
+    padding: 0 .75rem;
+    border: none;
+}
+.input-group-prepend{
+    border: 2px solid var(--main-green);
+    border-right: 0;
+    border-radius: 30px 0px 0px 30px;
+}
+.form Button{
+    background: rgb(19, 91, 100);
+    background: -moz-linear-gradient(
+      45deg,
+      rgba(19, 91, 100, 1) 0%,
+      rgba(41, 136, 137, 1) 100%
+    );
+    background: -webkit-linear-gradient(
+      45deg,
+      rgba(19, 91, 100, 1) 0%,
+      rgba(41, 136, 137, 1) 100%
+    );
+    background: linear-gradient(
+      45deg,
+      rgba(19, 91, 100, 1) 0%,
+      rgba(41, 136, 137, 1) 100%
+    );
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#135b64",endColorstr="#298889",GradientType=1);
+    border: none !important;
+}
+.invalid-feedback{
+    text-align: center;
+}
