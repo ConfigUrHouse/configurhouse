@@ -1,8 +1,8 @@
+import { PaginatedResponse } from '../../utils/pagination';
+
 export interface UsersState {
   formValues: FormValues;
-  users: User[];
-  currentPage: number;
-  totalPages: number;
+  paginatedItems: PaginatedResponse<User>;
 }
 
 export interface User {
