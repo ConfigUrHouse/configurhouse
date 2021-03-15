@@ -23,12 +23,12 @@ class UserAccountDelete extends React.Component<any, any> {
     this.sendEmail = this.sendEmail.bind(this);
     }
   sendEmail(){
-    fetch('http://localhost:7000/utils/sendEmail', {
+    fetch(process.env.REACT_APP_API_BASE_URL+'/utils/sendEmail', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             email: this.state.user.email,
-            subject: "Demande du suppression de compte",
+            subject: "Demande de suppression de compte",
             content : this.htmlMail(this.state.reason)
         })
     }).then(
