@@ -10,6 +10,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { UsersList } from './components/UsersList/UsersList';
 import Mentions from './components/Mentions/Mentions';
 import Contact from './components/Contact/Contact';
+import User from './components/User/User';
 
 function App() {
   return (
@@ -18,6 +19,9 @@ function App() {
         <Sidebar />
 
         <Switch>
+        <Route path="/account">
+            <User />
+          </Route>
           <Route path="/users">
             <UsersList />
           </Route>
@@ -26,6 +30,12 @@ function App() {
           </Route>
           <Route path="/contact">
             <Contact />
+          </Route>
+          <Route path="/policies">
+            <Policies />
+          </Route>
+          <Route path="/mentions">
+            <Mentions />
           </Route>
           <Route path="/policies">
             <Policies />
