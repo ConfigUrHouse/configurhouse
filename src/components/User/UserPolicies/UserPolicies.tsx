@@ -1,8 +1,7 @@
-import { Component } from "react";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPaperPlane, faUserAltSlash, faUserShield } from "@fortawesome/free-solid-svg-icons";
-import { Form, Row,Col, FormControl,Button } from "react-bootstrap";
+import { faUserShield } from "@fortawesome/free-solid-svg-icons";
+import { Form, Row,Col} from "react-bootstrap";
 
 class UserPolicies extends React.Component<any, any> {
   constructor(props: any) {

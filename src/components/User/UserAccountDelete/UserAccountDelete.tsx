@@ -1,4 +1,3 @@
-import { Component } from "react";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faPaperPlane, faTimes, faUserAltSlash, faUserShield } from "@fortawesome/free-solid-svg-icons";
@@ -64,18 +63,21 @@ class UserAccountDelete extends React.Component<any, any> {
     )
 }
   render() {
-      
+    let alert;
+    if(this.state.success == 1){
+        alert = <div className="alert alert-success mb-4"><FontAwesomeIcon icon={faCheck}  /> Demande envoyée avec succès, nous la traiterons au plus vite.</div>
+    }else if(this.state.success == -1){
+        alert = <div className="alert alert-danger m-4"><FontAwesomeIcon icon={faTimes}  /> Une erreur est survenue lors de l'envoi de la demande, veuillez réessayer plus tard.</div>
+    }else{
+        alert = null;
+    }
     return (
         <main className="p-5 w-100 bg-white m-0 user-accountdelete">
             <h2 className="text-green text-center"><FontAwesomeIcon icon={faUserShield} /> Suppression du compte</h2>
             <h6 className="text-center mt-2 mb-5">Vous pouvez ici demander la suppression de votre compte.</h6>
             <hr/>
             <h4 className="mt-5 text-green text-center mb-4"><FontAwesomeIcon icon={faUserAltSlash} /> Demander la suppression de mon compte :</h4>
-            {
-                this.state.success == 1 ? <div className="alert alert-success mb-4"><FontAwesomeIcon icon={faCheck}  /> Demande envoyée avec succès, nous la traiterons au plus vite.</div>
-                : this.state.success == -1 ? <div className="alert alert-danger m-4"><FontAwesomeIcon icon={faTimes}  /> Une erreur est survenue lors de l'envoi de la demande, veuillez réessayer plus tard.</div>
-                :''
-            }
+            {alert}
             <Form className="form shadow-none" onSubmit={this.sendEmail}>
                 <Row className="justify-content-center">
                     <Col md={6}>

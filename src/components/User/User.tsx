@@ -1,6 +1,4 @@
-import { Component } from "react";
 import React from "react";
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import UserPolicies from "./UserPolicies/UserPolicies";
 import UserConfigurations from "./UserConfigurations/UserConfigurations";
 import { Tabs,Tab } from "react-bootstrap";
