@@ -1,16 +1,60 @@
-import React from "react";
-import { Formik } from "formik";
-import * as Yup from "yup";
-import { Button, Form, Pagination, Table } from "react-bootstrap";
-import {
-  faCheck,
-  faTimes,
-  faPen,
-  faTrash,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { PaginatedResponse } from "../../utils/pagination";
-import { User, UsersState, FormValues } from "./Models";
+import React from 'react';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import { Button, Form } from 'react-bootstrap';
+import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { emptyPaginatedData, PaginatedResponse } from '../../utils/pagination';
+import { User, UsersState, FormValues } from './Models';
+import { apiRequest } from '../../api/utils';
+import { ItemsTableColumn } from '../Templates/ItemsTable/Models';
+import { ItemsTable } from '../Templates/ItemsTable/ItemsTable';
+
+const initialValues: FormValues = {
+  firstName: '',
+  lastName: '',
+  role: 'Tous',
+};
+
+const schema = Yup.object().shape({
+  firstName: Yup.string().min(2, 'Trop court !'),
+  lastName: Yup.string(),
+  role: Yup.string().oneOf(
+    ['Utilisateur', 'Administrateur', 'Tous'],
+    'Le rôle doit être Utilisateur ou Administrateur ou Tous'
+  ),
+});
+
+const columns: ItemsTableColumn<User>[] = [
+  {
+    name: 'id',
+    displayName: 'ID',
+  },
+  {
+    name: 'lastname',
+    displayName: 'Nom',
+  },
+  {
+    name: 'firstname',
+    displayName: 'Prénom',
+  },
+  {
+    name: 'email',
+    displayName: 'Email',
+  },
+  {
+    name: 'active',
+    displayName: 'Vérifié',
+    component(item) {
+      return (
+        <FontAwesomeIcon
+          icon={item.active ? faCheck : faTimes}
+          color={item.active ? 'green' : 'red'}
+        />
+      );
+    },
+  },
+];
 
 export class UsersList extends React.Component<{}, UsersState> {
   constructor(props: {}) {
@@ -20,92 +64,76 @@ export class UsersList extends React.Component<{}, UsersState> {
     this.handleDelete = this.handleDelete.bind(this);
 
     this.state = {
-      formValues: this.initialValues,
-      users: [],
-      currentPage: 0,
-      totalPages: 0,
+      formValues: initialValues,
+      paginatedItems: emptyPaginatedData<User>(),
     };
   }
 
-  defaultRole = "Tous";
-
-  schema = Yup.object().shape({
-    firstName: Yup.string().min(2, "Trop court !"),
-    lastName: Yup.string(),
-    role: Yup.string().oneOf(
-      ["Utilisateur", "Administrateur", "Tous"],
-      "Le rôle doit être Utilisateur ou Administrateur ou Tous"
-    ),
-  });
-
-  initialValues: FormValues = {
-    firstName: "",
-    lastName: "",
-    role: this.defaultRole,
-  };
-
   componentDidMount() {
-    this.fetchUsers(this.initialValues);
+    this.fetchUsers();
   }
 
-  fetchUsers(values: FormValues) {
-    const firstNameParam = `firstname=${values.firstName}`;
-    const lastNameParam = `lastname=${values.lastName}`;
-    const typeParam = `type=${values.role}`;
-    const queryParams = [
-      `${values.firstName ? firstNameParam : ""}`,
-      `${values.lastName ?  lastNameParam : ""}`,
-      `${values.role !== this.defaultRole ? typeParam : ""}`,
-      `page=${this.state.currentPage}`,
-      `size=10`,
-    ]
-      .filter((param) => {
-        if (param) return param;
-      })
-      .join("&");
-    fetch(`${process.env.REACT_APP_API_URL}user?${queryParams}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    })
-      .then(async (response) => {
-        const data = (await response.json()) as PaginatedResponse<User>;
-        this.setState({
-          users: data.items,
-          currentPage: data.currentPage,
-          totalPages: data.totalPages,
-        });
-      })
-      .catch((_response) => {
-        this.setState({ users: [] });
-      });
+  async fetchUsers() {
+    const {
+      paginatedItems: { currentPage },
+      formValues,
+    } = this.state;
+
+    const queryParams = [`page=${currentPage}`, `size=10`];
+    if (formValues.firstName) {
+      queryParams.push(`firstname=${formValues.firstName}`);
+    }
+    if (formValues.firstName) {
+      queryParams.push(`lastname=${formValues.lastName}`);
+    }
+    if (formValues.firstName) {
+      queryParams.push(`type=${formValues.role}`);
+    }
+
+    try {
+      const paginatedItems: PaginatedResponse<User> = await apiRequest(
+        'user',
+        'GET',
+        queryParams
+      );
+
+      this.setState({ paginatedItems });
+    } catch (error) {
+      this.setState({ paginatedItems: emptyPaginatedData<User>() });
+    }
   }
 
-  handleEdit() {
-    console.log("Edit");
+  handleEdit(id: number) {
+    console.log('Edit');
   }
 
-  handleDelete() {
-    console.log("Delete");
+  handleDelete(id: number) {
+    console.log('Delete');
   }
 
-  handlePageChange(event: React.MouseEvent, value: number) {
+  handlePageChange(value: number) {
+    const paginatedItems = { ...this.state.paginatedItems };
+    paginatedItems.currentPage = value;
+
     this.setState(
       {
-        currentPage: value,
+        paginatedItems,
       },
       () => {
-        this.fetchUsers(this.state.formValues);
+        this.fetchUsers();
       }
     );
   }
 
   render() {
+    const { paginatedItems } = this.state;
+
     return (
-      <main className="users">
+      <main className="users w-100">
         <Formik
-          validationSchema={this.schema}
+          validationSchema={schema}
           onSubmit={this.fetchUsers}
-          initialValues={this.initialValues}
+          initialValues={initialValues}
         >
           {({
             handleSubmit,
@@ -174,67 +202,14 @@ export class UsersList extends React.Component<{}, UsersState> {
             </Form>
           )}
         </Formik>
-        <Pagination>
-          <Pagination.First
-            disabled={this.state.currentPage === 0}
-            onClick={(event) => this.handlePageChange(event, 0)}
-          />
-          <Pagination.Prev
-            disabled={this.state.currentPage === 0}
-            onClick={(event) =>
-              this.handlePageChange(event, this.state.currentPage - 1)
-            }
-          />
-          <Pagination.Item active>{this.state.currentPage + 1}</Pagination.Item>
-          <Pagination.Next
-            disabled={this.state.currentPage === this.state.totalPages - 1}
-            onClick={(event) =>
-              this.handlePageChange(event, this.state.currentPage + 1)
-            }
-          />
-          <Pagination.Last
-            disabled={this.state.currentPage === this.state.totalPages - 1}
-            onClick={(event) =>
-              this.handlePageChange(event, this.state.totalPages - 1)
-            }
-          />
-        </Pagination>
-        <Table bordered hover className="mt-5 text-center">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nom</th>
-              <th>Prénom</th>
-              <th>Email</th>
-              <th>Vérifié</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.state.users &&
-              this.state.users.map((user: User, index) => (
-                <tr key={index}>
-                  <td>{user.id}</td>
-                  <td>{user.firstname}</td>
-                  <td>{user.lastname}</td>
-                  <td>{user.email}</td>
-                  <td>
-                    <FontAwesomeIcon
-                      icon={user.active ? faCheck : faTimes}
-                      color={user.active ? "green" : "red"}
-                    />
-                  </td>
-                  <td>
-                    <FontAwesomeIcon icon={faPen} onClick={this.handleEdit} />
-                    <FontAwesomeIcon
-                      icon={faTrash}
-                      onClick={this.handleDelete}
-                    />
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </Table>
+
+        <ItemsTable<User>
+          paginatedItems={paginatedItems}
+          columns={columns}
+          handlePageChange={this.handlePageChange}
+          handleEdit={this.handleEdit}
+          handleDelete={this.handleDelete}
+        ></ItemsTable>
       </main>
     );
   }

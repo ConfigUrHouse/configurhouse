@@ -1,6 +1,17 @@
 export interface PaginatedResponse<T> {
-  totalItems: number;
   items: T[];
-  totalPages: number;
   currentPage: number;
+  totalPages: number;
+  totalItems: number;
+}
+
+export function emptyPaginatedData<T>() {
+  const paginatedResponse: PaginatedResponse<T> = {
+    items: [],
+    currentPage: 0,
+    totalPages: 0,
+    totalItems: 0,
+  };
+
+  return paginatedResponse;
 }
