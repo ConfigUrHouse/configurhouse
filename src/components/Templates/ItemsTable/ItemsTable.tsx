@@ -1,15 +1,13 @@
 import React from 'react';
-import { Button, Form, Pagination, Table } from 'react-bootstrap';
-import {
-  faCheck,
-  faTimes,
-  faPen,
-  faTrash,
-} from '@fortawesome/free-solid-svg-icons';
+import { Pagination, Table } from 'react-bootstrap';
+import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ItemsTableProps } from './Models';
 
-export class ItemsTable<T> extends React.Component<ItemsTableProps<T>, {}> {
+export class ItemsTable<T extends Record<string, any>> extends React.Component<
+  ItemsTableProps<T>,
+  {}
+> {
   constructor(props: ItemsTableProps<T>) {
     super(props);
   }
@@ -36,8 +34,7 @@ export class ItemsTable<T> extends React.Component<ItemsTableProps<T>, {}> {
             </tr>
           </thead>
           <tbody>
-            {items.map((i) => {
-              const item = i as any;
+            {items.map((item: T) => {
               return (
                 <tr key={item.id}>
                   {columns.map((col) => (

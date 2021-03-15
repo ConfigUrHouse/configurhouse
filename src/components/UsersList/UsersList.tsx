@@ -1,13 +1,8 @@
 import React from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { Button, Form, Pagination, Table } from 'react-bootstrap';
-import {
-  faCheck,
-  faTimes,
-  faPen,
-  faTrash,
-} from '@fortawesome/free-solid-svg-icons';
+import { Button, Form } from 'react-bootstrap';
+import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { emptyPaginatedData, PaginatedResponse } from '../../utils/pagination';
 import { User, UsersState, FormValues } from './Models';
@@ -30,7 +25,7 @@ const schema = Yup.object().shape({
   ),
 });
 
-const columns: ItemsTableColumn[] = [
+const columns: ItemsTableColumn<User>[] = [
   {
     name: 'id',
     displayName: 'ID',
