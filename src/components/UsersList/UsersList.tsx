@@ -5,25 +5,18 @@ import { Button, Form } from 'react-bootstrap';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { emptyPaginatedData, PaginatedResponse } from '../../utils/pagination';
-import { User, UsersState, FormValues } from './Models';
+import { User, Role, UsersState, FormValues } from './Models';
 import { apiRequest } from '../../api/utils';
 import { ItemsTableColumn } from '../Templates/ItemsTable/Models';
 import { ItemsTable } from '../Templates/ItemsTable/ItemsTable';
 
+const defaultRole = 'Tous';
+
 const initialValues: FormValues = {
   firstName: '',
   lastName: '',
-  role: 'Tous',
+  role: defaultRole,
 };
-
-const schema = Yup.object().shape({
-  firstName: Yup.string().min(2, 'Trop court !'),
-  lastName: Yup.string(),
-  role: Yup.string().oneOf(
-    ['Utilisateur', 'Administrateur', 'Tous'],
-    'Le rôle doit être Utilisateur ou Administrateur ou Tous'
-  ),
-});
 
 const columns: ItemsTableColumn<User>[] = [
   {
@@ -66,11 +59,32 @@ export class UsersList extends React.Component<{}, UsersState> {
     this.state = {
       formValues: initialValues,
       paginatedItems: emptyPaginatedData<User>(),
+      roles: []
     };
   }
 
+  schema = Yup.object().shape({
+    firstName: Yup.string().min(2, 'Trop court !'),
+    lastName: Yup.string(),
+    role: Yup.lazy(() => Yup.string().oneOf([...this.state.roles.map(role => role.name), defaultRole]))
+  });
+
   componentDidMount() {
+    this.fetchRoles();
     this.fetchUsers();
+  }
+
+  async fetchRoles() {
+    try {
+      const roles: Role[] = await apiRequest(
+        'role',
+        'GET',
+        []
+      );
+      this.setState({ roles });
+    } catch (error) {
+      this.setState({ roles: [] });
+    }
   }
 
   async fetchUsers() {
@@ -83,11 +97,11 @@ export class UsersList extends React.Component<{}, UsersState> {
     if (formValues.firstName) {
       queryParams.push(`firstname=${formValues.firstName}`);
     }
-    if (formValues.firstName) {
+    if (formValues.lastName) {
       queryParams.push(`lastname=${formValues.lastName}`);
     }
-    if (formValues.firstName) {
-      queryParams.push(`type=${formValues.role}`);
+    if (formValues.role && formValues.role !== defaultRole) {
+      queryParams.push(`role=${formValues.role}`);
     }
 
     try {
@@ -131,7 +145,7 @@ export class UsersList extends React.Component<{}, UsersState> {
     return (
       <main className="users w-100">
         <Formik
-          validationSchema={schema}
+          validationSchema={this.schema}
           onSubmit={this.fetchUsers}
           initialValues={initialValues}
         >
@@ -153,7 +167,7 @@ export class UsersList extends React.Component<{}, UsersState> {
                   placeholder="Entrez un prénom"
                   value={values.firstName}
                   onChange={(e) => {
-                    this.setState({ formValues: values });
+                    this.setState({ formValues: { ...this.state.formValues, firstName: e.target.value } });
                     handleChange(e);
                   }}
                   isInvalid={!!errors.firstName}
@@ -170,7 +184,7 @@ export class UsersList extends React.Component<{}, UsersState> {
                   placeholder="Entrez un nom"
                   value={values.lastName}
                   onChange={(e) => {
-                    this.setState({ formValues: values });
+                    this.setState({ formValues: { ...this.state.formValues, lastName: e.target.value } });
                     handleChange(e);
                   }}
                   isInvalid={!!errors.lastName}
@@ -179,18 +193,17 @@ export class UsersList extends React.Component<{}, UsersState> {
               <Form.Group>
                 <Form.Label>Rôle</Form.Label>
                 <Form.Control
-                  id="type"
+                  id="role"
                   as="select"
                   value={values.role}
                   onChange={(e) => {
-                    this.setState({ formValues: values });
+                    this.setState({ formValues: { ...this.state.formValues, role: e.target.value } });
                     handleChange(e);
                   }}
                   isInvalid={!!errors.role}
                 >
-                  <option>Tous</option>
-                  <option>Utilisateur</option>
-                  <option>Administrateur</option>
+                  <option>{defaultRole}</option>
+                  {this.state.roles.map(role => <option key={role.id}>{role.name}</option>)}
                 </Form.Control>
                 <Form.Control.Feedback type="invalid">
                   {errors.role}
