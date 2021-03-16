@@ -4,11 +4,13 @@ import * as Yup from 'yup';
 import { Button, Form } from 'react-bootstrap';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { emptyPaginatedData, PaginatedResponse } from '../../utils/pagination';
-import { User, Role, UsersState, FormValues } from './Models';
-import { apiRequest } from '../../api/utils';
-import { ItemsTableColumn } from '../Templates/ItemsTable/Models';
-import { ItemsTable } from '../Templates/ItemsTable/ItemsTable';
+import { emptyPaginatedData, PaginatedResponse } from '../../../utils/pagination';
+import { UsersListState, FormValues, UserListProps } from './Models';
+import { apiRequest } from '../../../api/utils';
+import { ItemsTableColumn } from '../../Templates/ItemsTable/Models';
+import { ItemsTable } from '../../Templates/ItemsTable/ItemsTable';
+import { Role, User } from '../UserEdit/Models';
+import { withRouter } from 'react-router';
 
 const defaultRole = 'Tous';
 
@@ -49,12 +51,13 @@ const columns: ItemsTableColumn<User>[] = [
   },
 ];
 
-export class UsersList extends React.Component<{}, UsersState> {
-  constructor(props: {}) {
+export class UserList extends React.Component<UserListProps, UsersListState> {
+  constructor(props: UserListProps) {
     super(props);
     this.fetchUsers = this.fetchUsers.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.handlePageChange = this.handlePageChange.bind(this);
 
     this.state = {
       formValues: initialValues,
@@ -118,7 +121,8 @@ export class UsersList extends React.Component<{}, UsersState> {
   }
 
   handleEdit(id: number) {
-    console.log('Edit');
+    let path = `user/${id}/edit`;
+    this.props.history.push(path);
   }
 
   async handleDelete(id: number) {
@@ -232,3 +236,5 @@ export class UsersList extends React.Component<{}, UsersState> {
     );
   }
 }
+
+export const UserListWithRouter = withRouter(UserList)
