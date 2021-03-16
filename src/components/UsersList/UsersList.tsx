@@ -121,8 +121,13 @@ export class UsersList extends React.Component<{}, UsersState> {
     console.log('Edit');
   }
 
-  handleDelete(id: number) {
-    console.log('Delete');
+  async handleDelete(id: number) {
+    try {
+      await apiRequest(`user/${id}`, 'DELETE', [])
+      this.fetchUsers();
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   handlePageChange(value: number) {
