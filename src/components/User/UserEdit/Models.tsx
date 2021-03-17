@@ -10,6 +10,13 @@ export type UserEditProps = RouteComponentProps<UserPathParams> & {}
 export interface UserEditState {
     id: number;
     availableRoles: Role[];
-    user?: User;
-    roles: number[];
+    formValues: FormValues
+}
+
+export interface FormValues {
+    firstname: string,
+    lastname: string,
+    email: string,
+    verified: boolean,
+    roles: number[]
 }
