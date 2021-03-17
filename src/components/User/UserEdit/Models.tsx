@@ -1,20 +1,15 @@
 import { RouteComponentProps } from "react-router-dom"
-
-export interface User {
-    id: number;
-    firstname: string;
-    lastname: string;
-    email: string;
-    active: number;
-}
-
-export interface Role {
-    id: number;
-    name: string;
-}
+import { User, Role } from "../Models"
 
 export interface UserPathParams {
     id: string,
 }
 
-export type UserProps = RouteComponentProps<UserPathParams> & {}
+export type UserEditProps = RouteComponentProps<UserPathParams> & {}
+
+export interface UserEditState {
+    id: number;
+    availableRoles: Role[];
+    user?: User;
+    roles: number[];
+}

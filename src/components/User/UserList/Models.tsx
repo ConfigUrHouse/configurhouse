@@ -1,6 +1,6 @@
 import { RouteComponentProps } from 'react-router-dom';
 import { PaginatedResponse } from '../../../utils/pagination';
-import { Role, User } from '../UserEdit/Models';
+import { Role, User } from '../Models';
 
 export interface UsersListState {
   formValues: FormValues;

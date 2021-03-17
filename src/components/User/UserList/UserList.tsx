@@ -9,7 +9,7 @@ import { UsersListState, FormValues, UserListProps } from './Models';
 import { apiRequest } from '../../../api/utils';
 import { ItemsTableColumn } from '../../Templates/ItemsTable/Models';
 import { ItemsTable } from '../../Templates/ItemsTable/ItemsTable';
-import { Role, User } from '../UserEdit/Models';
+import { Role, User } from '../Models';
 import { withRouter } from 'react-router';
 
 const defaultRole = 'Tous';
