@@ -1,13 +1,13 @@
-import { RouteComponentProps } from 'react-router-dom';
-import { ApiResponseError } from '../../../api/models';
-import { PaginatedResponse } from '../../../utils/pagination';
-import { Role, User } from '../Models';
+import { RouteComponentProps } from "react-router-dom";
+import { ApiResponseError } from "../../../api/models";
+import { PaginatedResponse } from "../../../utils/pagination";
+import { Role, User } from "../Models";
 
 export interface UsersListState {
   formValues: FormValues;
   paginatedItems: PaginatedResponse<User>;
   roles: Role[];
-  error?: ApiResponseError
+  error?: ApiResponseError;
 }
 
 export interface FormValues {
@@ -17,7 +17,7 @@ export interface FormValues {
 }
 
 export interface UserListPathParams {
-  id: string,
+  id: string;
 }
 
-export type UserListProps = RouteComponentProps<UserListPathParams> & {}
+export type UserListProps = RouteComponentProps<UserListPathParams> & {};

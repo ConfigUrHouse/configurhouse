@@ -1,14 +1,14 @@
 .form {
-    border-radius: 25px;
-    background-color: #fff;
-    -webkit-box-shadow: 4px 4px 5px 0px rgba(0, 0, 0, 0.06);
-    -moz-box-shadow: 4px 4px 5px 0px rgba(0, 0, 0, 0.06);
-    box-shadow: 4px 4px 5px 0px rgba(0, 0, 0, 0.06);
+  border-radius: 25px;
+  background-color: #fff;
+  -webkit-box-shadow: 4px 4px 5px 0px rgba(0, 0, 0, 0.06);
+  -moz-box-shadow: 4px 4px 5px 0px rgba(0, 0, 0, 0.06);
+  box-shadow: 4px 4px 5px 0px rgba(0, 0, 0, 0.06);
 }
-.form h3, .form p {
-    color: rgb(87, 87, 87);
-
+.form h3,
+.form p {
+  color: rgb(87, 87, 87);
 }
 main {
-    min-height: 100vh;
+  min-height: 100vh;
 }
