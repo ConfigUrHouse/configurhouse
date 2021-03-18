@@ -1,4 +1,4 @@
-import { faAt, faSave, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faAt, faSave, faTimes, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Formik } from "formik";
 import React from "react";
@@ -62,44 +62,43 @@ export class UserEdit extends React.Component<UserEditProps, UserEditState> {
                         }
                     })
                 }
-            })
-            .catch(error => console.log(error))
+            }).catch(error => console.log(error))
     }
 
     async fetchUserRoles(): Promise<void> {
-        try {
-            const userRoles: UserRole[] = await apiRequest(
-                `userRole/${this.state.id}`,
-                'GET',
-                []
-            )
-            this.setState({
-                formValues: {
-                    ...this.state.formValues,
-                    roles: userRoles.map(userRole => userRole.id)
-                }
-            })
-        } catch (error) {
-            this.setState({
-                formValues: {
-                    ...this.state.formValues,
-                    roles: []
-                }
-            })
-        }
+        apiRequest(
+            `userRole/${this.state.id}`,
+            'GET',
+            []
+        ).then(response => {
+            if (response.status === "error") {
+                this.setState({ error: response as ApiResponseError })
+            } else {
+                const userRoles = response as UserRole[];
+                this.setState({
+                    formValues: {
+                        ...this.state.formValues,
+                        roles: userRoles.map(userRole => userRole.id)
+                    }
+                })
+            }
+        }).catch(error => console.log(error))
+
     }
 
     async fetchAvailableRoles(): Promise<void> {
-        try {
-            const roles: Role[] = await apiRequest(
-                'role',
-                'GET',
-                []
-            );
-            this.setState({ availableRoles: roles });
-        } catch (error) {
-            this.setState({ availableRoles: [] });
-        }
+        apiRequest(
+            'role',
+            'GET',
+            []
+        ).then(response => {
+            if (response.status === "error") {
+                this.setState({ error: response as ApiResponseError })
+            } else {
+                const roles = response as Role[]
+                this.setState({ availableRoles: roles });
+            }
+        }).catch(error => console.log(error))
     }
 
     handleRoleChange(e: any) {
@@ -118,10 +117,12 @@ export class UserEdit extends React.Component<UserEditProps, UserEditState> {
             'PUT',
             this.state.formValues.roles.map(role => `roles=${role}`)
         ).then(response => {
-            this.props.history.push("/users")
-        }).catch(error => {
-
-        })
+            if (response.status === "error") {
+                this.setState({ error: response as ApiResponseError })
+            } else {
+                this.props.history.push("/users")
+            }
+        }).catch(error => console.log(error))
     }
 
     render() {
@@ -130,6 +131,13 @@ export class UserEdit extends React.Component<UserEditProps, UserEditState> {
                 <div className="circle1"></div>
                 <div className="circle2"></div>
                 <div className="p-5 form w-75 mx-auto">
+                    {this.state.error &&
+                        <div className="alert alert-danger m-4">
+                            <FontAwesomeIcon icon={faTimes} />
+                            Une erreur est survenue :
+                            <p>Message : {this.state.error.message}</p>
+                        </div>
+                    }
                     <h3 className="mb-2"><FontAwesomeIcon className="mr-2" icon={faUser} />Editer un utilisateur</h3>
                     <Formik
                         validationSchema={this.schema}
@@ -157,6 +165,9 @@ export class UserEdit extends React.Component<UserEditProps, UserEditState> {
                                                 value={this.state.formValues.firstname}
                                                 disabled
                                             />
+                                            <Form.Control.Feedback type="invalid">
+                                                {errors.firstname}
+                                            </Form.Control.Feedback>
                                         </InputGroup>
                                     </Col>
                                     <Col md={6}>
@@ -202,7 +213,7 @@ export class UserEdit extends React.Component<UserEditProps, UserEditState> {
                                         onChange={this.handleRoleChange}
                                     />
                                 )}
-                                <Button variant="primary" className="d-block mx-auto mt-3 p-3" type="submit">
+                                <Button variant="primary" className="d-block mx-auto mt-3 p-3" type="submit" disabled={!!this.state.error}>
                                     SAUVEGARDER <FontAwesomeIcon className="ml-2" icon={faSave} />
                                 </Button>
                             </Form>

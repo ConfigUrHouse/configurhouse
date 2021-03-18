@@ -1,8 +1,8 @@
 import React from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { Button, Form } from 'react-bootstrap';
-import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { Button, Col, Form, FormControl, InputGroup, Row } from 'react-bootstrap';
+import { faCheck, faSearch, faTimes, faUser, faUserTag } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { emptyPaginatedData, PaginatedResponse } from '../../../utils/pagination';
 import { UsersListState, FormValues, UserListProps } from './Models';
@@ -11,6 +11,8 @@ import { ItemsTableColumn } from '../../Templates/ItemsTable/Models';
 import { ItemsTable } from '../../Templates/ItemsTable/ItemsTable';
 import { Role, User } from '../Models';
 import { withRouter } from 'react-router';
+import './UserList.css'
+import { ApiResponseError } from '../../../api/models';
 
 const defaultRole = 'Tous';
 
@@ -62,13 +64,14 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
     this.state = {
       formValues: initialValues,
       paginatedItems: emptyPaginatedData<User>(),
-      roles: []
+      roles: [],
+      error: undefined
     };
   }
 
   schema = Yup.object().shape({
-    firstName: Yup.string().min(2, 'Trop court !'),
-    lastName: Yup.string(),
+    firstName: Yup.string().min(2, 'Le prénom doit faire au moins 2 caractères'),
+    lastName: Yup.string().min(2, 'Le nom doit faire au moins 2 caractères'),
     role: Yup.lazy(() => Yup.string().oneOf([...this.state.roles.map(role => role.name), defaultRole]))
   });
 
@@ -78,16 +81,18 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
   }
 
   async fetchRoles() {
-    try {
-      const roles: Role[] = await apiRequest(
-        'role',
-        'GET',
-        []
-      );
-      this.setState({ roles });
-    } catch (error) {
-      this.setState({ roles: [] });
-    }
+    apiRequest(
+      'role',
+      'GET',
+      []
+    ).then(response => {
+      if (response.status === "error") {
+        this.setState({ error: response as ApiResponseError })
+      } else {
+        const roles = response as Role[];
+        this.setState({ roles });
+      }
+    }).catch(error => console.log(error))
   }
 
   async fetchUsers() {
@@ -107,17 +112,20 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
       queryParams.push(`role=${formValues.role}`);
     }
 
-    try {
-      const paginatedItems: PaginatedResponse<User> = await apiRequest(
-        'user',
-        'GET',
-        queryParams
-      );
+    apiRequest(
+      'user',
+      'GET',
+      queryParams
+    ).then(response => {
+      if (response.status === "error") {
+        this.setState({ error: response as ApiResponseError })
+      } else {
+        const paginatedItems: PaginatedResponse<User> = response as PaginatedResponse<User>
+        this.setState({ paginatedItems });
+      }
+    }).catch(error => console.log(error))
 
-      this.setState({ paginatedItems });
-    } catch (error) {
-      this.setState({ paginatedItems: emptyPaginatedData<User>() });
-    }
+    this.setState({ paginatedItems: emptyPaginatedData<User>() });
   }
 
   handleEdit(id: number) {
@@ -126,12 +134,14 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
   }
 
   async handleDelete(id: number) {
-    try {
-      await apiRequest(`user/${id}`, 'DELETE', [])
-      this.fetchUsers();
-    } catch (error) {
-      console.log(error)
-    }
+    apiRequest(`user/${id}`, 'DELETE', [])
+      .then(response => {
+        if (response.status === "error") {
+          this.setState({ error: response as ApiResponseError })
+        } else {
+          this.fetchUsers();
+        }
+      }).catch(error => console.log(error))
   }
 
   handlePageChange(value: number) {
@@ -150,89 +160,113 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
 
   render() {
     const { paginatedItems } = this.state;
-
     return (
-      <main className="users w-100">
-        <Formik
-          validationSchema={this.schema}
-          onSubmit={this.fetchUsers}
-          initialValues={initialValues}
-        >
-          {({
-            handleSubmit,
-            handleChange,
-            handleBlur,
-            values,
-            touched,
-            isValid,
-            errors,
-          }) => (
-            <Form noValidate onSubmit={handleSubmit}>
-              <Form.Group>
-                <Form.Label>Prénom</Form.Label>
-                <Form.Control
-                  id="firstName"
-                  type="text"
-                  placeholder="Entrez un prénom"
-                  value={values.firstName}
-                  onChange={(e) => {
-                    this.setState({ formValues: { ...this.state.formValues, firstName: e.target.value } });
-                    handleChange(e);
-                  }}
-                  isInvalid={!!errors.firstName}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.firstName}
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group>
-                <Form.Label>Nom</Form.Label>
-                <Form.Control
-                  id="lastName"
-                  type="text"
-                  placeholder="Entrez un nom"
-                  value={values.lastName}
-                  onChange={(e) => {
-                    this.setState({ formValues: { ...this.state.formValues, lastName: e.target.value } });
-                    handleChange(e);
-                  }}
-                  isInvalid={!!errors.lastName}
-                />
-              </Form.Group>
-              <Form.Group>
-                <Form.Label>Rôle</Form.Label>
-                <Form.Control
-                  id="role"
-                  as="select"
-                  value={values.role}
-                  onChange={(e) => {
-                    this.setState({ formValues: { ...this.state.formValues, role: e.target.value } });
-                    handleChange(e);
-                  }}
-                  isInvalid={!!errors.role}
-                >
-                  <option>{defaultRole}</option>
-                  {this.state.roles.map(role => <option key={role.id}>{role.name}</option>)}
-                </Form.Control>
-                <Form.Control.Feedback type="invalid">
-                  {errors.role}
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Button variant="primary" type="submit">
-                Rechercher
+      <main className="p-5 w-100 bg" >
+        <div className="circle1"></div>
+        <div className="circle2"></div>
+        <div className="p-5 form w-75 mx-auto">
+          {this.state.error &&
+            <div className="alert alert-danger m-4">
+              <FontAwesomeIcon icon={faTimes} />
+              Une erreur est survenue :
+              <p>Message : {this.state.error.message}</p>
+            </div>
+          }
+          <h3 className="mb-2"><FontAwesomeIcon className="mr-2" icon={faUser} />Liste des utilisateurs</h3>
+          <Formik
+            validationSchema={this.schema}
+            onSubmit={this.fetchUsers}
+            initialValues={initialValues}
+          >
+            {({
+              handleSubmit,
+              handleChange,
+              handleBlur,
+              values,
+              touched,
+              isValid,
+              errors,
+            }) => (
+              <Form noValidate onSubmit={handleSubmit}>
+                <Row>
+                  <Col md={6}>
+                    <InputGroup className="mb-3">
+                      <InputGroup.Prepend>
+                        <InputGroup.Text id="FirstnameIcon"><FontAwesomeIcon icon={faUser} /></InputGroup.Text>
+                      </InputGroup.Prepend>
+                      <FormControl
+                        placeholder="Prénom"
+                        name="firstName"
+                        value={values.firstName}
+                        onChange={(e) => {
+                          this.setState({ formValues: { ...this.state.formValues, firstName: e.target.value } });
+                          handleChange(e);
+                        }}
+                        isInvalid={!!errors.firstName}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.firstName}
+                      </Form.Control.Feedback>
+                    </InputGroup>
+                  </Col>
+                  <Col md={6}>
+                    <InputGroup className="mb-3">
+                      <InputGroup.Prepend>
+                        <InputGroup.Text id="LastnameIcon"><FontAwesomeIcon icon={faUser} /></InputGroup.Text>
+                      </InputGroup.Prepend>
+                      <FormControl
+                        placeholder="Nom de famille"
+                        name="lastName"
+                        value={values.lastName}
+                        onChange={(e) => {
+                          this.setState({ formValues: { ...this.state.formValues, lastName: e.target.value } });
+                          handleChange(e);
+                        }}
+                        isInvalid={!!errors.lastName}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.lastName}
+                      </Form.Control.Feedback>
+                    </InputGroup>
+                  </Col>
+                </Row>
+                <InputGroup className="mb-3">
+                  <InputGroup.Prepend>
+                    <InputGroup.Text id="RoleIcon"><FontAwesomeIcon icon={faUserTag} /></InputGroup.Text>
+                  </InputGroup.Prepend>
+                  <Form.Control
+                    id="role"
+                    as="select"
+                    value={values.role}
+                    onChange={(e) => {
+                      this.setState({ formValues: { ...this.state.formValues, role: e.target.value } });
+                      handleChange(e);
+                    }}
+                    isInvalid={!!errors.role}
+                  >
+                    <option>{defaultRole}</option>
+                    {this.state.roles.map(role => <option key={role.id}>{role.name}</option>)}
+                  </Form.Control>
+                  <Form.Control.Feedback type="invalid">
+                    {errors.role}
+                  </Form.Control.Feedback>
+                </InputGroup>
+                <Button variant="primary" type="submit">
+                  RECHERCHER <FontAwesomeIcon className="ml-2" icon={faSearch} />
               </Button>
-            </Form>
-          )}
-        </Formik>
+              </Form>
+            )}
+          </Formik>
 
-        <ItemsTable<User>
-          paginatedItems={paginatedItems}
-          columns={columns}
-          handlePageChange={this.handlePageChange}
-          handleEdit={this.handleEdit}
-          handleDelete={this.handleDelete}
-        ></ItemsTable>
-      </main>
+          <ItemsTable<User>
+            paginatedItems={paginatedItems}
+            columns={columns}
+            handlePageChange={this.handlePageChange}
+            handleEdit={this.handleEdit}
+            handleDelete={this.handleDelete}
+          />
+        </div>
+      </main >
     );
   }
 }

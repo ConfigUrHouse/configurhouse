@@ -1,11 +1,13 @@
 import { RouteComponentProps } from 'react-router-dom';
+import { ApiResponseError } from '../../../api/models';
 import { PaginatedResponse } from '../../../utils/pagination';
 import { Role, User } from '../Models';
 
 export interface UsersListState {
   formValues: FormValues;
   paginatedItems: PaginatedResponse<User>;
-  roles: Role[]
+  roles: Role[];
+  error?: ApiResponseError
 }
 
 export interface FormValues {
