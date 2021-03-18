@@ -1,4 +1,5 @@
 import { RouteComponentProps } from "react-router-dom"
+import { ApiResponseError } from "../../../api/models"
 import { User, Role } from "../Models"
 
 export interface UserPathParams {
@@ -10,7 +11,8 @@ export type UserEditProps = RouteComponentProps<UserPathParams> & {}
 export interface UserEditState {
     id: number;
     availableRoles: Role[];
-    formValues: FormValues
+    formValues: FormValues;
+    error?: ApiResponseError;
 }
 
 export interface FormValues {

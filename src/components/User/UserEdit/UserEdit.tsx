@@ -5,6 +5,7 @@ import React from "react";
 import { Button, Col, Form, FormControl, InputGroup, Row } from "react-bootstrap";
 import { withRouter } from "react-router";
 import * as Yup from "yup";
+import { ApiResponseError } from "../../../api/models";
 import { apiRequest } from "../../../api/utils";
 import { Role, User, UserRole } from "../Models";
 import { FormValues, UserEditProps, UserEditState } from "./Models";
@@ -21,7 +22,8 @@ export class UserEdit extends React.Component<UserEditProps, UserEditState> {
         this.state = {
             id,
             availableRoles: [],
-            formValues: this.initialValues
+            formValues: this.initialValues,
+            error: undefined
         }
     }
 
@@ -46,16 +48,20 @@ export class UserEdit extends React.Component<UserEditProps, UserEditState> {
     async fetchUser(): Promise<void> {
         apiRequest(`user/${this.state.id}`, 'GET', [])
             .then(response => {
-                const user = (response as User)
-                this.setState({
-                    formValues: {
-                        ...this.state.formValues,
-                        firstname: user.firstname,
-                        lastname: user.lastname,
-                        email: user.email,
-                        verified: !!user.active
-                    }
-                })
+                if (response.status === "error") {
+                    this.setState({ error: response as ApiResponseError })
+                } else {
+                    const user = (response as User)
+                    this.setState({
+                        formValues: {
+                            ...this.state.formValues,
+                            firstname: user.firstname,
+                            lastname: user.lastname,
+                            email: user.email,
+                            verified: !!user.active
+                        }
+                    })
+                }
             })
             .catch(error => console.log(error))
     }
@@ -107,15 +113,15 @@ export class UserEdit extends React.Component<UserEditProps, UserEditState> {
     }
 
     async submitForm(values: FormValues): Promise<void> {
-        try {
-            await apiRequest(
-                `user/${this.state.id}/update-roles`,
-                'PUT',
-                this.state.formValues.roles.map(role => `roles=${role}`)
-            )
-        } catch (error) {
-            //TODO handle error
-        }
+        apiRequest(
+            `user/${this.state.id}/update-roles`,
+            'PUT',
+            this.state.formValues.roles.map(role => `roles=${role}`)
+        ).then(response => {
+            this.props.history.push("/users")
+        }).catch(error => {
+
+        })
     }
 
     render() {
