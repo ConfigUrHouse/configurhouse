@@ -1,12 +1,12 @@
 import { RouteComponentProps } from "react-router-dom";
 import { ApiResponseError } from "../../../api/models";
-import { User, Role } from "../Models";
+import { Role } from "../Models";
 
 export interface UserPathParams {
   id: string;
 }
 
-export type UserEditProps = RouteComponentProps<UserPathParams> & {};
+export type UserEditProps = RouteComponentProps<UserPathParams>;
 
 export interface UserEditState {
   id: number;

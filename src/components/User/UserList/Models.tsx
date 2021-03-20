@@ -22,4 +22,4 @@ export interface UserListPathParams {
   id: string;
 }
 
-export type UserListProps = RouteComponentProps<UserListPathParams> & {};
+export type UserListProps = RouteComponentProps<UserListPathParams>;
