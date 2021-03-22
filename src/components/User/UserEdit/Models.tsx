@@ -11,7 +11,6 @@ export type UserEditProps = RouteComponentProps<UserPathParams>;
 export interface UserEditState {
   id: number;
   availableRoles: Role[];
-  formValues: FormValues;
   error?: ApiResponseError;
 }
 

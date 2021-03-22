@@ -5,7 +5,7 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Formik } from "formik";
+import { FieldArray, Formik } from "formik";
 import React from "react";
 import {
   Button,
@@ -27,20 +27,22 @@ export class UserEdit extends React.Component<UserEditProps, UserEditState> {
   constructor(props: UserEditProps) {
     super(props);
 
-    this.handleRoleChange = this.handleRoleChange.bind(this);
     this.submitForm = this.submitForm.bind(this);
 
     const id = parseInt(this.props.match.params.id);
     this.state = {
       id,
       availableRoles: [],
-      formValues: this.initialValues,
       error: undefined,
     };
   }
 
   schema = Yup.object().shape({
-    roles: Yup.array().of(Yup.number()),
+    firstname: Yup.string().min(2, "Trop court !"),
+    lastname: Yup.string().min(2, "Trop court !"),
+    roles: Yup.array()
+      .of(Yup.number())
+      .min(1, "Vous devez cocher au moins un rôle"),
   });
 
   initialValues: FormValues = {
@@ -64,15 +66,13 @@ export class UserEdit extends React.Component<UserEditProps, UserEditState> {
           this.setState({ error: response as ApiResponseError });
         } else {
           const user = response as User;
-          this.setState({
-            formValues: {
-              ...this.state.formValues,
-              firstname: user.firstname,
-              lastname: user.lastname,
-              email: user.email,
-              verified: !!user.active,
-            },
-          });
+          this.initialValues = {
+            ...this.initialValues,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            email: user.email,
+            verified: !!user.active,
+          };
         }
       })
       .catch((error) => console.log(error));
@@ -85,12 +85,7 @@ export class UserEdit extends React.Component<UserEditProps, UserEditState> {
           this.setState({ error: response as ApiResponseError });
         } else {
           const userRoles = response as UserRole[];
-          this.setState({
-            formValues: {
-              ...this.state.formValues,
-              roles: userRoles.map((userRole) => userRole.id),
-            },
-          });
+          this.initialValues.roles = userRoles.map((userRole) => userRole.id);
         }
       })
       .catch((error) => console.log(error));
@@ -109,21 +104,11 @@ export class UserEdit extends React.Component<UserEditProps, UserEditState> {
       .catch((error) => console.log(error));
   }
 
-  handleRoleChange(e: any) {
-    let roles = [...this.state.formValues.roles];
-    if (e.target.checked) {
-      roles.push(parseInt(e.target.value));
-    } else {
-      roles = roles.filter((roleId) => roleId !== parseInt(e.target.value));
-    }
-    this.setState({ formValues: { ...this.state.formValues, roles } });
-  }
-
   async submitForm(values: FormValues): Promise<void> {
     apiRequest(
       `user/${this.state.id}/update-roles`,
       "PUT",
-      this.state.formValues.roles.map((role) => `roles=${role}`)
+      values.roles.map((role) => `roles=${role}`)
     )
       .then((response) => {
         if (response.status === "error") {
@@ -158,8 +143,16 @@ export class UserEdit extends React.Component<UserEditProps, UserEditState> {
               this.submitForm(values);
             }}
             initialValues={this.initialValues}
+            enableReinitialize
           >
-            {({ handleSubmit, handleChange, values, errors }) => (
+            {({
+              handleSubmit,
+              handleChange,
+              values,
+              errors,
+              isValid,
+              dirty,
+            }) => (
               <Form noValidate onSubmit={handleSubmit}>
                 <Row>
                   <Col md={6}>
@@ -172,7 +165,9 @@ export class UserEdit extends React.Component<UserEditProps, UserEditState> {
                       <FormControl
                         placeholder="Prénom"
                         name="firstname"
-                        value={this.state.formValues.firstname}
+                        value={values.firstname}
+                        onChange={handleChange}
+                        isInvalid={!!errors.firstname}
                         disabled
                       />
                       <Form.Control.Feedback type="invalid">
@@ -190,7 +185,9 @@ export class UserEdit extends React.Component<UserEditProps, UserEditState> {
                       <FormControl
                         placeholder="Nom de famille"
                         name="lastname"
-                        value={this.state.formValues.lastname}
+                        value={values.lastname}
+                        onChange={handleChange}
+                        isInvalid={!!errors.lastname}
                         disabled
                       />
                       <Form.Control.Feedback type="invalid">
@@ -209,29 +206,54 @@ export class UserEdit extends React.Component<UserEditProps, UserEditState> {
                   <FormControl
                     placeholder="Adresse email"
                     name="email"
-                    value={this.state.formValues.email}
+                    value={values.email}
+                    onChange={handleChange}
+                    isInvalid={!!errors.email}
                     disabled
                   />
                   <Form.Control.Feedback type="invalid">
                     {errors.email}
                   </Form.Control.Feedback>
                 </InputGroup>
-                {this.state.availableRoles.map((role) => (
-                  <Form.Check
-                    key={role.id}
-                    id={`role${role.id}`}
-                    name="roles"
-                    label={role.name}
-                    value={role.id}
-                    checked={this.state.formValues.roles.includes(role.id)}
-                    onChange={this.handleRoleChange}
-                  />
-                ))}
+                <FieldArray
+                  name="roles"
+                  render={(arrayHelpers) => (
+                    <div>
+                      {this.state.availableRoles.map((role, index) => (
+                        <div>
+                          <Form.Check>
+                            <Form.Check.Input
+                              key={role.id}
+                              name="roles"
+                              value={role.id}
+                              checked={values.roles.includes(role.id)}
+                              onChange={(e: any) => {
+                                if (e.target.checked)
+                                  arrayHelpers.push(role.id);
+                                else {
+                                  const idx = values.roles.indexOf(role.id);
+                                  arrayHelpers.remove(idx);
+                                }
+                              }}
+                              isInvalid={!!errors.roles}
+                            />
+                            <Form.Check.Label>{role.name}</Form.Check.Label>
+                            {index === this.state.availableRoles.length - 1 && (
+                              <Form.Control.Feedback type="invalid">
+                                {errors.roles}
+                              </Form.Control.Feedback>
+                            )}
+                          </Form.Check>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                />
                 <Button
                   variant="primary"
                   className="d-block mx-auto mt-3 p-3"
                   type="submit"
-                  disabled={!!this.state.error}
+                  disabled={!isValid}
                 >
                   SAUVEGARDER <FontAwesomeIcon className="ml-2" icon={faSave} />
                 </Button>
