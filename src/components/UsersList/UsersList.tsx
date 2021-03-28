@@ -1,55 +1,56 @@
-import React from 'react';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
-import { Button, Form } from 'react-bootstrap';
-import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { emptyPaginatedData, PaginatedResponse } from '../../utils/pagination';
-import { User, UsersState, FormValues } from './Models';
-import { apiRequest } from '../../api/utils';
-import { ItemsTableColumn } from '../Templates/ItemsTable/Models';
-import { ItemsTable } from '../Templates/ItemsTable/ItemsTable';
+import React from "react";
+import { Formik } from "formik";
+import * as Yup from "yup";
+import { Button, Form } from "react-bootstrap";
+import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { emptyPaginatedData, PaginatedResponse } from "../../utils/pagination";
+import { UsersState, FormValues } from "./Models";
+import { apiRequest } from "../../api/utils";
+import { ItemsTableColumn } from "../Templates/ItemsTable/Models";
+import { ItemsTable } from "../Templates/ItemsTable/ItemsTable";
+import { User } from "../../models";
 
 const initialValues: FormValues = {
-  firstName: '',
-  lastName: '',
-  role: 'Tous',
+  firstName: "",
+  lastName: "",
+  role: "Tous",
 };
 
 const schema = Yup.object().shape({
-  firstName: Yup.string().min(2, 'Trop court !'),
+  firstName: Yup.string().min(2, "Trop court !"),
   lastName: Yup.string(),
   role: Yup.string().oneOf(
-    ['Utilisateur', 'Administrateur', 'Tous'],
-    'Le rôle doit être Utilisateur ou Administrateur ou Tous'
+    ["Utilisateur", "Administrateur", "Tous"],
+    "Le rôle doit être Utilisateur ou Administrateur ou Tous"
   ),
 });
 
 const columns: ItemsTableColumn<User>[] = [
   {
-    name: 'id',
-    displayName: 'ID',
+    name: "id",
+    displayName: "ID",
   },
   {
-    name: 'lastname',
-    displayName: 'Nom',
+    name: "lastname",
+    displayName: "Nom",
   },
   {
-    name: 'firstname',
-    displayName: 'Prénom',
+    name: "firstname",
+    displayName: "Prénom",
   },
   {
-    name: 'email',
-    displayName: 'Email',
+    name: "email",
+    displayName: "Email",
   },
   {
-    name: 'active',
-    displayName: 'Vérifié',
+    name: "active",
+    displayName: "Vérifié",
     component(item) {
       return (
         <FontAwesomeIcon
           icon={item.active ? faCheck : faTimes}
-          color={item.active ? 'green' : 'red'}
+          color={item.active ? "green" : "red"}
         />
       );
     },
@@ -92,8 +93,8 @@ export class UsersList extends React.Component<{}, UsersState> {
 
     try {
       const paginatedItems: PaginatedResponse<User> = await apiRequest(
-        'user',
-        'GET',
+        "user",
+        "GET",
         queryParams
       );
 
@@ -104,11 +105,11 @@ export class UsersList extends React.Component<{}, UsersState> {
   }
 
   handleEdit(id: number) {
-    console.log('Edit');
+    console.log("Edit");
   }
 
   handleDelete(id: number) {
-    console.log('Delete');
+    console.log("Delete");
   }
 
   handlePageChange(value: number) {

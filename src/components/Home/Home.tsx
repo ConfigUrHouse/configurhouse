@@ -184,13 +184,17 @@ function Home() {
             </h4>
             <ul className="mt-3 p-0">
               <hr />
-              <Link to="/mentions"><li>
-                <FontAwesomeIcon icon={faFileContract} /> Mentions légales
-              </li></Link>
-              <Link to="/policies"><li>
-                <FontAwesomeIcon icon={faUserShield} /> Politique de
-                confidentialité
-              </li></Link>
+              <Link to="/mentions">
+                <li>
+                  <FontAwesomeIcon icon={faFileContract} /> Mentions légales
+                </li>
+              </Link>
+              <Link to="/policies">
+                <li>
+                  <FontAwesomeIcon icon={faUserShield} /> Politique de
+                  confidentialité
+                </li>
+              </Link>
             </ul>
           </Col>
         </Row>

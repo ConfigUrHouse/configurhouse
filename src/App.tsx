@@ -1,16 +1,14 @@
-import React, { useState } from 'react';
-import './App.css';
-import Home from './components/Home/Home';
-import Sidebar from './components/Sidebar/Sidebar';
-import Configurator from './components/Configurator/Configurator';
-import Policies from './components/Policies/Policies';
+import "./App.css";
+import Home from "./components/Home/Home";
+import Sidebar from "./components/Sidebar/Sidebar";
+import Configurator from "./components/Configurator/Configurator";
+import Policies from "./components/Policies/Policies";
 
-import { Container, Row, Col } from 'react-bootstrap';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { UsersList } from './components/UsersList/UsersList';
-import Mentions from './components/Mentions/Mentions';
-import Contact from './components/Contact/Contact';
-import User from './components/User/User';
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { UsersList } from "./components/UsersList/UsersList";
+import Mentions from "./components/Mentions/Mentions";
+import Contact from "./components/Contact/Contact";
+import User from "./components/User/User";
 
 function App() {
   return (
@@ -19,7 +17,7 @@ function App() {
         <Sidebar />
 
         <Switch>
-        <Route path="/account">
+          <Route path="/account">
             <User />
           </Route>
           <Route path="/users">
