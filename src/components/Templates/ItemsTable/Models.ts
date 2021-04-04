@@ -1,4 +1,5 @@
-import { PaginatedResponse } from "../../../utils/pagination";
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { PaginatedResponse } from '../../../utils/pagination';
 
 export interface ItemsTableColumn<T extends Record<string, any>> {
   name: string;
@@ -12,4 +13,12 @@ export interface ItemsTableProps<T extends Record<string, any>> {
   handlePageChange(page: number): void;
   handleEdit?(id: number): void;
   handleDelete?(id: number): void;
+  globalActions?: {
+    icon: IconProp;
+    handle(selectedItems: T[]): void;
+  }[]
+}
+
+export interface ItemsTableState<T> {
+  selectedItems: T[];
 }

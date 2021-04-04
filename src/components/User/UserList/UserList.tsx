@@ -12,6 +12,8 @@ import {
 } from "react-bootstrap";
 import {
   faCheck,
+  faEnvelope,
+  faPaperPlane,
   faSearch,
   faTimes,
   faUser,
@@ -38,6 +40,11 @@ const initialValues: FormValues = {
   lastName: "",
   role: defaultRole,
 };
+
+const initialEmailValues = {
+  subject: "",
+  content: ""
+}
 
 const columns: ItemsTableColumn<User>[] = [
   {
@@ -77,7 +84,8 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
     this.handleEdit = this.handleEdit.bind(this);
     this.confirmDelete = this.confirmDelete.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
-    this.handleModalClose = this.handleModalClose.bind(this);
+    this.handleDeleteModalClose = this.handleDeleteModalClose.bind(this);
+    this.handleEmailModalClose = this.handleEmailModalClose.bind(this);
     this.handlePageChange = this.handlePageChange.bind(this);
 
     this.state = {
@@ -86,11 +94,13 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
       roles: [],
       error: undefined,
       showDeleteModal: false,
-      userToDelete: undefined
+      showEmailModal: false,
+      userToDelete: undefined,
+      selectedUsers: []
     };
   }
 
-  private schema = Yup.object().shape({
+  private searchSchema = Yup.object().shape({
     firstName: Yup.string().min(
       2,
       "Le prénom doit faire au moins 2 caractères"
@@ -103,6 +113,11 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
       ])
     ),
   });
+
+  private emailSchema = Yup.object().shape({
+    object: Yup.string(),
+    content: Yup.string().required("Veuillez saisir un message")
+  })
 
   componentDidMount() {
     this.fetchRoles();
@@ -162,7 +177,7 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
     this.setState({ showDeleteModal: true, userToDelete: this.state.paginatedItems.items.find(user => user.id === id) });
   }
 
-  private handleModalClose(): void {
+  private handleDeleteModalClose(): void {
     this.setState({ showDeleteModal: false });
   }
 
@@ -174,7 +189,7 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
         } else {
           this.fetchUsers();
         }
-        this.handleModalClose()
+        this.handleDeleteModalClose()
       })
       .catch((error) => console.log(error));
   }
@@ -193,18 +208,100 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
     );
   }
 
+  private handleEmailModalClose(): void {
+    this.setState({ showEmailModal: false });
+  }
+
+  private async sendEmails(emailList: string[], subject: string, content: string) {
+    apiRequest(`utils/sendEmails`, "POST", [], JSON.stringify({
+      emails: emailList,
+      subject: subject,
+      content: `<p>${content}<p>`
+    }))
+      .then((response) => {
+        if (response.status === "error") {
+          this.setState({ error: response as ApiResponseError });
+        }
+        this.handleEmailModalClose()
+      })
+      .catch((error) => console.log(error));
+  }
+
   render() {
     const { paginatedItems } = this.state;
     return (
       <main className="p-5 w-100 bg">
-        { this.state.userToDelete &&
-          <Modal show={this.state.showDeleteModal && this.state.userToDelete} onHide={this.handleModalClose}>
+        <Modal show={this.state.showEmailModal} onHide={this.handleEmailModalClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Envoyer un email</Modal.Title>
+          </Modal.Header>
+          <Formik
+            validationSchema={this.emailSchema}
+            onSubmit={(values) => this.sendEmails(this.state.selectedUsers.map(user => user.email), values.subject, values.content)}
+            initialValues={initialEmailValues}
+            enableReinitialize
+          >
+            {({
+              handleSubmit,
+              handleChange,
+              handleBlur,
+              values,
+              touched,
+              isValid,
+              errors,
+            }) => (
+              <Form noValidate onSubmit={handleSubmit}>
+                <Modal.Body>
+                  <p className="text-center">Voulez-vous envoyer un email à {this.state.selectedUsers.length} utilisateur(s) ?</p>
+                  <InputGroup className="mb-3">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text>
+                        <FontAwesomeIcon icon={faUser} />
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl
+                      placeholder="Objet"
+                      name="subject"
+                      value={values.subject}
+                      onChange={handleChange}
+                      isInvalid={!!errors.subject}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.subject}
+                    </Form.Control.Feedback>
+                  </InputGroup>
+                  <FormControl
+                    as="textarea"
+                    placeholder="Votre message"
+                    name="content"
+                    value={values.content}
+                    onChange={handleChange}
+                    isInvalid={!!errors.content}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.content}
+                  </Form.Control.Feedback>
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button variant="secondary" onClick={this.handleEmailModalClose}>
+                    Annuler
+                    </Button>
+                  <Button variant="primary" type="submit" disabled={!isValid}>
+                    ENVOYER <FontAwesomeIcon icon={faPaperPlane} />
+                  </Button>
+                </Modal.Footer>
+              </Form>
+            )}
+          </Formik>
+        </Modal>
+        {this.state.userToDelete &&
+          <Modal show={this.state.showDeleteModal && this.state.userToDelete} onHide={this.handleDeleteModalClose}>
             <Modal.Header closeButton>
               <Modal.Title>Confirmer la suppression</Modal.Title>
             </Modal.Header>
             <Modal.Body>Voulez-vous supprimer l'utilisateur {this.state.userToDelete?.firstname} {this.state.userToDelete?.lastname} ({this.state.userToDelete?.email}) ?</Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={this.handleModalClose}>
+              <Button variant="secondary" onClick={this.handleDeleteModalClose}>
                 Annuler
               </Button>
               <Button variant="danger" onClick={() => this.handleDelete(this.state.userToDelete?.id || -1)}>
@@ -227,7 +324,7 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
             Liste des utilisateurs
           </h3>
           <Formik
-            validationSchema={this.schema}
+            validationSchema={this.searchSchema}
             onSubmit={this.fetchUsers}
             initialValues={initialValues}
           >
@@ -341,6 +438,7 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
             handlePageChange={this.handlePageChange}
             handleEdit={this.handleEdit}
             handleDelete={this.confirmDelete}
+            globalActions={[{ icon: faEnvelope, handle: ((selectedItems: User[]) => this.setState({ showEmailModal: true, selectedUsers: selectedItems })) }]}
           />
         </div>
       </main>
