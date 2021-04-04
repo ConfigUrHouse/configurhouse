@@ -74,11 +74,11 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
           />
           <Pagination.Item active>{currentPage + 1}</Pagination.Item>
           <Pagination.Next
-            disabled={currentPage === totalPages - 1}
+            disabled={!totalPages || currentPage === totalPages - 1}
             onClick={() => handlePageChange(currentPage + 1)}
           />
           <Pagination.Last
-            disabled={currentPage === totalPages - 1}
+            disabled={!totalPages || currentPage === totalPages - 1}
             onClick={() => handlePageChange(totalPages - 1)}
           />
         </Pagination>
