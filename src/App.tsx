@@ -5,8 +5,8 @@ import Configurator from './components/Configurator/Configurator';
 import Policies from './components/Policies/Policies';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { UserListWithRouter } from './components/User/UserList/UserList';
-import { UserEditWithRouter } from './components/User/UserEdit/UserEdit'
-import User from './components/User/User'
+import { UserEditWithRouter } from './components/User/UserEdit/UserEdit';
+import User from './components/User/User';
 import Mentions from './components/Mentions/Mentions';
 import Contact from './components/Contact/Contact';
 

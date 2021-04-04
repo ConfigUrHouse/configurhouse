@@ -48,12 +48,14 @@ function Sidebar() {
         </MenuItem>
       </SidebarContent>
       <SidebarFooter>
-      <Link to="/account"><Menu iconShape="square">
-          <MenuItem>
-            <FontAwesomeIcon icon={faUser} size="lg" className="mr-2" />
-            Mon compte
-          </MenuItem>
-        </Menu></Link>
+        <Link to="/account">
+          <Menu iconShape="square">
+            <MenuItem>
+              <FontAwesomeIcon icon={faUser} size="lg" className="mr-2" />
+              Mon compte
+            </MenuItem>
+          </Menu>
+        </Link>
       </SidebarFooter>
     </ProSidebar>
   );

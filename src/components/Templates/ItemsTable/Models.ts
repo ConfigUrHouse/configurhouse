@@ -1,9 +1,9 @@
-import { PaginatedResponse } from '../../../utils/pagination';
+import { PaginatedResponse } from "../../../utils/pagination";
 
 export interface ItemsTableColumn<T extends Record<string, any>> {
   name: string;
   displayName: string;
-  component?(item: T): JSX.Element;
+  component?(item: T): JSX.Element | string;
 }
 
 export interface ItemsTableProps<T extends Record<string, any>> {

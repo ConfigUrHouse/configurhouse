@@ -1,8 +1,8 @@
-import React from 'react';
-import { Pagination, Table } from 'react-bootstrap';
-import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ItemsTableProps } from './Models';
+import React from "react";
+import { Pagination, Table } from "react-bootstrap";
+import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ItemsTableProps } from "./Models";
 
 export class ItemsTable<T extends Record<string, any>> extends React.Component<
   ItemsTableProps<T>,
