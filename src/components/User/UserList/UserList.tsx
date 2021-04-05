@@ -46,8 +46,8 @@ const initialValues: FormValues = {
 const initialEmailValues = {
   subject: "",
   content: "",
-  consent: false
-}
+  consent: false,
+};
 
 const columns: ItemsTableColumn<User>[] = [
   {
@@ -90,7 +90,7 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
     this.handleDeleteModalClose = this.handleDeleteModalClose.bind(this);
     this.handleEmailModalClose = this.handleEmailModalClose.bind(this);
     this.handlePageChange = this.handlePageChange.bind(this);
-    this.fetchAllResults = this.fetchAllResults.bind(this)
+    this.fetchAllResults = this.fetchAllResults.bind(this);
 
     this.state = {
       formValues: initialValues,
@@ -100,7 +100,7 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
       showDeleteModal: false,
       showEmailModal: false,
       userToDelete: undefined,
-      selectedUsers: []
+      selectedUsers: [],
     };
   }
 
@@ -121,8 +121,8 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
   private emailSchema = Yup.object().shape({
     object: Yup.string(),
     content: Yup.string().required("Veuillez saisir un message"),
-    consent: Yup.bool().isTrue("Veuillez cocher cette case avant d'envoyer")
-  })
+    consent: Yup.bool().isTrue("Veuillez cocher cette case avant d'envoyer"),
+  });
 
   componentDidMount() {
     this.fetchRoles();
@@ -191,15 +191,15 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
       .then((response) => {
         if (response.status === "error") {
           this.setState({ error: response as ApiResponseError });
-          return []
+          return [];
         } else {
           const paginatedItems: PaginatedResponse<User> = response as PaginatedResponse<User>;
-          return paginatedItems.items
+          return paginatedItems.items;
         }
       })
       .catch((error) => {
-        console.log(error)
-        return []
+        console.log(error);
+        return [];
       });
   }
 
@@ -209,7 +209,12 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
   }
 
   private confirmDelete(id: number): void {
-    this.setState({ showDeleteModal: true, userToDelete: this.state.paginatedItems.items.find(user => user.id === id) });
+    this.setState({
+      showDeleteModal: true,
+      userToDelete: this.state.paginatedItems.items.find(
+        (user) => user.id === id
+      ),
+    });
   }
 
   private handleDeleteModalClose(): void {
@@ -224,7 +229,7 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
         } else {
           this.fetchUsers();
         }
-        this.handleDeleteModalClose()
+        this.handleDeleteModalClose();
       })
       .catch((error) => console.log(error));
   }
@@ -247,17 +252,26 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
     this.setState({ showEmailModal: false });
   }
 
-  private async sendEmails(emailList: string[], subject: string, content: string) {
-    apiRequest(`utils/sendEmails`, "POST", [], JSON.stringify({
-      emails: emailList,
-      subject: subject,
-      content: content
-    }))
+  private async sendEmails(
+    emailList: string[],
+    subject: string,
+    content: string
+  ) {
+    apiRequest(
+      `utils/sendEmails`,
+      "POST",
+      [],
+      JSON.stringify({
+        emails: emailList,
+        subject: subject,
+        content: content,
+      })
+    )
       .then((response) => {
         if (response.status === "error") {
           this.setState({ error: response as ApiResponseError });
         }
-        this.handleEmailModalClose()
+        this.handleEmailModalClose();
       })
       .catch((error) => console.log(error));
   }
@@ -266,13 +280,23 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
     const { paginatedItems } = this.state;
     return (
       <main className="p-5 w-100 bg">
-        <Modal show={this.state.showEmailModal} onHide={this.handleEmailModalClose} size="xl">
+        <Modal
+          show={this.state.showEmailModal}
+          onHide={this.handleEmailModalClose}
+          size="xl"
+        >
           <Modal.Header closeButton>
             <Modal.Title>Envoyer un email</Modal.Title>
           </Modal.Header>
           <Formik
             validationSchema={this.emailSchema}
-            onSubmit={(values) => this.sendEmails(this.state.selectedUsers.map(user => user.email), values.subject, values.content)}
+            onSubmit={(values) =>
+              this.sendEmails(
+                this.state.selectedUsers.map((user) => user.email),
+                values.subject,
+                values.content
+              )
+            }
             initialValues={initialEmailValues}
             enableReinitialize
           >
@@ -306,20 +330,29 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
                   </InputGroup>
                   <EditorField name="content" initialValue="<p></p>" />
                   <Form.Check>
-                    <Form.Check.Input name="consent"
+                    <Form.Check.Input
+                      name="consent"
                       checked={values.consent}
                       onChange={handleChange}
-                      isInvalid={!!errors.consent} />
-                    <Form.Check.Label>Envoyer un email à {this.state.selectedUsers.length} utilisateur(s) <FontAwesomeIcon icon={faExclamationTriangle} /></Form.Check.Label>
+                      isInvalid={!!errors.consent}
+                    />
+                    <Form.Check.Label>
+                      Envoyer un email à {this.state.selectedUsers.length}{" "}
+                      utilisateur(s){" "}
+                      <FontAwesomeIcon icon={faExclamationTriangle} />
+                    </Form.Check.Label>
                   </Form.Check>
                   <Form.Control.Feedback type="invalid">
                     {errors.consent}
                   </Form.Control.Feedback>
                 </Modal.Body>
                 <Modal.Footer>
-                  <Button variant="secondary" onClick={this.handleEmailModalClose}>
+                  <Button
+                    variant="secondary"
+                    onClick={this.handleEmailModalClose}
+                  >
                     Annuler
-                    </Button>
+                  </Button>
                   <Button variant="primary" type="submit" disabled={!isValid}>
                     ENVOYER <FontAwesomeIcon icon={faPaperPlane} />
                   </Button>
@@ -328,21 +361,35 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
             )}
           </Formik>
         </Modal>
-        {this.state.userToDelete &&
-          <Modal show={this.state.showDeleteModal && this.state.userToDelete} onHide={this.handleDeleteModalClose}>
+        {this.state.userToDelete && (
+          <Modal
+            show={this.state.showDeleteModal && this.state.userToDelete}
+            onHide={this.handleDeleteModalClose}
+          >
             <Modal.Header closeButton>
               <Modal.Title>Confirmer la suppression</Modal.Title>
             </Modal.Header>
-            <Modal.Body>Voulez-vous supprimer l'utilisateur {this.state.userToDelete?.firstname} {this.state.userToDelete?.lastname} ({this.state.userToDelete?.email}) ?</Modal.Body>
+            <Modal.Body>
+              Voulez-vous supprimer l'utilisateur{" "}
+              {this.state.userToDelete?.firstname}{" "}
+              {this.state.userToDelete?.lastname} (
+              {this.state.userToDelete?.email}) ?
+            </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={this.handleDeleteModalClose}>
                 Annuler
               </Button>
-              <Button variant="danger" onClick={() => this.handleDelete(this.state.userToDelete?.id || -1)}>
+              <Button
+                variant="danger"
+                onClick={() =>
+                  this.handleDelete(this.state.userToDelete?.id || -1)
+                }
+              >
                 SUPPRIMER
               </Button>
             </Modal.Footer>
-          </Modal>}
+          </Modal>
+        )}
         <div className="circle1"></div>
         <div className="circle2"></div>
         <div className="p-5 form w-75 mx-auto">
@@ -473,8 +520,17 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
             handleEdit={this.handleEdit}
             handleDelete={this.confirmDelete}
             globalActions={{
-              actions: [{ icon: faEnvelope, handle: ((selectedItems: User[]) => this.setState({ showEmailModal: true, selectedUsers: selectedItems })) }],
-              fetchAll: this.fetchAllResults
+              actions: [
+                {
+                  icon: faEnvelope,
+                  handle: (selectedItems: User[]) =>
+                    this.setState({
+                      showEmailModal: true,
+                      selectedUsers: selectedItems,
+                    }),
+                },
+              ],
+              fetchAll: this.fetchAllResults,
             }}
           />
         </div>

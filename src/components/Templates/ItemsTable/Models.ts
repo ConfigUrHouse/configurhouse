@@ -1,5 +1,5 @@
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { PaginatedResponse } from '../../../utils/pagination';
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { PaginatedResponse } from "../../../utils/pagination";
 
 export interface ItemsTableColumn<T extends Record<string, any>> {
   name: string;
@@ -18,8 +18,8 @@ export interface ItemsTableProps<T extends Record<string, any>> {
       icon: IconProp;
       handle(selectedItems: T[]): void;
     }[];
-    fetchAll(): Promise<T[]>
-  }
+    fetchAll(): Promise<T[]>;
+  };
 }
 
 export interface ItemsTableState<T> {

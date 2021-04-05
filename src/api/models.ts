@@ -1,5 +1,5 @@
 export interface ApiResponseError {
-    status: string;
-    statusCode: number;
-    message: string;
+  status: string;
+  statusCode: number;
+  message: string;
 }
