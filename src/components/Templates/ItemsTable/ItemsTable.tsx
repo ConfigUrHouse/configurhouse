@@ -1,6 +1,6 @@
 import React from 'react';
-import { Dropdown, Form, InputGroup, Pagination, Row, Table } from 'react-bootstrap';
-import { faCaretDown, faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { Dropdown, Form, Pagination, Row, Table } from 'react-bootstrap';
+import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ItemsTableProps, ItemsTableState } from './Models';
 

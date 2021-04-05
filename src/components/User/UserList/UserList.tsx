@@ -1,5 +1,5 @@
 import React from "react";
-import { Formik } from "formik";
+import { Field, Formik } from "formik";
 import * as Yup from "yup";
 import {
   Button,
@@ -13,6 +13,7 @@ import {
 import {
   faCheck,
   faEnvelope,
+  faExclamationTriangle,
   faPaperPlane,
   faSearch,
   faTimes,
@@ -32,6 +33,7 @@ import { Role, User } from "../Models";
 import { withRouter } from "react-router";
 import "./UserList.css";
 import { ApiResponseError } from "../../../api/models";
+import { EditorField } from "../../Templates/EditorField/EditorField";
 
 const defaultRole = "Tous";
 
@@ -43,7 +45,8 @@ const initialValues: FormValues = {
 
 const initialEmailValues = {
   subject: "",
-  content: ""
+  content: "",
+  consent: false
 }
 
 const columns: ItemsTableColumn<User>[] = [
@@ -117,7 +120,8 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
 
   private emailSchema = Yup.object().shape({
     object: Yup.string(),
-    content: Yup.string().required("Veuillez saisir un message")
+    content: Yup.string().required("Veuillez saisir un message"),
+    consent: Yup.bool().isTrue("Veuillez cocher cette case avant d'envoyer")
   })
 
   componentDidMount() {
@@ -247,7 +251,7 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
     apiRequest(`utils/sendEmails`, "POST", [], JSON.stringify({
       emails: emailList,
       subject: subject,
-      content: `<p>${content}<p>`
+      content: content
     }))
       .then((response) => {
         if (response.status === "error") {
@@ -262,7 +266,7 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
     const { paginatedItems } = this.state;
     return (
       <main className="p-5 w-100 bg">
-        <Modal show={this.state.showEmailModal} onHide={this.handleEmailModalClose}>
+        <Modal show={this.state.showEmailModal} onHide={this.handleEmailModalClose} size="xl">
           <Modal.Header closeButton>
             <Modal.Title>Envoyer un email</Modal.Title>
           </Modal.Header>
@@ -283,7 +287,6 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
             }) => (
               <Form noValidate onSubmit={handleSubmit}>
                 <Modal.Body>
-                  <p className="text-center">Voulez-vous envoyer un email à {this.state.selectedUsers.length} utilisateur(s) ?</p>
                   <InputGroup className="mb-3">
                     <InputGroup.Prepend>
                       <InputGroup.Text>
@@ -301,16 +304,16 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
                       {errors.subject}
                     </Form.Control.Feedback>
                   </InputGroup>
-                  <FormControl
-                    as="textarea"
-                    placeholder="Votre message"
-                    name="content"
-                    value={values.content}
-                    onChange={handleChange}
-                    isInvalid={!!errors.content}
-                  />
+                  <EditorField name="content" initialValue="<p></p>" />
+                  <Form.Check>
+                    <Form.Check.Input name="consent"
+                      checked={values.consent}
+                      onChange={handleChange}
+                      isInvalid={!!errors.consent} />
+                    <Form.Check.Label>Envoyer un email à {this.state.selectedUsers.length} utilisateur(s) <FontAwesomeIcon icon={faExclamationTriangle} /></Form.Check.Label>
+                  </Form.Check>
                   <Form.Control.Feedback type="invalid">
-                    {errors.content}
+                    {errors.consent}
                   </Form.Control.Feedback>
                 </Modal.Body>
                 <Modal.Footer>
