@@ -73,90 +73,24 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
     const hasActions = !!(handleEdit || handleDelete);
     const canSelectItems = !!globalActions?.actions.length;
 
-    const globalActionsDiv = (
-      <div className="w-100 p-3 mt-5 d-flex justify-content-between">
-        <span className="selectedItems">
-          {this.state.selectedItems.length} élément(s) sélectionné(s)
-        </span>
-        <span className="globalActions">
-          {globalActions?.actions.map((action, index) => (
-            <FontAwesomeIcon
-              key={index}
-              icon={action.icon}
-              onClick={() => action.handle(this.state.selectedItems)}
-            />
-          ))}
-        </span>
-      </div>
-    );
-
-    const selectionColumn = (
-      <th>
-        <Row className="d-flex align-items-center justify-content-center">
-          <Form.Check
-            name="selectAll"
-            checked={items.every((item) =>
-              this.state.selectedItems.some(
-                (selectedItem) => selectedItem.id === item.id
-              )
-            )}
-            onChange={(e: any) => {
-              if (e.target.checked) {
-                this.selectCurrentPage();
-              } else {
-                this.deselectCurrentPage();
-              }
-            }}
-          />
-          <Dropdown id="selectionDropdown">
-            <Dropdown.Toggle as="span" variant="success" />
-            <Dropdown.Menu>
-              <Dropdown.Item as="button" onClick={this.selectAllResults}>
-                Sélectionner toutes les pages
-              </Dropdown.Item>
-              <Dropdown.Item as="button" onClick={this.selectCurrentPage}>
-                Sélectionner cette page
-              </Dropdown.Item>
-              <Dropdown.Item as="button" onClick={this.deselectCurrentPage}>
-                Désélectionner cette page
-              </Dropdown.Item>
-              <Dropdown.Item as="button" onClick={this.deselectAll}>
-                Désélectionner tout
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </Row>
-      </th>
-    );
-
-    const selectOneCheckbox = (item: T) => (
-      <td>
-        <Form.Check
-          name="selectOne"
-          checked={this.state.selectedItems.some(
-            (selectedItem) => selectedItem.id === item.id
-          )}
-          onChange={(e: any) => {
-            if (e.target.checked) {
-              const newItems = this.state.selectedItems;
-              newItems.push(item);
-              this.setState({ selectedItems: newItems });
-            } else {
-              const newItems = this.state.selectedItems;
-              const idx = this.state.selectedItems.findIndex(
-                (selectedItem) => selectedItem.id === item.id
-              );
-              newItems.splice(idx, 1);
-              this.setState({ selectedItems: newItems });
-            }
-          }}
-        />
-      </td>
-    );
-
     return (
       <div className="items w-100 p-3 d-flex flex-column align-items-center">
-        {canSelectItems && globalActionsDiv}
+        {canSelectItems && (
+          <div className="w-100 p-3 mt-5 d-flex justify-content-between">
+            <span className="selectedItems">
+              {this.state.selectedItems.length} élément(s) sélectionné(s)
+            </span>
+            <span className="globalActions">
+              {globalActions?.actions.map((action, index) => (
+                <FontAwesomeIcon
+                  key={index}
+                  icon={action.icon}
+                  onClick={() => action.handle(this.state.selectedItems)}
+                />
+              ))}
+            </span>
+          </div>
+        )}
         <Table
           bordered
           hover
@@ -164,7 +98,53 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
         >
           <thead>
             <tr>
-              {canSelectItems && selectionColumn}
+              {canSelectItems && (
+                <th>
+                  <Row className="d-flex align-items-center justify-content-center">
+                    <Form.Check
+                      name="selectAll"
+                      checked={items.every((item) =>
+                        this.state.selectedItems.some(
+                          (selectedItem) => selectedItem.id === item.id
+                        )
+                      )}
+                      onChange={(e: any) => {
+                        if (e.target.checked) {
+                          this.selectCurrentPage();
+                        } else {
+                          this.deselectCurrentPage();
+                        }
+                      }}
+                    />
+                    <Dropdown id="selectionDropdown">
+                      <Dropdown.Toggle as="span" variant="success" />
+                      <Dropdown.Menu>
+                        <Dropdown.Item
+                          as="button"
+                          onClick={this.selectAllResults}
+                        >
+                          Sélectionner toutes les pages
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          as="button"
+                          onClick={this.selectCurrentPage}
+                        >
+                          Sélectionner cette page
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          as="button"
+                          onClick={this.deselectCurrentPage}
+                        >
+                          Désélectionner cette page
+                        </Dropdown.Item>
+                        <Dropdown.Item as="button" onClick={this.deselectAll}>
+                          Désélectionner tout
+                        </Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </Row>
+                </th>
+              )}
               {columns.map((col) => (
                 <th key={col.name}>{col.displayName}</th>
               ))}
@@ -175,7 +155,30 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
             {items.map((item: T) => {
               return (
                 <tr key={item.id}>
-                  {canSelectItems && selectOneCheckbox}
+                  {canSelectItems && (
+                    <td>
+                      <Form.Check
+                        name="selectOne"
+                        checked={this.state.selectedItems.some(
+                          (selectedItem) => selectedItem.id === item.id
+                        )}
+                        onChange={(e: any) => {
+                          if (e.target.checked) {
+                            const newItems = this.state.selectedItems;
+                            newItems.push(item);
+                            this.setState({ selectedItems: newItems });
+                          } else {
+                            const newItems = this.state.selectedItems;
+                            const idx = this.state.selectedItems.findIndex(
+                              (selectedItem) => selectedItem.id === item.id
+                            );
+                            newItems.splice(idx, 1);
+                            this.setState({ selectedItems: newItems });
+                          }
+                        }}
+                      />
+                    </td>
+                  )}
                   {columns.map((col) => (
                     <td key={item.id + col.name}>
                       {col.component ? col.component(item) : item[col.name]}
