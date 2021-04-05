@@ -1,5 +1,5 @@
 import React from "react";
-import { Field, Formik } from "formik";
+import { Formik } from "formik";
 import * as Yup from "yup";
 import {
   Button,
@@ -187,7 +187,7 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
       queryParams.push(`role=${formValues.role}`);
     }
 
-    return await apiRequest("user", "GET", queryParams)
+    return apiRequest("user", "GET", queryParams)
       .then((response) => {
         if (response.status === "error") {
           this.setState({ error: response as ApiResponseError });
