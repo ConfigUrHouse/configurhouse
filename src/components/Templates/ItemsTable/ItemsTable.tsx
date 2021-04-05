@@ -1,6 +1,6 @@
 import React from 'react';
-import { Form, Pagination, Table } from 'react-bootstrap';
-import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { Dropdown, Form, InputGroup, Pagination, Row, Table } from 'react-bootstrap';
+import { faCaretDown, faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ItemsTableProps, ItemsTableState } from './Models';
 
@@ -10,10 +10,42 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
 > {
   constructor(props: ItemsTableProps<T>) {
     super(props);
+
+    this.selectCurrentPage = this.selectCurrentPage.bind(this)
+    this.selectAllResults = this.selectAllResults.bind(this)
+    this.deselectCurrentPage = this.deselectCurrentPage.bind(this)
+    this.deselectAll = this.deselectAll.bind(this)
   }
 
   public readonly state: ItemsTableState<T> = {
     selectedItems: []
+  }
+
+  async selectAllResults() {
+    this.setState({ selectedItems: await this.props.globalActions?.fetchAll() || [] })
+  }
+
+  selectCurrentPage() {
+    const newItems: T[] = []
+    this.props.paginatedItems.items.forEach(item => {
+      if (!this.state.selectedItems.some(selectedItem => selectedItem.id === item.id)) newItems.push(item)
+    })
+    this.setState({ selectedItems: this.state.selectedItems.concat(newItems) })
+  }
+
+  deselectAll() {
+    this.setState({ selectedItems: [] })
+  }
+
+  deselectCurrentPage() {
+    const newItems: T[] = this.state.selectedItems
+    this.props.paginatedItems.items.forEach(item => {
+      if (this.state.selectedItems.some(selectedItem => selectedItem.id === item.id)) {
+        const index = this.state.selectedItems.findIndex(selectedItem => selectedItem.id === item.id)
+        newItems.splice(index, 1)
+      }
+    })
+    this.setState({ selectedItems: newItems })
   }
 
   render() {
@@ -26,7 +58,7 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
       globalActions
     } = this.props;
     const hasActions = !!(handleEdit || handleDelete);
-    const canSelectItems = !!globalActions?.length
+    const canSelectItems = !!globalActions?.actions.length
 
     return (
       <div className="items w-100 p-3 d-flex flex-column align-items-center">
@@ -35,30 +67,41 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
             {this.state.selectedItems.length} élément(s) sélectionné(s)
           </span>
           <span className="globalActions">
-            {globalActions?.map((action,index) =>
-              <FontAwesomeIcon key={index} icon={action.icon} onClick={() => action.handle(this.state.selectedItems)}/>
+            {globalActions?.actions.map((action, index) =>
+              <FontAwesomeIcon key={index} icon={action.icon} onClick={() => action.handle(this.state.selectedItems)} />
             )}
           </span>
         </div>}
         <Table bordered hover className={`${canSelectItems ? "" : "mt-5"} text-center`}>
           <thead>
             <tr>
-              {canSelectItems && <th>
-                <Form.Check
-                  name="selectAll"
-                  onChange={(e: any) => {
-                    if (e.target.checked) {
-                      const newItems: T[] = []
-                      items.forEach(item => {
-                        if (!this.state.selectedItems.includes(item)) newItems.push(item)
-                      })
-                      this.setState({ selectedItems: this.state.selectedItems.concat(newItems) })
-                    }
-                    else {
-                      this.setState({ selectedItems: [] })
-                    }
-                  }}
-                /></th>}
+              {canSelectItems &&
+                <th>
+                  <Row className="d-flex align-items-center justify-content-center">
+                    <Form.Check
+                      name="selectAll"
+                      checked={items.every(item => this.state.selectedItems.some(selectedItem => selectedItem.id === item.id))}
+                      onChange={(e: any) => {
+                        if (e.target.checked) {
+                          this.selectCurrentPage()
+                        }
+                        else {
+                          this.deselectCurrentPage()
+                        }
+                      }}
+                    />
+                    <Dropdown id="selectionDropdown">
+                      <Dropdown.Toggle as="span" variant="success" />
+                      <Dropdown.Menu>
+                        <Dropdown.Item as="button" onClick={this.selectAllResults}>Sélectionner toutes les pages</Dropdown.Item>
+                        <Dropdown.Item as="button" onClick={this.selectCurrentPage}>Sélectionner cette page</Dropdown.Item>
+                        <Dropdown.Item as="button" onClick={this.deselectCurrentPage}>Désélectionner cette page</Dropdown.Item>
+                        <Dropdown.Item as="button" onClick={this.deselectAll}>Désélectionner tout</Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </Row>
+                </th>
+              }
               {columns.map((col) => (
                 <th key={col.name}>{col.displayName}</th>
               ))}
@@ -72,7 +115,7 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
                   {canSelectItems && <td>
                     <Form.Check
                       name="selectOne"
-                      checked={this.state.selectedItems.includes(item)}
+                      checked={this.state.selectedItems.some(selectedItem => selectedItem.id === item.id)}
                       onChange={(e: any) => {
                         if (e.target.checked) {
                           const newItems = this.state.selectedItems;
@@ -81,7 +124,7 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
                         }
                         else {
                           const newItems = this.state.selectedItems;
-                          const idx = this.state.selectedItems.indexOf(item);
+                          const idx = this.state.selectedItems.findIndex(selectedItem => selectedItem.id === item.id);
                           newItems.splice(idx, 1);
                           this.setState({ selectedItems: newItems });
                         }

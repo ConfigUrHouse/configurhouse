@@ -87,6 +87,7 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
     this.handleDeleteModalClose = this.handleDeleteModalClose.bind(this);
     this.handleEmailModalClose = this.handleEmailModalClose.bind(this);
     this.handlePageChange = this.handlePageChange.bind(this);
+    this.fetchAllResults = this.fetchAllResults.bind(this)
 
     this.state = {
       formValues: initialValues,
@@ -166,6 +167,36 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
       .catch((error) => console.log(error));
 
     this.setState({ paginatedItems: emptyPaginatedData<User>() });
+  }
+
+  private async fetchAllResults(): Promise<User[]> {
+    const formValues = this.state.formValues;
+
+    const queryParams = [];
+    if (formValues.firstName) {
+      queryParams.push(`firstname=${formValues.firstName}`);
+    }
+    if (formValues.lastName) {
+      queryParams.push(`lastname=${formValues.lastName}`);
+    }
+    if (formValues.role && formValues.role !== defaultRole) {
+      queryParams.push(`role=${formValues.role}`);
+    }
+
+    return await apiRequest("user", "GET", queryParams)
+      .then((response) => {
+        if (response.status === "error") {
+          this.setState({ error: response as ApiResponseError });
+          return []
+        } else {
+          const paginatedItems: PaginatedResponse<User> = response as PaginatedResponse<User>;
+          return paginatedItems.items
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+        return []
+      });
   }
 
   private handleEdit(id: number): void {
@@ -438,7 +469,10 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
             handlePageChange={this.handlePageChange}
             handleEdit={this.handleEdit}
             handleDelete={this.confirmDelete}
-            globalActions={[{ icon: faEnvelope, handle: ((selectedItems: User[]) => this.setState({ showEmailModal: true, selectedUsers: selectedItems })) }]}
+            globalActions={{
+              actions: [{ icon: faEnvelope, handle: ((selectedItems: User[]) => this.setState({ showEmailModal: true, selectedUsers: selectedItems })) }],
+              fetchAll: this.fetchAllResults
+            }}
           />
         </div>
       </main>

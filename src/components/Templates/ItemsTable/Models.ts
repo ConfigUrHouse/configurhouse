@@ -14,9 +14,12 @@ export interface ItemsTableProps<T extends Record<string, any>> {
   handleEdit?(id: number): void;
   handleDelete?(id: number): void;
   globalActions?: {
-    icon: IconProp;
-    handle(selectedItems: T[]): void;
-  }[]
+    actions: {
+      icon: IconProp;
+      handle(selectedItems: T[]): void;
+    }[];
+    fetchAll(): Promise<T[]>
+  }
 }
 
 export interface ItemsTableState<T> {
