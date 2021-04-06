@@ -7,7 +7,6 @@ import {
   Form,
   FormControl,
   InputGroup,
-  Modal,
   Row,
 } from "react-bootstrap";
 import {
@@ -75,9 +74,7 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
     super(props);
     this.fetchUsers = this.fetchUsers.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
-    this.confirmDelete = this.confirmDelete.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
-    this.handleModalClose = this.handleModalClose.bind(this);
     this.handlePageChange = this.handlePageChange.bind(this);
 
     this.state = {
@@ -85,8 +82,6 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
       paginatedItems: emptyPaginatedData<User>(),
       roles: [],
       error: undefined,
-      showDeleteModal: false,
-      userToDelete: undefined
     };
   }
 
@@ -158,25 +153,20 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
     this.props.history.push(path);
   }
 
-  private confirmDelete(id: number): void {
-    this.setState({ showDeleteModal: true, userToDelete: this.state.paginatedItems.items.find(user => user.id === id) });
-  }
-
-  private handleModalClose(): void {
-    this.setState({ showDeleteModal: false });
-  }
-
   private async handleDelete(id: number): Promise<void> {
-    apiRequest(`user/${id}`, "DELETE", [])
+    return apiRequest(`user/${id}`, "DELETE", [])
       .then((response) => {
         if (response.status === "error") {
           this.setState({ error: response as ApiResponseError });
         } else {
           this.fetchUsers();
         }
-        this.handleModalClose()
       })
       .catch((error) => console.log(error));
+  }
+
+  private deleteMessage(item: User): string {
+    return `Voulez-vous supprimer l'utilisateur ${item.firstname} ${item.lastname} (${item.email}) ?`;
   }
 
   private handlePageChange(value: number): void {
@@ -197,21 +187,6 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
     const { paginatedItems } = this.state;
     return (
       <main className="p-5 w-100 bg">
-        { this.state.userToDelete &&
-          <Modal show={this.state.showDeleteModal && this.state.userToDelete} onHide={this.handleModalClose}>
-            <Modal.Header closeButton>
-              <Modal.Title>Confirmer la suppression</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>Voulez-vous supprimer l'utilisateur {this.state.userToDelete?.firstname} {this.state.userToDelete?.lastname} ({this.state.userToDelete?.email}) ?</Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={this.handleModalClose}>
-                Annuler
-              </Button>
-              <Button variant="danger" onClick={() => this.handleDelete(this.state.userToDelete?.id || -1)}>
-                SUPPRIMER
-              </Button>
-            </Modal.Footer>
-          </Modal>}
         <div className="circle1"></div>
         <div className="circle2"></div>
         <div className="p-5 form w-75 mx-auto">
@@ -340,7 +315,8 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
             columns={columns}
             handlePageChange={this.handlePageChange}
             handleEdit={this.handleEdit}
-            handleDelete={this.confirmDelete}
+            handleDelete={this.handleDelete}
+            deleteMessage={this.deleteMessage}
           />
         </div>
       </main>
