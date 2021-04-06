@@ -9,14 +9,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { ItemsTableColumn } from '../../Templates/ItemsTable/Models';
 import { Formik } from 'formik';
-import {
-  Button,
-  Col,
-  Form,
-  FormControl,
-  InputGroup,
-  Row,
-} from 'react-bootstrap';
+import { Button, Form, FormControl, InputGroup } from 'react-bootstrap';
 import { ItemsTable } from '../../Templates/ItemsTable/ItemsTable';
 import * as Yup from 'yup';
 import {
