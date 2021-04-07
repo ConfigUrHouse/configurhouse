@@ -14,7 +14,10 @@ export async function apiRequest(
 
   return fetch(`${process.env.REACT_APP_API_BASE_URL}/${url}${queryParams}`, {
     method,
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Authorization": "Basic myVerySecretAdminToken",
+      "Content-Type": "application/json"
+    },
     body: !["GET", "DELETE"].includes(method) && body ? body : undefined,
   })
     .then((response) => response.json())
