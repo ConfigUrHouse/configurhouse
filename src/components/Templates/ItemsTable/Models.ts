@@ -12,4 +12,9 @@ export interface ItemsTableProps<T extends Record<string, any>> {
   handlePageChange(page: number): void;
   handleEdit?(id: number): void;
   handleDelete?(id: number): void;
+  deleteMessage?(item: T): string;
+}
+
+export interface ItemsTableState<T extends Record<string, any>> {
+  itemToDelete: T | null;
 }

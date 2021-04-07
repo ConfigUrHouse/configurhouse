@@ -7,8 +7,6 @@ export interface UsersListState {
   formValues: FormValues;
   paginatedItems: PaginatedResponse<User>;
   roles: Role[];
-  showDeleteModal: boolean;
-  userToDelete?: User;
   error?: ApiResponseError;
 }
 
