@@ -1,5 +1,5 @@
 import React from "react";
-import { Dropdown, Form, Pagination, Row, Table } from "react-bootstrap";
+import { Button, Modal, Dropdown, Form, Pagination, Row, Table } from "react-bootstrap";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ItemsTableProps, ItemsTableState } from "./Models";
@@ -11,23 +11,26 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
   constructor(props: ItemsTableProps<T>) {
     super(props);
 
+    this.state = {
+      itemToDelete: null,
+      selectedItems: []
+    };
+
+    this.confirmDelete = this.confirmDelete.bind(this);
+    this.handleModalClose = this.handleModalClose.bind(this);
     this.selectCurrentPage = this.selectCurrentPage.bind(this);
     this.selectAllResults = this.selectAllResults.bind(this);
     this.deselectCurrentPage = this.deselectCurrentPage.bind(this);
     this.deselectAll = this.deselectAll.bind(this);
   }
 
-  public readonly state: ItemsTableState<T> = {
-    selectedItems: [],
-  };
-
-  async selectAllResults() {
+  private async selectAllResults(): Promise<void> {
     this.setState({
       selectedItems: (await this.props.globalActions?.fetchAll()) || [],
     });
   }
 
-  selectCurrentPage() {
+  private selectCurrentPage(): void {
     const newItems: T[] = [];
     this.props.paginatedItems.items.forEach((item) => {
       if (
@@ -40,11 +43,11 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
     this.setState({ selectedItems: this.state.selectedItems.concat(newItems) });
   }
 
-  deselectAll() {
+  private deselectAll(): void {
     this.setState({ selectedItems: [] });
   }
 
-  deselectCurrentPage() {
+  private deselectCurrentPage(): void {
     const newItems: T[] = this.state.selectedItems;
     this.props.paginatedItems.items.forEach((item) => {
       if (
@@ -61,7 +64,17 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
     this.setState({ selectedItems: newItems });
   }
 
+  private confirmDelete(item: T): void {
+    this.setState({ itemToDelete: item });
+  }
+
+  private handleModalClose(): void {
+    this.setState({ itemToDelete: null });
+  }
+
   render() {
+    const { itemToDelete } = this.state;
+
     const {
       columns,
       paginatedItems: { items, currentPage, totalPages },
@@ -69,12 +82,39 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
       handleEdit,
       handleDelete,
       globalActions,
+      deleteMessage
     } = this.props;
     const hasActions = !!(handleEdit || handleDelete);
     const canSelectItems = !!globalActions?.actions.length;
 
     return (
       <div className="items w-100 p-3 d-flex flex-column align-items-center">
+        {handleDelete && itemToDelete && (
+          <Modal show={itemToDelete} onHide={this.handleModalClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Confirmer la suppression</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              {deleteMessage
+                ? deleteMessage(itemToDelete)
+                : "Supprimer l'objet ?"}
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={this.handleModalClose}>
+                Annuler
+              </Button>
+              <Button
+                variant="danger"
+                onClick={() => {
+                  handleDelete(itemToDelete.id);
+                  this.handleModalClose();
+                }}
+              >
+                SUPPRIMER
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        )}
         {canSelectItems && (
           <div className="w-100 p-3 mt-5 d-flex justify-content-between">
             <span className="selectedItems">
@@ -195,7 +235,7 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
                       {handleDelete && (
                         <FontAwesomeIcon
                           icon={faTrash}
-                          onClick={() => handleDelete(item.id)}
+                          onClick={() => this.confirmDelete(item)}
                         />
                       )}
                     </td>

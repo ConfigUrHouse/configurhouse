@@ -13,6 +13,7 @@ export interface ItemsTableProps<T extends Record<string, any>> {
   handlePageChange(page: number): void;
   handleEdit?(id: number): void;
   handleDelete?(id: number): void;
+  deleteMessage?(item: T): string;
   globalActions?: {
     actions: {
       icon: IconProp;
@@ -22,6 +23,7 @@ export interface ItemsTableProps<T extends Record<string, any>> {
   };
 }
 
-export interface ItemsTableState<T> {
+export interface ItemsTableState<T extends Record<string, any>> {
   selectedItems: T[];
+  itemToDelete: T | null;
 }
