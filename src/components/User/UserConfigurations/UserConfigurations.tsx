@@ -1,33 +1,40 @@
-import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCogs } from "@fortawesome/free-solid-svg-icons";
-import { ItemsTableColumn } from "../../Templates/ItemsTable/Models";
-import { Formik } from "formik";
-import { Button, Form } from "react-bootstrap";
-import { ItemsTable } from "../../Templates/ItemsTable/ItemsTable";
-import * as Yup from "yup";
+import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faCogs,
+  faPlus,
+  faKeyboard,
+  faHome,
+  faSearch,
+} from '@fortawesome/free-solid-svg-icons';
+import { ItemsTableColumn } from '../../Templates/ItemsTable/Models';
+import { Formik } from 'formik';
+import { Button, Form, FormControl, InputGroup } from 'react-bootstrap';
+import { ItemsTable } from '../../Templates/ItemsTable/ItemsTable';
+import * as Yup from 'yup';
 import {
   emptyPaginatedData,
   PaginatedResponse,
-} from "../../../utils/pagination";
-import { apiRequest } from "../../../api/utils";
-import { Configuration, HouseModel } from "../../../models";
+} from '../../../utils/pagination';
+import { apiRequest } from '../../../api/utils';
+import { Configuration, HouseModel } from '../../../models';
 import {
   UserConfigurationsFormValues,
   UserConfigurationsState,
-} from "./Models";
+} from './Models';
+import './UserConfigurations.css';
 
 export default class UserConfigurations extends React.Component<
   {},
   UserConfigurationsState
 > {
   private initialValues: UserConfigurationsFormValues = {
-    name: "",
+    name: '',
     houseModelId: 0,
   };
 
   private schema = Yup.object().shape({
-    name: Yup.string().min(2, "Trop court !"),
+    name: Yup.string().min(2, 'Trop court !'),
     houseModelId: Yup.lazy(() =>
       Yup.number().oneOf([
         ...this.state.houseModels.map((houseModel) => houseModel.id),
@@ -38,18 +45,18 @@ export default class UserConfigurations extends React.Component<
 
   private columns: ItemsTableColumn<Configuration>[] = [
     {
-      name: "id",
-      displayName: "ID",
+      name: 'id',
+      displayName: 'ID',
     },
     {
-      name: "name",
-      displayName: "Nom",
+      name: 'name',
+      displayName: 'Nom',
     },
     {
-      name: "houseModel",
-      displayName: "Modèle",
+      name: 'houseModel',
+      displayName: 'Modèle',
       component(item) {
-        return item.houseModel?.name ?? "Inconnu";
+        return item.houseModel?.name ?? 'Inconnu';
       },
     },
   ];
@@ -76,8 +83,8 @@ export default class UserConfigurations extends React.Component<
   async fetchHouseModels() {
     try {
       const paginatedHouseModels: PaginatedResponse<HouseModel> = await apiRequest(
-        "houseModel",
-        "GET"
+        'houseModel',
+        'GET'
       );
 
       this.setState({ houseModels: paginatedHouseModels.items });
@@ -102,8 +109,8 @@ export default class UserConfigurations extends React.Component<
 
     try {
       const paginatedItems: PaginatedResponse<Configuration> = await apiRequest(
-        "configuration",
-        "GET",
+        'configuration',
+        'GET',
         queryParams
       );
 
@@ -114,11 +121,19 @@ export default class UserConfigurations extends React.Component<
   }
 
   handleEdit(id: number) {
-    console.log("Edit");
+    console.log('Edit');
   }
 
-  handleDelete(id: number) {
-    console.log("Delete");
+  private async handleDelete(id: number): Promise<void> {
+    apiRequest(`configuration/${id}`, 'DELETE', [])
+      .then((response) => {
+        this.fetchConfigurations();
+      })
+      .catch((error) => console.log(error));
+  }
+
+  private deleteMessage(item: Configuration): string {
+    return `Voulez-vous supprimer cette configuration (${item.houseModel?.name}) ?`;
   }
 
   handlePageChange(value: number) {
@@ -152,6 +167,12 @@ export default class UserConfigurations extends React.Component<
         <hr />
 
         <div>
+          <div className="addNew">
+            <Button variant="primary" href="/config">
+              <FontAwesomeIcon className="mr-2" icon={faPlus} />
+              AJOUTER
+            </Button>
+          </div>
           <Formik
             validationSchema={schema}
             onSubmit={this.fetchConfigurations}
@@ -167,12 +188,15 @@ export default class UserConfigurations extends React.Component<
               errors,
             }) => (
               <Form noValidate onSubmit={handleSubmit}>
-                <Form.Group>
-                  <Form.Label>Nom</Form.Label>
-                  <Form.Control
-                    id="name"
-                    type="text"
-                    placeholder="Entrez un nom"
+                <InputGroup className="mb-3">
+                  <InputGroup.Prepend>
+                    <InputGroup.Text id="NameIcon">
+                      <FontAwesomeIcon icon={faKeyboard} />
+                    </InputGroup.Text>
+                  </InputGroup.Prepend>
+                  <FormControl
+                    placeholder="Nom"
+                    name="name"
                     value={values.name}
                     onChange={(e) => {
                       this.setState({
@@ -185,11 +209,19 @@ export default class UserConfigurations extends React.Component<
                     }}
                     isInvalid={!!errors.name}
                   />
-                </Form.Group>
-                <Form.Group>
-                  <Form.Label>Modèle</Form.Label>
+                  <Form.Control.Feedback type="invalid">
+                    {errors.name}
+                  </Form.Control.Feedback>
+                </InputGroup>
+                <InputGroup className="mb-3">
+                  <InputGroup.Prepend>
+                    <InputGroup.Text id="ModelIcon">
+                      <FontAwesomeIcon icon={faHome} />
+                    </InputGroup.Text>
+                  </InputGroup.Prepend>
                   <Form.Control
-                    id="houseModelId"
+                    placeholder="Modèle"
+                    name="houseModelId"
                     as="select"
                     value={values.houseModelId}
                     onChange={(e) => {
@@ -209,9 +241,13 @@ export default class UserConfigurations extends React.Component<
                       </option>
                     ))}
                   </Form.Control>
-                </Form.Group>
+                  <Form.Control.Feedback type="invalid">
+                    {errors.houseModelId}
+                  </Form.Control.Feedback>
+                </InputGroup>
                 <Button variant="primary" type="submit">
-                  Rechercher
+                  RECHERCHER{' '}
+                  <FontAwesomeIcon className="ml-2" icon={faSearch} />
                 </Button>
               </Form>
             )}
@@ -223,6 +259,7 @@ export default class UserConfigurations extends React.Component<
             handlePageChange={this.handlePageChange}
             handleEdit={this.handleEdit}
             handleDelete={this.handleDelete}
+            deleteMessage={this.deleteMessage}
           ></ItemsTable>
         </div>
 
