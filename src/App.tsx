@@ -9,16 +9,31 @@ import { UserEditWithRouter } from "./components/User/UserEdit/UserEdit";
 import User from "./components/User/User";
 import Mentions from "./components/Mentions/Mentions";
 import Contact from "./components/Contact/Contact";
+import { ICurrent } from "./types";
+import { checkAuthentication } from "./actions/current";
+import { connect } from "react-redux";
+import * as React from "react";
+import LoggedInRoute from "./routes/LoggedInRoute";
+import LoggedOutRoute from "./routes/LoggedOutRoute";
+import Login from "./components/Login/Login";
 
-function App() {
-  return (
-    <div className="App">
-      <Router>
+interface IProps {
+  checkAuthenticationConnect: () => void;
+  isAuthenticated: boolean | null;
+}
+
+const App = ({
+  checkAuthenticationConnect,
+  isAuthenticated
+}: IProps) => {
+  React.useEffect(() => {
+    checkAuthenticationConnect();
+  }, []);
+
+  const app = isAuthenticated !== null ? (
+    <Router>
         <Sidebar />
         <Switch>
-          <Route path="/account">
-            <User />
-          </Route>
           <Route path="/users">
             <UserListWithRouter />
           </Route>
@@ -37,13 +52,33 @@ function App() {
           <Route path="/mentions">
             <Mentions />
           </Route>
+          <LoggedOutRoute path="/login" exact={true} component={Login} />
+          <LoggedInRoute path="/account" exact={true} component={User} />
+
           <Route path="/">
             <Home />
           </Route>
+
         </Switch>
       </Router>
+  ) : null;
+
+  return (
+    <div className="App">
+      {app}
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = (state: ICurrent) => ({
+  isAuthenticated: state.isAuthenticated
+});
+
+const mapDispatchToProps = {
+  checkAuthenticationConnect: checkAuthentication
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(App);

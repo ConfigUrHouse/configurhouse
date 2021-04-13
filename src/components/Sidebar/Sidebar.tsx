@@ -1,7 +1,7 @@
 import React from "react";
 import logo from "../../assets/images/logo.svg";
 import "./Sidebar.css";
-import { Button, Nav } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCog,
@@ -11,6 +11,7 @@ import {
   faSignOutAlt,
   faUser,
   faUsers,
+  faKey,
 } from "@fortawesome/free-solid-svg-icons";
 import { Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -25,8 +26,17 @@ import {
 } from "react-pro-sidebar";
 import "react-pro-sidebar/dist/css/styles.css";
 import { Link } from "react-router-dom";
+import Logout from "../Logout/Logout";
+import { ICurrent } from "../../types";
 
-function Sidebar() {
+import { connect } from "react-redux";
+
+interface IProps {
+  isAuthenticated: boolean | null;
+  uuid: string | null;
+}
+
+const Nav = ({ isAuthenticated, uuid }: IProps) => {
   return (
     <ProSidebar breakPoint="md" className="position-fixed">
       <SidebarHeader>
@@ -53,17 +63,48 @@ function Sidebar() {
         </MenuItem>
       </SidebarContent>
       <SidebarFooter>
-        <Link to="/account">
+        {
+          isAuthenticated  ? 
+            <Menu iconShape="square">
+              <MenuItem>
+                <Row>
+                <Link to="/account"><Col md={8}>
+                  <FontAwesomeIcon icon={faUser} size="lg" className="mr-2" /> Mon compte
+
+                  </Col></Link>
+                  <Col md={4}>
+                  <Logout />
+
+                  </Col>
+                </Row>
+
+              </MenuItem>
+
+            </Menu>
+        
+        
+          :
+          <Link to="/login">
           <Menu iconShape="square">
             <MenuItem>
-              <FontAwesomeIcon icon={faUser} size="lg" className="mr-2" />
-              Mon compte
+              <FontAwesomeIcon icon={faKey} size="lg" className="mr-2" />
+              Se connecter
             </MenuItem>
           </Menu>
         </Link>
+
+        }
+       
       </SidebarFooter>
     </ProSidebar>
   );
-}
+};
 
-export default Sidebar;
+const mapStateToProps = (state: ICurrent) => ({
+  uuid: state.uuid,
+  isAuthenticated: state.isAuthenticated,
+});
+
+export default connect(
+  mapStateToProps,
+)(Nav);

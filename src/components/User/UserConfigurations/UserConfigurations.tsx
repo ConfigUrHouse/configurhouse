@@ -235,7 +235,7 @@ export default class UserConfigurations extends React.Component<
                     }}
                   >
                     <option value={0}>Choisir un modèle</option>
-                    {houseModels.map((houseModel) => (
+                    {houseModels?.map((houseModel) => (
                       <option key={houseModel.id} value={houseModel.id}>
                         {houseModel.name}
                       </option>

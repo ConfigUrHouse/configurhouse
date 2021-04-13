@@ -192,7 +192,7 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
             </tr>
           </thead>
           <tbody>
-            {items.map((item: T) => {
+            {items?.map((item: T) => {
               return (
                 <tr key={item.id}>
                   {canSelectItems && (
