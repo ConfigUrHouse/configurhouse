@@ -10,23 +10,25 @@ import User from "./components/User/User";
 import Mentions from "./components/Mentions/Mentions";
 import Contact from "./components/Contact/Contact";
 import { ICurrent } from "./types";
-import {  checkAuthentication } from "./actions/current";
+import {  checkAuthentication, checkAdmin } from "./actions/current";
 import { connect } from "react-redux";
 import * as React from "react";
 import LoggedInRoute from "./routes/LoggedInRoute";
 import LoggedOutRoute from "./routes/LoggedOutRoute";
 import Login from "./components/Login/Login";
+import AdminRoute from "./routes/AdminRoute";
 
 interface IProps {
   checkAuthenticationConnect: () => void;
   isAuthenticated: boolean | null;
-
+  checkAdmin:() => void;
   isAdmin: boolean | null;
 }
 
-const App = ({ checkAuthenticationConnect, isAuthenticated}: IProps) => {
+const App = ({ checkAuthenticationConnect, isAuthenticated,checkAdmin, isAdmin}: IProps) => {
   React.useEffect(() => {
     checkAuthenticationConnect();
+    checkAdmin();
   }, []);
 
   const app =
@@ -34,12 +36,7 @@ const App = ({ checkAuthenticationConnect, isAuthenticated}: IProps) => {
       <Router>
         <Sidebar />
         <Switch>
-          <Route path="/users">
-            <UserListWithRouter />
-          </Route>
-          <Route path="/user/:id/edit">
-            <UserEditWithRouter />
-          </Route>
+          
           <Route path="/config">
             <Configurator />
           </Route>
@@ -54,7 +51,9 @@ const App = ({ checkAuthenticationConnect, isAuthenticated}: IProps) => {
           </Route>
           <LoggedOutRoute path="/login" exact={true} component={Login} />
           <LoggedInRoute path="/account" exact={true} component={User} />
-
+          
+          <AdminRoute path="/users" exact={true} component={UserListWithRouter} />
+          <AdminRoute path="/user/:id/edit" exact={true} component={UserEditWithRouter} />
           <Route path="/">
             <Home />
           </Route>
@@ -72,6 +71,7 @@ const mapStateToProps = (state: ICurrent) => ({
 
 const mapDispatchToProps = {
   checkAuthenticationConnect: checkAuthentication,
+  checkAdmin: checkAdmin
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -13,6 +13,7 @@ import {
   faUsers,
   faKey,
   faUserCog,
+  faUserShield,
 } from "@fortawesome/free-solid-svg-icons";
 import { Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -70,7 +71,7 @@ const Nav = ({ isAuthenticated, isAdmin }: IProps) => {
               <Row>
                 <Link to="/account">
                   <Col md={8}>
-                    <FontAwesomeIcon icon={isAdmin  ? faUserCog : faUser} size="lg" className="mr-2" />{" "}
+                    <FontAwesomeIcon icon={isAdmin  ? faUserShield : faUser} size="lg" className="mr-2" />{" "}
                     Mon compte
                   </Col>
                 </Link>

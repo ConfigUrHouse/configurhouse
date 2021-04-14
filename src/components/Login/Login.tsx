@@ -63,7 +63,6 @@ class Login extends React.Component<any, any> {
               if(response.filter((role : any) => role.id == process.env.REACT_APP_ADMIN_ROLE_NUMBER).length > 0){ //TODO : SET ADMIN ID OU REQUETRE 
                 isAdmin = true;
               }
-              console.log(this.props)
               this.props.logInConnect(datas.token, isAdmin);
 
 
