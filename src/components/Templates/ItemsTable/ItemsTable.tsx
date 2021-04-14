@@ -1,5 +1,13 @@
 import React from "react";
-import { Button, Modal, Dropdown, Form, Pagination, Row, Table } from "react-bootstrap";
+import {
+  Button,
+  Modal,
+  Dropdown,
+  Form,
+  Pagination,
+  Row,
+  Table,
+} from "react-bootstrap";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ItemsTableProps, ItemsTableState } from "./Models";
@@ -13,7 +21,7 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
 
     this.state = {
       itemToDelete: null,
-      selectedItems: []
+      selectedItems: [],
     };
 
     this.confirmDelete = this.confirmDelete.bind(this);
@@ -82,7 +90,7 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
       handleEdit,
       handleDelete,
       globalActions,
-      deleteMessage
+      deleteMessage,
     } = this.props;
     const hasActions = !!(handleEdit || handleDelete);
     const canSelectItems = !!globalActions?.actions.length;

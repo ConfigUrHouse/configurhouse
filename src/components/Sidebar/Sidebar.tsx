@@ -12,6 +12,7 @@ import {
   faUser,
   faUsers,
   faKey,
+  faUserCog,
 } from "@fortawesome/free-solid-svg-icons";
 import { Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -33,10 +34,10 @@ import { connect } from "react-redux";
 
 interface IProps {
   isAuthenticated: boolean | null;
-  uuid: string | null;
+  isAdmin: boolean | null;
 }
 
-const Nav = ({ isAuthenticated, uuid }: IProps) => {
+const Nav = ({ isAuthenticated, isAdmin }: IProps) => {
   return (
     <ProSidebar breakPoint="md" className="position-fixed">
       <SidebarHeader>
@@ -63,48 +64,40 @@ const Nav = ({ isAuthenticated, uuid }: IProps) => {
         </MenuItem>
       </SidebarContent>
       <SidebarFooter>
-        {
-          isAuthenticated  ? 
-            <Menu iconShape="square">
-              <MenuItem>
-                <Row>
-                <Link to="/account"><Col md={8}>
-                  <FontAwesomeIcon icon={faUser} size="lg" className="mr-2" /> Mon compte
-
-                  </Col></Link>
-                  <Col md={4}>
-                  <Logout />
-
-                  </Col>
-                </Row>
-
-              </MenuItem>
-
-            </Menu>
-        
-        
-          :
-          <Link to="/login">
+        {isAuthenticated ? (
           <Menu iconShape="square">
             <MenuItem>
-              <FontAwesomeIcon icon={faKey} size="lg" className="mr-2" />
-              Se connecter
+              <Row>
+                <Link to="/account">
+                  <Col md={8}>
+                    <FontAwesomeIcon icon={isAdmin  ? faUserCog : faUser} size="lg" className="mr-2" />{" "}
+                    Mon compte
+                  </Col>
+                </Link>
+                <Col md={4}>
+                  <Logout />
+                </Col>
+              </Row>
             </MenuItem>
           </Menu>
-        </Link>
-
-        }
-       
+        ) : (
+          <Link to="/login">
+            <Menu iconShape="square">
+              <MenuItem>
+                <FontAwesomeIcon icon={faKey} size="lg" className="mr-2" />
+                Se connecter
+              </MenuItem>
+            </Menu>
+          </Link>
+        )}
       </SidebarFooter>
     </ProSidebar>
   );
 };
 
 const mapStateToProps = (state: ICurrent) => ({
-  uuid: state.uuid,
   isAuthenticated: state.isAuthenticated,
+  isAdmin: state.isAdmin,
 });
 
-export default connect(
-  mapStateToProps,
-)(Nav);
+export default connect(mapStateToProps)(Nav);

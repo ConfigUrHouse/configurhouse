@@ -14,12 +14,12 @@ const LoggedInRoute = ({
   ...otherProps
 }: IProps) => {
   if (isAuthenticated === false) {
-    return <Redirect to="/login" />
+    return <Redirect to="/login" />;
   }
   return (
     <>
       <Route
-        render={otherProps => (
+        render={(otherProps) => (
           <>
             <Component {...otherProps} />
           </>
@@ -29,8 +29,6 @@ const LoggedInRoute = ({
   );
 };
 const mapStateToProps = (state: ICurrent) => ({
-  isAuthenticated: state.isAuthenticated
+  isAuthenticated: state.isAuthenticated,
 });
-export default connect(
-  mapStateToProps
-)(LoggedInRoute);
+export default connect(mapStateToProps)(LoggedInRoute);

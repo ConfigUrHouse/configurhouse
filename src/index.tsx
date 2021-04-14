@@ -17,14 +17,14 @@ if (
 } else {
   composeEnhancers = compose;
 }
-const store = createStore<ICurrent, any, any, any>(
+const store = createStore(
   currentReducer,
   undefined,
-  composeEnhancers(applyMiddleware(thunkMiddleware)),
+  composeEnhancers(applyMiddleware(thunkMiddleware))
 );
 ReactDOM.render(
   <Provider store={store}>
     <App />
   </Provider>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
