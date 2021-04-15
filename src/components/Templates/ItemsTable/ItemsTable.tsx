@@ -1,8 +1,8 @@
-import React from "react";
-import { Button, Modal, Pagination, Table } from "react-bootstrap";
-import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ItemsTableProps, ItemsTableState } from "./Models";
+import React from 'react';
+import { Button, Modal, Pagination, Table } from 'react-bootstrap';
+import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ItemsTableProps, ItemsTableState } from './Models';
 
 export class ItemsTable<T extends Record<string, any>> extends React.Component<
   ItemsTableProps<T>,
@@ -43,7 +43,7 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
     return (
       <div className="items w-100 p-3 d-flex flex-column align-items-center">
         {handleDelete && itemToDelete && (
-          <Modal show={itemToDelete} onHide={this.handleModalClose}>
+          <Modal show={!!itemToDelete} onHide={this.handleModalClose}>
             <Modal.Header closeButton>
               <Modal.Title>Confirmer la suppression</Modal.Title>
             </Modal.Header>
