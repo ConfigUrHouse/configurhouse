@@ -1,8 +1,8 @@
-import React from 'react';
-import logo from '../../assets/images/logo.svg';
-import './Sidebar.css';
-import { Button, Nav } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from "react";
+import logo from "../../assets/images/logo.svg";
+import "./Sidebar.css";
+import { Button, Nav } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCog,
   faHome,
@@ -10,9 +10,9 @@ import {
   faBars,
   faSignOutAlt,
   faUser,
-} from '@fortawesome/free-solid-svg-icons';
-import { Row, Col } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
+} from "@fortawesome/free-solid-svg-icons";
+import { Row, Col } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 import {
   ProSidebar,
   Menu,
@@ -21,9 +21,9 @@ import {
   SidebarHeader,
   SidebarFooter,
   SidebarContent,
-} from 'react-pro-sidebar';
-import 'react-pro-sidebar/dist/css/styles.css';
-import { Link } from 'react-router-dom';
+} from "react-pro-sidebar";
+import "react-pro-sidebar/dist/css/styles.css";
+import { Link } from "react-router-dom";
 
 function Sidebar() {
   return (
@@ -39,15 +39,15 @@ function Sidebar() {
       </SidebarHeader>
       <SidebarContent>
         <MenuItem className="m-5">
-          <FontAwesomeIcon icon={faCog} size="lg" className="mr-2" />{' '}
+          <FontAwesomeIcon icon={faCog} size="lg" className="mr-2" />{" "}
           <Link to="/config">Configurateur</Link>
         </MenuItem>
         <MenuItem className="m-5">
-          <FontAwesomeIcon icon={faAddressBook} size="lg" className="mr-2" />{' '}
+          <FontAwesomeIcon icon={faAddressBook} size="lg" className="mr-2" />{" "}
           <Link to="/contact">Contact</Link>
         </MenuItem>
         <MenuItem className="m-5">
-          <FontAwesomeIcon icon={faHome} size="lg" className="mr-2" />{' '}
+          <FontAwesomeIcon icon={faHome} size="lg" className="mr-2" />{" "}
           <Link to="/houseModels">Modèles</Link>
         </MenuItem>
       </SidebarContent>

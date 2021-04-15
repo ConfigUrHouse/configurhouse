@@ -1,19 +1,19 @@
-import React from 'react';
-import { faTimes, faHome, faPlus } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { withRouter } from 'react-router';
-import './HouseModelList.css';
-import { ApiResponseError } from '../../../api/models';
-import { ItemsTableColumn } from '../../Templates/ItemsTable/Models';
-import { HouseModel } from '../../../models';
-import { HouseModelsProps, HouseModelsState } from './Models';
+import React from "react";
+import { faTimes, faHome, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { withRouter } from "react-router";
+import "./HouseModelList.css";
+import { ApiResponseError } from "../../../api/models";
+import { ItemsTableColumn } from "../../Templates/ItemsTable/Models";
+import { HouseModel } from "../../../models";
+import { HouseModelsProps, HouseModelsState } from "./Models";
 import {
   emptyPaginatedData,
   PaginatedResponse,
-} from '../../../utils/pagination';
-import { apiRequest } from '../../../api/utils';
-import { ItemsTable } from '../../Templates/ItemsTable/ItemsTable';
-import { Button } from 'react-bootstrap';
+} from "../../../utils/pagination";
+import { apiRequest } from "../../../api/utils";
+import { ItemsTable } from "../../Templates/ItemsTable/ItemsTable";
+import { Button } from "react-bootstrap";
 
 class HouseModelList extends React.Component<
   HouseModelsProps,
@@ -21,18 +21,18 @@ class HouseModelList extends React.Component<
 > {
   private columns: ItemsTableColumn<HouseModel>[] = [
     {
-      name: 'id',
-      displayName: 'ID',
+      name: "id",
+      displayName: "ID",
     },
     {
-      name: 'name',
-      displayName: 'Nom',
+      name: "name",
+      displayName: "Nom",
     },
     {
-      name: 'modelType',
-      displayName: 'Type de Modèle',
+      name: "modelType",
+      displayName: "Type de Modèle",
       component(item) {
-        return item.modelType?.name ?? 'Inconnu';
+        return item.modelType?.name ?? "Inconnu";
       },
     },
   ];
@@ -61,9 +61,9 @@ class HouseModelList extends React.Component<
 
     const queryParams = [`page=${currentPage}`, `size=10`];
 
-    apiRequest('houseModel', 'GET', queryParams)
+    apiRequest("houseModel", "GET", queryParams)
       .then((response) => {
-        if (response.status === 'error') {
+        if (response.status === "error") {
           this.setState({ error: response as ApiResponseError });
         } else {
           const paginatedItems = response as PaginatedResponse<HouseModel>;
@@ -81,9 +81,9 @@ class HouseModelList extends React.Component<
   }
 
   private async handleDelete(id: number): Promise<void> {
-    return apiRequest(`houseModel/${id}`, 'DELETE', [])
+    return apiRequest(`houseModel/${id}`, "DELETE", [])
       .then((response) => {
-        if (response.status === 'error') {
+        if (response.status === "error") {
           this.setState({ error: response as ApiResponseError });
         } else {
           this.fetchHouseModels();

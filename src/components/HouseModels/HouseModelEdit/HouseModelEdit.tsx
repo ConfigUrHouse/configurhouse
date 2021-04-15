@@ -4,10 +4,10 @@ import {
   faSave,
   faTimes,
   faFileAlt,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Formik } from 'formik';
-import React from 'react';
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Formik } from "formik";
+import React from "react";
 import {
   Button,
   Col,
@@ -15,14 +15,14 @@ import {
   FormControl,
   InputGroup,
   Row,
-} from 'react-bootstrap';
-import { withRouter } from 'react-router';
-import * as Yup from 'yup';
-import { ApiResponseError } from '../../../api/models';
-import { apiRequest } from '../../../api/utils';
-import { HouseModelEditProps, HouseModelEditState } from './Models';
-import './HouseModelEdit.css';
-import { Asset, HouseModel, ModelType } from '../../../models';
+} from "react-bootstrap";
+import { withRouter } from "react-router";
+import * as Yup from "yup";
+import { ApiResponseError } from "../../../api/models";
+import { apiRequest } from "../../../api/utils";
+import { HouseModelEditProps, HouseModelEditState } from "./Models";
+import "./HouseModelEdit.css";
+import { Asset, HouseModel, ModelType } from "../../../models";
 
 class HouseModelEdit extends React.Component<
   HouseModelEditProps,
@@ -30,12 +30,12 @@ class HouseModelEdit extends React.Component<
 > {
   private schema = Yup.object().shape({
     name: Yup.string()
-      .min(4, 'Le nom doit faire plus de 3 charactères')
-      .required('Le nom ne peut pas être vide'),
+      .min(4, "Le nom doit faire plus de 3 charactères")
+      .required("Le nom ne peut pas être vide"),
     id_ModelType: Yup.lazy(() =>
       Yup.number().oneOf(
         [...this.state.modelTypes.map((type) => type.id)],
-        'Le type ne peut pas être vide'
+        "Le type ne peut pas être vide"
       )
     ),
     id_Asset: Yup.lazy(() =>
@@ -48,7 +48,7 @@ class HouseModelEdit extends React.Component<
 
   private initialItem: HouseModel = {
     id: 0,
-    name: '',
+    name: "",
     id_ModelType: 0,
     id_Asset: 0,
   };
@@ -81,9 +81,9 @@ class HouseModelEdit extends React.Component<
   }
 
   async fetchHouseModel(): Promise<void> {
-    apiRequest(`houseModel/${this.state.item.id}`, 'GET', [])
+    apiRequest(`houseModel/${this.state.item.id}`, "GET", [])
       .then((response) => {
-        if (response.status === 'error') {
+        if (response.status === "error") {
           this.setState({ error: response as ApiResponseError });
         } else {
           this.setState({ item: response as HouseModel });
@@ -93,9 +93,9 @@ class HouseModelEdit extends React.Component<
   }
 
   async fetchModelTypes(): Promise<void> {
-    apiRequest(`modelType`, 'GET', [])
+    apiRequest(`modelType`, "GET", [])
       .then((response) => {
-        if (response.status === 'error') {
+        if (response.status === "error") {
           this.setState({ error: response as ApiResponseError });
         } else {
           this.setState({ modelTypes: response as ModelType[] });
@@ -105,9 +105,9 @@ class HouseModelEdit extends React.Component<
   }
 
   async fetchAssets(): Promise<void> {
-    apiRequest(`asset`, 'GET', [])
+    apiRequest(`asset`, "GET", [])
       .then((response) => {
-        if (response.status === 'error') {
+        if (response.status === "error") {
           this.setState({ error: response as ApiResponseError });
         } else {
           this.setState({ assets: response as Asset[] });
@@ -120,14 +120,14 @@ class HouseModelEdit extends React.Component<
     const { editMode } = this.state;
 
     (editMode
-      ? apiRequest(`houseModel/${values.id}`, 'PUT', '', values)
-      : apiRequest(`houseModel`, 'POST', '', values)
+      ? apiRequest(`houseModel/${values.id}`, "PUT", "", values)
+      : apiRequest(`houseModel`, "POST", "", values)
     )
       .then((response) => {
-        if (response.status === 'error') {
+        if (response.status === "error") {
           this.setState({ error: response as ApiResponseError });
         } else {
-          this.props.history.push('/houseModels');
+          this.props.history.push("/houseModels");
         }
       })
       .catch((error) => console.log(error));
@@ -148,7 +148,7 @@ class HouseModelEdit extends React.Component<
           )}
           <h3 className="mb-5">
             <FontAwesomeIcon className="mr-2" icon={faHome} />
-            {editMode ? 'Editer' : 'Ajouter'} un modèle
+            {editMode ? "Editer" : "Ajouter"} un modèle
           </h3>
           <Formik
             validationSchema={this.schema}
