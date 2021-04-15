@@ -14,11 +14,14 @@ export async function apiRequest(
 
   return fetch(`${process.env.REACT_APP_API_BASE_URL}/${url}${queryParams}`, {
     method,
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Authorization": "Basic myVerySecretAdminToken",
+      "Content-Type": "application/json"
+    },
     body:
       !["GET", "DELETE"].includes(method) && body
         ? JSON.stringify(body)
-        : undefined,
+        : undefined
   })
     .then((response) => response.json())
     .catch((error) => console.error("api error", error));

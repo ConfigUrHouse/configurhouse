@@ -10,6 +10,7 @@ import {
   faBars,
   faSignOutAlt,
   faUser,
+  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import { Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -49,6 +50,10 @@ function Sidebar() {
         <MenuItem className="m-5">
           <FontAwesomeIcon icon={faHome} size="lg" className="mr-2" />{" "}
           <Link to="/houseModels">Modèles</Link>
+        </MenuItem>
+        <MenuItem className="m-5">
+          <FontAwesomeIcon icon={faUsers} size="lg" className="mr-2" />{" "}
+          <Link to="/users">Utilisateurs</Link>
         </MenuItem>
       </SidebarContent>
       <SidebarFooter>

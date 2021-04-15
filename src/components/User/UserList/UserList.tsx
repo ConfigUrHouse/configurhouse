@@ -7,10 +7,14 @@ import {
   Form,
   FormControl,
   InputGroup,
+  Modal,
   Row,
 } from "react-bootstrap";
 import {
   faCheck,
+  faEnvelope,
+  faExclamationTriangle,
+  faPaperPlane,
   faSearch,
   faTimes,
   faUser,
@@ -29,6 +33,7 @@ import { Role, User } from "../Models";
 import { withRouter } from "react-router";
 import "./UserList.css";
 import { ApiResponseError } from "../../../api/models";
+import { EditorField } from "../../Templates/EditorField/EditorField";
 
 const defaultRole = "Tous";
 
@@ -36,6 +41,12 @@ const initialValues: FormValues = {
   firstName: "",
   lastName: "",
   role: defaultRole,
+};
+
+const initialEmailValues = {
+  subject: "",
+  content: "",
+  consent: false,
 };
 
 const columns: ItemsTableColumn<User>[] = [
@@ -75,17 +86,21 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
     this.fetchUsers = this.fetchUsers.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.handleEmailModalClose = this.handleEmailModalClose.bind(this);
     this.handlePageChange = this.handlePageChange.bind(this);
+    this.fetchAllResults = this.fetchAllResults.bind(this);
 
     this.state = {
       formValues: initialValues,
       paginatedItems: emptyPaginatedData<User>(),
       roles: [],
       error: undefined,
+      showEmailModal: false,
+      selectedUsers: [],
     };
   }
 
-  private schema = Yup.object().shape({
+  private searchSchema = Yup.object().shape({
     firstName: Yup.string().min(
       2,
       "Le prénom doit faire au moins 2 caractères"
@@ -97,6 +112,12 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
         defaultRole,
       ])
     ),
+  });
+
+  private emailSchema = Yup.object().shape({
+    object: Yup.string(),
+    content: Yup.string().required("Veuillez saisir un message"),
+    consent: Yup.bool().isTrue("Veuillez cocher cette case avant d'envoyer"),
   });
 
   componentDidMount() {
@@ -148,6 +169,36 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
     this.setState({ paginatedItems: emptyPaginatedData<User>() });
   }
 
+  private async fetchAllResults(): Promise<User[]> {
+    const formValues = this.state.formValues;
+
+    const queryParams = [];
+    if (formValues.firstName) {
+      queryParams.push(`firstname=${formValues.firstName}`);
+    }
+    if (formValues.lastName) {
+      queryParams.push(`lastname=${formValues.lastName}`);
+    }
+    if (formValues.role && formValues.role !== defaultRole) {
+      queryParams.push(`role=${formValues.role}`);
+    }
+
+    return apiRequest("user", "GET", queryParams)
+      .then((response) => {
+        if (response.status === "error") {
+          this.setState({ error: response as ApiResponseError });
+          return [];
+        } else {
+          const paginatedItems: PaginatedResponse<User> = response as PaginatedResponse<User>;
+          return paginatedItems.items;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        return [];
+      });
+  }
+
   private handleEdit(id: number): void {
     let path = `user/${id}/edit`;
     this.props.history.push(path);
@@ -183,10 +234,119 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
     );
   }
 
+  private handleEmailModalClose(): void {
+    this.setState({ showEmailModal: false });
+  }
+
+  private async sendEmails(
+    emailList: string[],
+    subject: string,
+    content: string
+  ) {
+    apiRequest(
+      `utils/sendEmails`,
+      "POST",
+      [],
+      JSON.stringify({
+        emails: emailList,
+        subject: subject,
+        content: content,
+      })
+    )
+      .then((response) => {
+        if (response.status === "error") {
+          this.setState({ error: response as ApiResponseError });
+        }
+        this.handleEmailModalClose();
+      })
+      .catch((error) => console.log(error));
+  }
+
   render() {
     const { paginatedItems } = this.state;
     return (
       <main className="p-5 w-100 bg">
+        <Modal
+          show={this.state.showEmailModal}
+          onHide={this.handleEmailModalClose}
+          size="xl"
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Envoyer un email</Modal.Title>
+          </Modal.Header>
+          <Formik
+            validationSchema={this.emailSchema}
+            onSubmit={(values) =>
+              this.sendEmails(
+                this.state.selectedUsers.map((user) => user.email),
+                values.subject,
+                values.content
+              )
+            }
+            initialValues={initialEmailValues}
+            enableReinitialize
+          >
+            {({
+              handleSubmit,
+              handleChange,
+              handleBlur,
+              values,
+              touched,
+              isValid,
+              errors,
+            }) => (
+              <Form noValidate onSubmit={handleSubmit}>
+                <Modal.Body>
+                  <InputGroup className="mb-3">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text>
+                        <FontAwesomeIcon icon={faUser} />
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl
+                      placeholder="Objet"
+                      name="subject"
+                      value={values.subject}
+                      onChange={handleChange}
+                      isInvalid={!!errors.subject}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.subject}
+                    </Form.Control.Feedback>
+                  </InputGroup>
+                  <EditorField name="content" initialValue="<p></p>" />
+                  <Form.Check>
+                    <Form.Check.Input
+                      name="consent"
+                      checked={values.consent}
+                      onChange={handleChange}
+                      isInvalid={!!errors.consent}
+                    />
+                    <Form.Check.Label>
+                      Envoyer un email à {this.state.selectedUsers.length}{" "}
+                      utilisateur(s){" "}
+                      <FontAwesomeIcon icon={faExclamationTriangle} />
+                    </Form.Check.Label>
+                  </Form.Check>
+                  <Form.Control.Feedback type="invalid">
+                    {errors.consent}
+                  </Form.Control.Feedback>
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button
+                    variant="secondary"
+                    onClick={this.handleEmailModalClose}
+                  >
+                    Annuler
+                  </Button>
+                  <Button variant="primary" type="submit" disabled={!isValid}>
+                    ENVOYER <FontAwesomeIcon icon={faPaperPlane} />
+                  </Button>
+                </Modal.Footer>
+              </Form>
+            )}
+          </Formik>
+        </Modal>
         <div className="circle1"></div>
         <div className="circle2"></div>
         <div className="p-5 form w-75 mx-auto">
@@ -202,7 +362,7 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
             Liste des utilisateurs
           </h3>
           <Formik
-            validationSchema={this.schema}
+            validationSchema={this.searchSchema}
             onSubmit={this.fetchUsers}
             initialValues={initialValues}
           >
@@ -317,6 +477,19 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
             handleEdit={this.handleEdit}
             handleDelete={this.handleDelete}
             deleteMessage={this.deleteMessage}
+            globalActions={{
+              actions: [
+                {
+                  icon: faEnvelope,
+                  handle: (selectedItems: User[]) =>
+                    this.setState({
+                      showEmailModal: true,
+                      selectedUsers: selectedItems,
+                    }),
+                },
+              ],
+              fetchAll: this.fetchAllResults,
+            }}
           />
         </div>
       </main>
