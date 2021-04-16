@@ -9,6 +9,8 @@ import { UserEditWithRouter } from "./components/User/UserEdit/UserEdit";
 import User from "./components/User/User";
 import Mentions from "./components/Mentions/Mentions";
 import Contact from "./components/Contact/Contact";
+import HouseModelList from "./components/HouseModels/HouseModelList/HouseModelList";
+import HouseModelEdit from "./components/HouseModels/HouseModelEdit/HouseModelEdit";
 
 function App() {
   return (
@@ -24,6 +26,15 @@ function App() {
           </Route>
           <Route path="/user/:id/edit">
             <UserEditWithRouter />
+          </Route>
+          <Route path="/houseModels/add">
+            <HouseModelEdit />
+          </Route>
+          <Route path="/houseModels/:id">
+            <HouseModelEdit />
+          </Route>
+          <Route path="/houseModels">
+            <HouseModelList />
           </Route>
           <Route path="/config">
             <Configurator />

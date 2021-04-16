@@ -20,7 +20,8 @@ export interface HouseModel {
   name: string;
   id_ModelType: number;
   id_Asset: number;
-  id_Asset_HouseModelAsset3D: number;
+  modelType?: ModelType;
+  asset?: Asset;
 }
 
 export interface ModelType {

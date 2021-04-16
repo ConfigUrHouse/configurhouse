@@ -90,7 +90,7 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
     return (
       <div className="items w-100 p-3 d-flex flex-column align-items-center">
         {handleDelete && itemToDelete && (
-          <Modal show={itemToDelete} onHide={this.handleModalClose}>
+          <Modal show={!!itemToDelete} onHide={this.handleModalClose}>
             <Modal.Header closeButton>
               <Modal.Title>Confirmer la suppression</Modal.Title>
             </Modal.Header>

@@ -2,7 +2,7 @@ export async function apiRequest(
   url: string,
   method = "GET",
   params: string[] | string = "",
-  body?: BodyInit
+  body?: Record<string, any>
 ) {
   //TODO add authentification token if exists
 
@@ -18,7 +18,10 @@ export async function apiRequest(
       "Authorization": "Basic myVerySecretAdminToken",
       "Content-Type": "application/json"
     },
-    body: !["GET", "DELETE"].includes(method) && body ? body : undefined,
+    body:
+      !["GET", "DELETE"].includes(method) && body
+        ? JSON.stringify(body)
+        : undefined
   })
     .then((response) => response.json())
     .catch((error) => console.error("api error", error));
