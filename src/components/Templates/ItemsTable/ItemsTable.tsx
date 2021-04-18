@@ -1,8 +1,17 @@
-import React from "react";
-import { Button, Modal, Dropdown, Form, Pagination, Row, Table } from "react-bootstrap";
-import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ItemsTableProps, ItemsTableState } from "./Models";
+import React from 'react';
+import {
+  Button,
+  Modal,
+  Dropdown,
+  Form,
+  Pagination,
+  Row,
+  Table,
+} from 'react-bootstrap';
+import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ItemsTableProps, ItemsTableState } from './Models';
+import './ItemsTable.css';
 
 export class ItemsTable<T extends Record<string, any>> extends React.Component<
   ItemsTableProps<T>,
@@ -13,7 +22,7 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
 
     this.state = {
       itemToDelete: null,
-      selectedItems: []
+      selectedItems: [],
     };
 
     this.confirmDelete = this.confirmDelete.bind(this);
@@ -82,7 +91,7 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
       handleEdit,
       handleDelete,
       globalActions,
-      deleteMessage
+      deleteMessage,
     } = this.props;
     const hasActions = !!(handleEdit || handleDelete);
     const canSelectItems = !!globalActions?.actions.length;
@@ -134,7 +143,7 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
         <Table
           bordered
           hover
-          className={`${canSelectItems ? "" : "mt-5"} text-center`}
+          className={`${canSelectItems ? '' : 'mt-5'} items-table text-center`}
         >
           <thead>
             <tr>
