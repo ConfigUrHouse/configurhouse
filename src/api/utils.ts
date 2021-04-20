@@ -2,7 +2,7 @@ export async function apiRequest(
   url: string,
   method = "GET",
   params: string[] | string = "",
-  body: Record<string, any> | string = ''
+  body?: Record<string, any>
 ) {
   //TODO add authentification token if exists
 
@@ -12,18 +12,16 @@ export async function apiRequest(
       }`
     : "";
 
-  let queryBody = (!['GET', 'DELETE'].includes(method) && body) || null;
-  if (queryBody && typeof queryBody !== 'string') {
-    queryBody = JSON.stringify(queryBody);
-  }
-
   return fetch(`${process.env.REACT_APP_API_BASE_URL}/${url}${queryParams}`, {
     method,
     headers: {
       "Authorization": "Basic myVerySecretAdminToken",
       "Content-Type": "application/json"
     },
-    body: queryBody || null,
+    body:
+      !["GET", "DELETE"].includes(method) && body
+        ? JSON.stringify(body)
+        : undefined
   })
     .then((response) => response.json())
     .catch((error) => console.error("api error", error));
