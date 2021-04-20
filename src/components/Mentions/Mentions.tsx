@@ -1,6 +1,4 @@
-import React from "react";
-import "./Mentions.css";
-import { Table } from "react-bootstrap";
+import "./mentions.css";
 
 function Mentions() {
   return (

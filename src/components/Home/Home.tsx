@@ -1,9 +1,9 @@
 import React from "react";
-import home_devis from "../../assets/images/home_devis.png";
-import home_3D from "../../assets/images/home_3D.png";
-import home_conso from "../../assets/images/home_conso.png";
-import home_video from "../../assets/images/home_video.mp4";
-import "./Home.css";
+import home_devis from "../../assets/images/home-devis.png";
+import home_3D from "../../assets/images/home-3D.png";
+import home_conso from "../../assets/images/home-conso.png";
+import home_video from "../../assets/images/home-video.mp4";
+import "./home.css";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -17,7 +17,6 @@ import {
   faQuestionCircle,
   faBriefcase,
   faNewspaper,
-  faFileSignature,
   faUserShield,
 } from "@fortawesome/free-solid-svg-icons";
 import { Col, Row } from "react-bootstrap";

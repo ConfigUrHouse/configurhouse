@@ -19,9 +19,9 @@ import { withRouter } from "react-router";
 import * as Yup from "yup";
 import { ApiResponseError } from "../../../api/models";
 import { apiRequest } from "../../../api/utils";
-import { Role, User, UserRole } from "../Models";
-import { FormValues, UserEditProps, UserEditState } from "./Models";
-import "./UserEdit.css";
+import { Role, User, UserRole } from "../models";
+import { FormValues, UserEditProps, UserEditState } from "./models";
+import "./user-edit.css";
 
 export class UserEdit extends React.Component<UserEditProps, UserEditState> {
   constructor(props: UserEditProps) {

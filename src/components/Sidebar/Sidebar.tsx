@@ -1,24 +1,17 @@
-import React from "react";
-import logo from "../../assets/images/logo.svg";
-import "./Sidebar.css";
-import { Button, Nav } from "react-bootstrap";
+import "./sidebar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCog,
   faHome,
   faAddressBook,
-  faBars,
-  faSignOutAlt,
   faUser,
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
-import { Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
   ProSidebar,
   Menu,
   MenuItem,
-  SubMenu,
   SidebarHeader,
   SidebarFooter,
   SidebarContent,

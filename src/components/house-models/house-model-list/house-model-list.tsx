@@ -2,17 +2,17 @@ import React from "react";
 import { faTimes, faHome, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { withRouter } from "react-router";
-import "./HouseModelList.css";
+import "./house-model-list.css";
 import { ApiResponseError } from "../../../api/models";
-import { ItemsTableColumn } from "../../Templates/ItemsTable/Models";
+import { ItemsTableColumn } from "../../templates/items-table/models";
 import { HouseModel } from "../../../models";
-import { HouseModelsProps, HouseModelsState } from "./Models";
+import { HouseModelsProps, HouseModelsState } from "./models";
 import {
   emptyPaginatedData,
   PaginatedResponse,
 } from "../../../utils/pagination";
 import { apiRequest } from "../../../api/utils";
-import { ItemsTable } from "../../Templates/ItemsTable/ItemsTable";
+import { ItemsTable } from "../../templates/items-table/items-table";
 import { Button } from "react-bootstrap";
 
 class HouseModelList extends React.Component<

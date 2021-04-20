@@ -1,5 +1,4 @@
-import React from "react";
-import "./Policies.css";
+import "./policies.css";
 import { Table } from "react-bootstrap";
 
 function Policies() {

@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Modal, Dropdown, Form, Pagination, Row, Table } from "react-bootstrap";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ItemsTableProps, ItemsTableState } from "./Models";
+import { ItemsTableProps, ItemsTableState } from "./models";
 
 export class ItemsTable<T extends Record<string, any>> extends React.Component<
   ItemsTableProps<T>,

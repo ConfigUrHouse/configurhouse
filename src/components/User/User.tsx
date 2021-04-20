@@ -1,8 +1,8 @@
 import React from "react";
-import UserPolicies from "./UserPolicies/UserPolicies";
-import UserConfigurations from "./UserConfigurations/UserConfigurations";
+import UserPolicies from "./user-policies/user-policies";
+import UserConfigurations from "./user-configurations/user-configurations";
 import { Tabs, Tab } from "react-bootstrap";
-import UserAccountDelete from "./UserAccountDelete/UserAccountDelete";
+import UserAccountDelete from "./user-account-delete/user-account-delete";
 
 class User extends React.Component<any, any> {
   constructor(props: any) {

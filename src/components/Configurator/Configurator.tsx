@@ -2,8 +2,8 @@ import { Component } from "react";
 import React from "react";
 
 import { Col, Row, Form, Table, Button } from "react-bootstrap";
-import home_3D from "../../assets/images/home_3D.png";
-import "./Configurator.css";
+import home_3D from "../../assets/images/home-3D.png";
+import "./configurator.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowCircleRight } from "@fortawesome/free-solid-svg-icons";
 class Configurator extends React.Component<any, any> {

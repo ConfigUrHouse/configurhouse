@@ -25,15 +25,15 @@ import {
   emptyPaginatedData,
   PaginatedResponse,
 } from "../../../utils/pagination";
-import { UsersListState, FormValues, UserListProps } from "./Models";
+import { UsersListState, FormValues, UserListProps } from "./models";
 import { apiRequest } from "../../../api/utils";
-import { ItemsTableColumn } from "../../Templates/ItemsTable/Models";
-import { ItemsTable } from "../../Templates/ItemsTable/ItemsTable";
-import { Role, User } from "../Models";
+import { ItemsTableColumn } from "../../templates/items-table/models";
+import { ItemsTable } from "../../templates/items-table/items-table";
+import { Role, User } from "../models";
 import { withRouter } from "react-router";
-import "./UserList.css";
+import "./user-list.css";
 import { ApiResponseError } from "../../../api/models";
-import { EditorField } from "../../Templates/EditorField/EditorField";
+import { EditorField } from "../../templates/editor-field/editor-field";
 
 const defaultRole = "Tous";
 

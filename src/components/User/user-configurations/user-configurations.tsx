@@ -7,10 +7,10 @@ import {
   faHome,
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
-import { ItemsTableColumn } from "../../Templates/ItemsTable/Models";
+import { ItemsTableColumn } from "../../templates/items-table/models";
 import { Formik } from "formik";
 import { Button, Form, FormControl, InputGroup } from "react-bootstrap";
-import { ItemsTable } from "../../Templates/ItemsTable/ItemsTable";
+import { ItemsTable } from "../../templates/items-table/items-table";
 import * as Yup from "yup";
 import {
   emptyPaginatedData,
@@ -21,8 +21,8 @@ import { Configuration, HouseModel } from "../../../models";
 import {
   UserConfigurationsFormValues,
   UserConfigurationsState,
-} from "./Models";
-import "./UserConfigurations.css";
+} from "./models";
+import "./user-configurations.css";
 
 export default class UserConfigurations extends React.Component<
   {},

@@ -1,4 +1,4 @@
-import { EditorFieldProps } from "./Models";
+import { EditorFieldProps } from "./models";
 import { Editor as TinyMCEEditor } from "tinymce";
 import { Editor } from "@tinymce/tinymce-react";
 import { useField } from "formik";

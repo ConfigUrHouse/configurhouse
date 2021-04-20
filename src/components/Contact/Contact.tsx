@@ -1,6 +1,6 @@
 import React from "react";
 import { InputGroup, FormControl, Row, Col, Button } from "react-bootstrap";
-import "./Contact.css";
+import "./contact.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUser,
@@ -12,8 +12,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import ReactDOMServer from "react-dom/server";
 import { Formik } from "formik";
-import { Form, Pagination, Table } from "react-bootstrap";
-import { FormValues } from "./Models";
+import { Form } from "react-bootstrap";
+import { FormValues } from "./models";
 import * as Yup from "yup";
 
 class Contact extends React.Component<any, any> {

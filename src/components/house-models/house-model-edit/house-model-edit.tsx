@@ -1,5 +1,4 @@
 import {
-  faAt,
   faHome,
   faSave,
   faTimes,
@@ -20,8 +19,8 @@ import { withRouter } from "react-router";
 import * as Yup from "yup";
 import { ApiResponseError } from "../../../api/models";
 import { apiRequest } from "../../../api/utils";
-import { HouseModelEditProps, HouseModelEditState } from "./Models";
-import "./HouseModelEdit.css";
+import { HouseModelEditProps, HouseModelEditState } from "./models";
+import "./house-model-edit.css";
 import { Asset, HouseModel, ModelType } from "../../../models";
 
 class HouseModelEdit extends React.Component<
