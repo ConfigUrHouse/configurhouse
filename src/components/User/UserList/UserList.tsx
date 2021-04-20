@@ -1,6 +1,6 @@
-import React from 'react';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
+import React from "react";
+import { Formik } from "formik";
+import * as Yup from "yup";
 import {
   Button,
   Col,
@@ -9,7 +9,7 @@ import {
   InputGroup,
   Modal,
   Row,
-} from 'react-bootstrap';
+} from "react-bootstrap";
 import {
   faCheck,
   faEnvelope,
@@ -19,61 +19,61 @@ import {
   faTimes,
   faUser,
   faUserTag,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   emptyPaginatedData,
   PaginatedResponse,
-} from '../../../utils/pagination';
-import { UsersListState, FormValues, UserListProps } from './Models';
-import { apiRequest } from '../../../api/utils';
-import { ItemsTableColumn } from '../../Templates/ItemsTable/Models';
-import { ItemsTable } from '../../Templates/ItemsTable/ItemsTable';
-import { Role, User } from '../Models';
-import { withRouter } from 'react-router';
-import './UserList.css';
-import { ApiResponseError } from '../../../api/models';
-import { EditorField } from '../../Templates/EditorField/EditorField';
+} from "../../../utils/pagination";
+import { UsersListState, FormValues, UserListProps } from "./Models";
+import { apiRequest } from "../../../api/utils";
+import { ItemsTableColumn } from "../../Templates/ItemsTable/Models";
+import { ItemsTable } from "../../Templates/ItemsTable/ItemsTable";
+import { Role, User } from "../Models";
+import { withRouter } from "react-router";
+import "./UserList.css";
+import { ApiResponseError } from "../../../api/models";
+import { EditorField } from "../../Templates/EditorField/EditorField";
 
-const defaultRole = 'Tous';
+const defaultRole = "Tous";
 
 const initialValues: FormValues = {
-  firstName: '',
-  lastName: '',
+  firstName: "",
+  lastName: "",
   role: defaultRole,
 };
 
 const initialEmailValues = {
-  subject: '',
-  content: '',
+  subject: "",
+  content: "",
   consent: false,
 };
 
 const columns: ItemsTableColumn<User>[] = [
   {
-    name: 'id',
-    displayName: 'ID',
+    name: "id",
+    displayName: "ID",
   },
   {
-    name: 'lastname',
-    displayName: 'Nom',
+    name: "lastname",
+    displayName: "Nom",
   },
   {
-    name: 'firstname',
-    displayName: 'Prénom',
+    name: "firstname",
+    displayName: "Prénom",
   },
   {
-    name: 'email',
-    displayName: 'Email',
+    name: "email",
+    displayName: "Email",
   },
   {
-    name: 'active',
-    displayName: 'Vérifié',
+    name: "active",
+    displayName: "Vérifié",
     component(item) {
       return (
         <FontAwesomeIcon
           icon={item.active ? faCheck : faTimes}
-          color={item.active ? 'green' : 'red'}
+          color={item.active ? "green" : "red"}
         />
       );
     },
@@ -103,9 +103,9 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
   private searchSchema = Yup.object().shape({
     firstName: Yup.string().min(
       2,
-      'Le prénom doit faire au moins 2 caractères'
+      "Le prénom doit faire au moins 2 caractères"
     ),
-    lastName: Yup.string().min(2, 'Le nom doit faire au moins 2 caractères'),
+    lastName: Yup.string().min(2, "Le nom doit faire au moins 2 caractères"),
     role: Yup.lazy(() =>
       Yup.string().oneOf([
         ...this.state.roles.map((role) => role.name),
@@ -116,7 +116,7 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
 
   private emailSchema = Yup.object().shape({
     object: Yup.string(),
-    content: Yup.string().required('Veuillez saisir un message'),
+    content: Yup.string().required("Veuillez saisir un message"),
     consent: Yup.bool().isTrue("Veuillez cocher cette case avant d'envoyer"),
   });
 
@@ -126,9 +126,9 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
   }
 
   private async fetchRoles() {
-    apiRequest('role', 'GET', [])
+    apiRequest("role", "GET", [])
       .then((response) => {
-        if (response.status === 'error') {
+        if (response.status === "error") {
           this.setState({ error: response as ApiResponseError });
         } else {
           const roles = response as Role[];
@@ -155,9 +155,9 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
       queryParams.push(`role=${formValues.role}`);
     }
 
-    apiRequest('user', 'GET', queryParams)
+    apiRequest("user", "GET", queryParams)
       .then((response) => {
-        if (response.status === 'error') {
+        if (response.status === "error") {
           this.setState({ error: response as ApiResponseError });
         } else {
           const paginatedItems: PaginatedResponse<User> = response as PaginatedResponse<User>;
@@ -183,9 +183,9 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
       queryParams.push(`role=${formValues.role}`);
     }
 
-    return apiRequest('user', 'GET', queryParams)
+    return apiRequest("user", "GET", queryParams)
       .then((response) => {
-        if (response.status === 'error') {
+        if (response.status === "error") {
           this.setState({ error: response as ApiResponseError });
           return [];
         } else {
@@ -205,9 +205,9 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
   }
 
   private async handleDelete(id: number): Promise<void> {
-    return apiRequest(`user/${id}`, 'DELETE', [])
+    return apiRequest(`user/${id}`, "DELETE", [])
       .then((response) => {
-        if (response.status === 'error') {
+        if (response.status === "error") {
           this.setState({ error: response as ApiResponseError });
         } else {
           this.fetchUsers();
@@ -243,13 +243,13 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
     subject: string,
     content: string
   ) {
-    apiRequest(`utils/sendEmails`, 'POST', [], {
+    apiRequest(`utils/sendEmails`, "POST", [], {
       emails: emailList,
       subject: subject,
       content: content,
     })
       .then((response) => {
-        if (response.status === 'error') {
+        if (response.status === "error") {
           this.setState({ error: response as ApiResponseError });
         }
         this.handleEmailModalClose();
@@ -318,8 +318,8 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
                       isInvalid={!!errors.consent}
                     />
                     <Form.Check.Label>
-                      Envoyer un email à {this.state.selectedUsers.length}{' '}
-                      utilisateur(s){' '}
+                      Envoyer un email à {this.state.selectedUsers.length}{" "}
+                      utilisateur(s){" "}
                       <FontAwesomeIcon icon={faExclamationTriangle} />
                     </Form.Check.Label>
                   </Form.Check>
@@ -458,7 +458,7 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
                   </Form.Control.Feedback>
                 </InputGroup>
                 <Button variant="primary" type="submit">
-                  RECHERCHER{' '}
+                  RECHERCHER{" "}
                   <FontAwesomeIcon className="ml-2" icon={faSearch} />
                 </Button>
               </Form>

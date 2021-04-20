@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Button,
   Modal,
@@ -7,11 +7,11 @@ import {
   Pagination,
   Row,
   Table,
-} from 'react-bootstrap';
-import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ItemsTableProps, ItemsTableState } from './Models';
-import './ItemsTable.css';
+} from "react-bootstrap";
+import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ItemsTableProps, ItemsTableState } from "./Models";
+import "./ItemsTable.css";
 
 export class ItemsTable<T extends Record<string, any>> extends React.Component<
   ItemsTableProps<T>,
@@ -143,7 +143,7 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
         <Table
           bordered
           hover
-          className={`${canSelectItems ? '' : 'mt-5'} items-table text-center`}
+          className={`${canSelectItems ? "" : "mt-5"} items-table text-center`}
         >
           <thead>
             <tr>

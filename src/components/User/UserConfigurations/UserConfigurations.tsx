@@ -9,7 +9,14 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { ItemsTableColumn } from "../../Templates/ItemsTable/Models";
 import { Formik } from "formik";
-import { Button, Form, FormControl, InputGroup } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  Form,
+  FormControl,
+  InputGroup,
+  Row,
+} from "react-bootstrap";
 import { ItemsTable } from "../../Templates/ItemsTable/ItemsTable";
 import * as Yup from "yup";
 import {
@@ -188,63 +195,69 @@ export default class UserConfigurations extends React.Component<
               errors,
             }) => (
               <Form noValidate onSubmit={handleSubmit}>
-                <InputGroup className="mb-3">
-                  <InputGroup.Prepend>
-                    <InputGroup.Text id="NameIcon">
-                      <FontAwesomeIcon icon={faKeyboard} />
-                    </InputGroup.Text>
-                  </InputGroup.Prepend>
-                  <FormControl
-                    placeholder="Nom"
-                    name="name"
-                    value={values.name}
-                    onChange={(e) => {
-                      this.setState({
-                        formValues: {
-                          ...this.state.formValues,
-                          name: e.target.value,
-                        },
-                      });
-                      handleChange(e);
-                    }}
-                    isInvalid={!!errors.name}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.name}
-                  </Form.Control.Feedback>
-                </InputGroup>
-                <InputGroup className="mb-3">
-                  <InputGroup.Prepend>
-                    <InputGroup.Text id="ModelIcon">
-                      <FontAwesomeIcon icon={faHome} />
-                    </InputGroup.Text>
-                  </InputGroup.Prepend>
-                  <Form.Control
-                    placeholder="Modèle"
-                    name="houseModelId"
-                    as="select"
-                    value={values.houseModelId}
-                    onChange={(e) => {
-                      this.setState({
-                        formValues: {
-                          ...this.state.formValues,
-                          houseModelId: parseInt(e.target.value),
-                        },
-                      });
-                      handleChange(e);
-                    }}
-                  >
-                    <option value={0}>Choisir un modèle</option>
-                    {houseModels.map((houseModel) => (
-                      <option key={houseModel.id} value={houseModel.id}>
-                        {houseModel.name}
-                      </option>
-                    ))}
-                  </Form.Control>
-                  <Form.Control.Feedback type="invalid">
-                    {errors.houseModelId}
-                  </Form.Control.Feedback>
-                </InputGroup>
+                <Row>
+                  <Col md={6} sm={12}>
+                    <InputGroup className="mb-3">
+                      <InputGroup.Prepend>
+                        <InputGroup.Text id="NameIcon">
+                          <FontAwesomeIcon icon={faKeyboard} />
+                        </InputGroup.Text>
+                      </InputGroup.Prepend>
+                      <FormControl
+                        placeholder="Nom"
+                        name="name"
+                        value={values.name}
+                        onChange={(e) => {
+                          this.setState({
+                            formValues: {
+                              ...this.state.formValues,
+                              name: e.target.value,
+                            },
+                          });
+                          handleChange(e);
+                        }}
+                        isInvalid={!!errors.name}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.name}
+                      </Form.Control.Feedback>
+                    </InputGroup>
+                  </Col>
+                  <Col md={6} sm={12}>
+                    <InputGroup className="mb-3">
+                      <InputGroup.Prepend>
+                        <InputGroup.Text id="ModelIcon">
+                          <FontAwesomeIcon icon={faHome} />
+                        </InputGroup.Text>
+                      </InputGroup.Prepend>
+                      <Form.Control
+                        placeholder="Modèle"
+                        name="houseModelId"
+                        as="select"
+                        value={values.houseModelId}
+                        onChange={(e) => {
+                          this.setState({
+                            formValues: {
+                              ...this.state.formValues,
+                              houseModelId: parseInt(e.target.value),
+                            },
+                          });
+                          handleChange(e);
+                        }}
+                      >
+                        <option value={0}>Choisir un modèle</option>
+                        {houseModels.map((houseModel) => (
+                          <option key={houseModel.id} value={houseModel.id}>
+                            {houseModel.name}
+                          </option>
+                        ))}
+                      </Form.Control>
+                      <Form.Control.Feedback type="invalid">
+                        {errors.houseModelId}
+                      </Form.Control.Feedback>
+                    </InputGroup>
+                  </Col>
+                </Row>
                 <Button variant="primary" type="submit">
                   RECHERCHER{" "}
                   <FontAwesomeIcon className="ml-2" icon={faSearch} />
