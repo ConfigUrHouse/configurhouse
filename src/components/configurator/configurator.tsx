@@ -1,4 +1,3 @@
-import { Component } from "react";
 import React from "react";
 
 import { Col, Row, Form, Table, Button } from "react-bootstrap";
