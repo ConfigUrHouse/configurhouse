@@ -23,7 +23,7 @@ class Configurator extends React.Component<any, any> {
       <main className="configurator p-5 w-100">
         <div className="circle1"></div>
         <div className="circle2"></div>
-        {this.state.model == null ? (
+        {this.state.model == null && (
           <div className="models-choice">
             <h3>Modèles</h3>
             <Row>
@@ -139,7 +139,8 @@ class Configurator extends React.Component<any, any> {
               </Col>
             </Row>
           </div>
-        ) : (
+        )}
+        {this.state.model && (
           <div>
             <h3>Configurateur</h3>
             <Row>
