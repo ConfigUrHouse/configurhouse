@@ -29,9 +29,9 @@ class Configurator extends React.Component<any, any> {
             <Row>
               <Col>
                 <div
-                  className={
-                    "model " + (this.state.modelSelected == 1 ? "selected" : "")
-                  }
+                  className={`model ${
+                    this.state.modelSelected == 1 ? "selected" : ""
+                  }`}
                   onClick={(e) => this.selectModel(1)}
                 >
                   <h4>Modèle N°1</h4>
@@ -79,9 +79,9 @@ class Configurator extends React.Component<any, any> {
               </Col>
               <Col>
                 <div
-                  className={
-                    "model " + (this.state.modelSelected == 2 ? "selected" : "")
-                  }
+                  className={`model ${
+                    this.state.modelSelected == 2 ? "selected" : ""
+                  }`}
                   onClick={(e) => this.selectModel(2)}
                 >
                   <h4>Modèle N°2</h4>

@@ -1,5 +1,12 @@
 import React from "react";
-import { InputGroup, FormControl, Row, Col, Button } from "react-bootstrap";
+import {
+  InputGroup,
+  FormControl,
+  Row,
+  Col,
+  Button,
+  Form,
+} from "react-bootstrap";
 import "./contact.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -12,7 +19,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import ReactDOMServer from "react-dom/server";
 import { Formik } from "formik";
-import { Form } from "react-bootstrap";
 import { FormValues } from "./models";
 import * as Yup from "yup";
 
@@ -120,19 +126,19 @@ class Contact extends React.Component<any, any> {
             problème, d'une question ou de toutes autres demandes. Nous nous
             engageons à vous répondre au plus vite.
           </p>
-          {this.state.success == 1 ? (
+          {(this.state.success == 1 && (
             <div className="alert alert-success mb-4">
               <FontAwesomeIcon icon={faCheck} /> Email envoyé avec succès, nous
               vous réponderons au plus vite.
             </div>
-          ) : this.state.success == -1 ? (
-            <div className="alert alert-danger m-4">
-              <FontAwesomeIcon icon={faTimes} /> Une erreur est survenue lors de
-              l'envoi du mail, veuillez réessayer plus tard.
-            </div>
-          ) : (
-            ""
-          )}
+          )) ||
+            (this.state.success == -1 && (
+              <div className="alert alert-danger m-4">
+                <FontAwesomeIcon icon={faTimes} /> Une erreur est survenue lors
+                de l'envoi du mail, veuillez réessayer plus tard.
+              </div>
+            )) ||
+            ""}
           <Formik
             validationSchema={this.schema}
             onSubmit={(values, { resetForm }) => {
