@@ -1,4 +1,3 @@
-import React from "react";
 import home_devis from "../../assets/images/home-devis.png";
 import home_3D from "../../assets/images/home-3D.png";
 import home_conso from "../../assets/images/home-conso.png";
@@ -58,7 +57,7 @@ function Home() {
         </div>
         <svg
           version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
+          xmlns="https://www.w3.org/2000/svg"
           className="wave rotate"
           viewBox="0 0 1440 100"
           preserveAspectRatio="none"
@@ -89,7 +88,7 @@ function Home() {
       <ScrollAnimation animateIn="fadeIn">
         <svg
           version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
+          xmlns="https://www.w3.org/2000/svg"
           className="wave mt-5"
           viewBox="0 0 1440 100"
           preserveAspectRatio="none"
@@ -116,7 +115,7 @@ function Home() {
         </Row>
         <svg
           version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
+          xmlns="https://www.w3.org/2000/svg"
           className="wave rotate"
           viewBox="0 0 1440 100"
           preserveAspectRatio="none"
