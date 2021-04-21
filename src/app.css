@@ -1,0 +1,205 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap");
+
+* {
+  font-family: Roboto, sans-serif;
+  box-sizing: border-box;
+}
+.App {
+  display: flex;
+}
+main {
+  margin-left: 270px;
+}
+:root {
+  --main-green: #1a7c7d;
+  --main-lightgreen: #a8cfcf;
+}
+a {
+  text-decoration: none !important;
+  color: var(--main-green) !important;
+}
+.text-green {
+  color: var(--main-green) !important;
+}
+.bg-lightgreen {
+  background-color: var(--main-lightgreen) !important;
+}
+table thead {
+  background-color: var(--main-green) !important;
+  color: #fff;
+}
+.table-striped tbody tr:nth-of-type(odd),
+.table .sub {
+  background-color: var(--main-lightgreen) !important;
+}
+.table .sub {
+  font-weight: bold;
+  text-align: center;
+}
+
+.circle1 {
+  background-color: #ebebeb;
+  width: 800px;
+  height: 800px;
+  position: fixed;
+  z-index: -1;
+  border-radius: 400px;
+  top: -400px;
+  left: 0;
+}
+.circle2 {
+  background-color: #ebebeb;
+  width: 1000px;
+  height: 1000px;
+  position: fixed;
+  z-index: -1;
+  border-radius: 500px;
+  right: -500px;
+  bottom: -500px;
+}
+.btn {
+  border-radius: 60px !important;
+  padding: 10px !important;
+  transition: 0.3s;
+}
+.btn-green {
+  background-color: var(--main-green) !important;
+  border: 2px solid var(--main-green) !important;
+}
+.btn-green:hover {
+  border: 2px solid var(--main-green) !important;
+  background: transparent !important;
+  color: var(--main-green) !important;
+}
+.btn-outline-green {
+  border: 2px solid var(--main-green) !important;
+  background: transparent !important;
+  color: var(--main-green) !important;
+}
+.btn-outline-green:hover {
+  background-color: var(--main-green) !important;
+  color: #fff !important;
+}
+
+.fadeIn {
+  animation: fadeIn ease 20s;
+  -webkit-animation: fadeIn ease 20s;
+  -moz-animation: fadeIn ease 20s;
+  -o-animation: fadeIn ease 20s;
+  -ms-animation: fadeIn ease 20s;
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translate3D(0, -5%, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3D(0, 0, 0);
+  }
+}
+
+@-moz-keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translate3D(0, -5%, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3D(0, 0, 0);
+  }
+}
+
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translate3D(0, -5%, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3D(0, 0, 0);
+  }
+}
+
+@-o-keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translate3D(0, -5%, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3D(0, 0, 0);
+  }
+}
+
+@-ms-keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translate3D(0, -5%, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3D(0, 0, 0);
+  }
+}
+
+.input-group input {
+  border: 2px solid var(--main-green);
+  border-left: 0;
+  height: 50px;
+  border-radius: 0px 30px 30px 0 !important;
+}
+textarea {
+  border: 2px solid var(--main-green) !important;
+  border-radius: 30px !important;
+  height: 200px !important;
+  padding: 15px !important;
+}
+.input-group input:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border: 2px solid var(--main-green);
+  border-left: 0;
+}
+.input-group-prepend .input-group-text {
+  background-color: transparent;
+  padding: 0 0.75rem;
+  border: none;
+}
+.input-group-prepend {
+  border: 2px solid var(--main-green);
+  border-right: 0;
+  border-radius: 30px 0px 0px 30px;
+}
+
+.input-group select {
+  border: 2px solid var(--main-green);
+  border-left: 0;
+  height: 50px;
+  border-radius: 0px 30px 30px 0 !important;
+}
+.btn.btn-primary {
+  color: white !important;
+  background: rgb(19, 91, 100);
+  background: -moz-linear-gradient(
+    45deg,
+    rgba(19, 91, 100, 1) 0%,
+    rgba(41, 136, 137, 1) 100%
+  );
+  background: -webkit-linear-gradient(
+    45deg,
+    rgba(19, 91, 100, 1) 0%,
+    rgba(41, 136, 137, 1) 100%
+  );
+  background: linear-gradient(
+    45deg,
+    rgba(19, 91, 100, 1) 0%,
+    rgba(41, 136, 137, 1) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#135b64",endColorstr="#298889",GradientType=1);
+  border: none !important;
+}
+.invalid-feedback {
+  text-align: center;
+}
