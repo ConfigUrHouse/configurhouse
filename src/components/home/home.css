@@ -41,3 +41,18 @@ video {
   bottom: 0;
   top: 0;
 }
+.cover-container .btn {
+  color: #fff;
+}
+.cover-container .btn-out {
+  border: 2px solid var(--main-green) !important;
+  background-color: transparent !important;
+  color: var(--main-green);
+  transition: 0.3s;
+}
+
+.cover-container .btn-out:hover {
+  border: none;
+  background-color: var(--main-green) !important;
+  color: #fff;
+}

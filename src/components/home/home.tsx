@@ -43,14 +43,10 @@ function Home() {
             </h5>
             <div className="row justify-content-center m-0 mt-5">
               <div className="col-md-2">
-                <div className="btn btn-primary w-100 btn-green">
-                  Let's go !
-                </div>
+                <div className="btn w-100 btn-green">Let's go !</div>
               </div>
               <div className="col-md-2">
-                <div className="btn btn-primary w-100 btn-outline-green">
-                  Let's go !
-                </div>
+                <div className="btn btn-out w-100">Let's go !</div>
               </div>
             </div>
           </div>
