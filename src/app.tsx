@@ -30,8 +30,6 @@ interface IProps {
 const App = ({
   checkAuthenticationConnect,
   isAuthenticated,
-  checkAdmin,
-  isAdmin,
 }: IProps) => {
   React.useEffect(() => {
     checkAuthenticationConnect();

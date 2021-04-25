@@ -19,7 +19,7 @@ const LoggedInRoute = ({
   return (
     <>
       <Route
-        render={(otherProps) => (
+        render={() => (
           <>
             <Component {...otherProps} />
           </>

@@ -19,7 +19,7 @@ const AdminRoute = ({
   return (
     <>
       <Route
-        render={(otherProps) => (
+        render={() => (
           <>
             <Component {...otherProps} />
           </>

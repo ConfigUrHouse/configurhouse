@@ -31,6 +31,12 @@ interface IProps {
 }
 
 const Nav = ({ isAuthenticated, isAdmin }: IProps) => {
+
+  let accountIcon = faUser;
+  if(isAdmin){
+    accountIcon = faUserShield;
+  }
+
   return (
     <ProSidebar breakPoint="md" className="position-fixed">
       <SidebarHeader>
@@ -68,7 +74,7 @@ const Nav = ({ isAuthenticated, isAdmin }: IProps) => {
                 <Link to="/account">
                   <Col md={8}>
                     <FontAwesomeIcon
-                      icon={isAdmin ? faUserShield : faUser}
+                      icon={accountIcon}
                       size="lg"
                       className="mr-2"
                     />{" "}

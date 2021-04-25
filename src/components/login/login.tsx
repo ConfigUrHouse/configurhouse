@@ -1,5 +1,5 @@
 import "./login.css";
-import { InputGroup, FormControl, Button } from "react-bootstrap";
+import { InputGroup, FormControl, Button, Form } from "react-bootstrap";
 import * as Yup from "yup";
 import { apiRequest } from "../../api/utils";
 import { logIn } from "../../actions/current";
@@ -14,7 +14,6 @@ import {
   faKey,
   faLock,
 } from "@fortawesome/free-solid-svg-icons";
-import { Form } from "react-bootstrap";
 import React from "react";
 import { Formik } from "formik";
 import { FormValues } from "./form-value";
@@ -65,7 +64,6 @@ class Login extends React.Component<any, any> {
                       role.id == process.env.REACT_APP_ADMIN_ROLE_NUMBER
                   ).length > 0
                 ) {
-                  //TODO : SET ADMIN ID OU REQUETRE
                   isAdmin = true;
                 }
                 this.props.logInConnect(datas.token, isAdmin);
@@ -83,6 +81,19 @@ class Login extends React.Component<any, any> {
     this.setState({ [nam]: val });
   }
   render() {
+    let alertDiv;
+    if (this.state.success == 1) {
+      alertDiv = <div className="alert alert-success mb-4">
+                  <FontAwesomeIcon icon={faCheck} /> Connexion réussie, vous
+                  allez être redirigé...
+                </div>;
+    } else if(this.state.success == -1) {
+      alertDiv = <div className="alert alert-danger m-4">
+                  <FontAwesomeIcon icon={faTimes} /> L'identifiant ou le mot de
+                  passe est incorrect.
+                </div>;
+    }
+
     return (
       <>
         <main className="p-5 w-100">
@@ -95,20 +106,7 @@ class Login extends React.Component<any, any> {
               <h6 className="text-center mb-5 text-green">
                 Veuillez vous connecter afin d'accéder à votre espace personnel
               </h6>
-
-              {this.state.success == 1 ? (
-                <div className="alert alert-success mb-4">
-                  <FontAwesomeIcon icon={faCheck} /> Connexion réussie, vous
-                  allez être redirigé...
-                </div>
-              ) : this.state.success == -1 ? (
-                <div className="alert alert-danger m-4">
-                  <FontAwesomeIcon icon={faTimes} /> L'identifiant ou le mot de
-                  passe est incorrect.
-                </div>
-              ) : (
-                ""
-              )}
+              {alertDiv}
               <Formik
                 validationSchema={this.schema}
                 onSubmit={(values, { resetForm }) => {
@@ -130,7 +128,7 @@ class Login extends React.Component<any, any> {
                   >
                     <InputGroup className="mb-3">
                       <InputGroup.Prepend>
-                        <InputGroup.Text id="MailIcon">
+                        <InputGroup.Text id="EMailIcon">
                           <FontAwesomeIcon icon={faAt} />
                         </InputGroup.Text>
                       </InputGroup.Prepend>
@@ -150,7 +148,7 @@ class Login extends React.Component<any, any> {
                     </InputGroup>
                     <InputGroup className="mb-3">
                       <InputGroup.Prepend>
-                        <InputGroup.Text id="SubjectIcon">
+                        <InputGroup.Text id="PasswordIcon">
                           <FontAwesomeIcon icon={faLock} />
                         </InputGroup.Text>
                       </InputGroup.Prepend>
