@@ -36,7 +36,6 @@ const App = ({ checkAuthenticationConnect, isAuthenticated,checkAdmin, isAdmin}:
       <Router>
         <Sidebar />
         <Switch>
-          
           <Route path="/config">
             <Configurator />
           </Route>

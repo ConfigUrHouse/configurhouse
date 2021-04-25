@@ -50,13 +50,29 @@ export function checkAuthentication() {
   return async (dispatch: Dispatch<AuthenticationAction, {}, any>) => {
     const auth = await window.localStorage.getItem("authenticated");
     const formattedAuth = typeof auth === "string" ? JSON.parse(auth) : null;
-    formattedAuth ? dispatch(authenticate()) : dispatch(unauthenticate());
+    const isAdmin = await window.localStorage.getItem("admin");
+    const formattedAdmin = typeof isAdmin === "string" ? JSON.parse(isAdmin) : null;
+    if(formattedAdmin)    {
+      dispatch(authenticateAdmin())
+    }else{
+      formattedAuth ? dispatch(authenticate()) : dispatch(unauthenticate());
+    }
   };
 }
 export function checkAdmin() {
   return async (dispatch: Dispatch<AuthenticationAction, {}, any>) => {
-    const auth = await window.localStorage.getItem("admin");
-    const formattedAuth = typeof auth === "string" ? JSON.parse(auth) : null;
-    formattedAuth ? dispatch(authenticateAdmin()) : dispatch(authenticate());
+    const isAdmin = await window.localStorage.getItem("admin");
+
+    const logged = await window.localStorage.getItem("authenticated");
+    const formattedLogged = typeof logged === "string" ? JSON.parse(logged) : null;
+    
+    if(!formattedLogged){
+      dispatch(unauthenticate())
+    }else{
+
+      const formattedAdmin = typeof isAdmin === "string" ? JSON.parse(isAdmin) : null;
+
+      formattedAdmin ? dispatch(authenticateAdmin()) : dispatch(authenticate());
+    }
   };
 }

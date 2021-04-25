@@ -13,8 +13,9 @@ const LoggedInRoute = ({
   isAuthenticated,
   ...otherProps
 }: IProps) => {
+  
   if (isAuthenticated === false) {
-    return <Redirect to="/login" />;
+     return <Redirect to="/login" />;
   }
   return (
     <>

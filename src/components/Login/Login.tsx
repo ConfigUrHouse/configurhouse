@@ -64,8 +64,6 @@ class Login extends React.Component<any, any> {
                 isAdmin = true;
               }
               this.props.logInConnect(datas.token, isAdmin);
-
-
             }
           })
           .catch((error) => console.log(error));

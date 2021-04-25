@@ -39,6 +39,7 @@ interface IProps {
 }
 
 const Nav = ({ isAuthenticated, isAdmin }: IProps) => {
+  console.log(isAdmin)
   return (
     <ProSidebar breakPoint="md" className="position-fixed">
       <SidebarHeader>

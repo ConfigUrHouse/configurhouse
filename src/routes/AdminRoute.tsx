@@ -13,6 +13,7 @@ const AdminRoute = ({
   isAdmin,
   ...otherProps
 }: IProps) => {
+
   if (isAdmin === false) {
     return <Redirect to="/login" />;
   }

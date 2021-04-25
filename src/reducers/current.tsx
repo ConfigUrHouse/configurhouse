@@ -8,6 +8,7 @@ export default function currentReducer(
   },
   action: IAuthenticate | IUnauthenticate | IAuthenticateAdmin, 
 ): ICurrent {
+
   switch (action.type) {
     case AUTHENTICATE:
       return {
@@ -15,11 +16,11 @@ export default function currentReducer(
         isAuthenticated: true,
         isAdmin:false,
       };
-      case AUTHENTICATEADMIN:
+    case AUTHENTICATEADMIN:
       return {
         ...state,
-        isAuthenticated: true,
         isAdmin:true,
+        isAuthenticated: true,
       };
     case UNAUTHENTICATE:
       return { isAuthenticated: false, isAdmin: false };
