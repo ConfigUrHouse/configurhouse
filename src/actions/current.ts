@@ -1,8 +1,7 @@
 import { ThunkDispatch as Dispatch } from "redux-thunk";
 import * as constants from "../constants";
-import { ICurrent } from "../types";
 export interface IAuthenticate {
-  type: constants.AUTHENTICATE;
+  type: constants.AUTHENTICATETYPE;
 }
 function authenticate(): IAuthenticate {
   return {
@@ -10,7 +9,7 @@ function authenticate(): IAuthenticate {
   };
 }
 export interface IUnauthenticate {
-  type: constants.UNAUTHENTICATE;
+  type: constants.UNAUTHENTICATETYPE;
 }
 function unauthenticate(): IUnauthenticate {
   return {
@@ -18,7 +17,7 @@ function unauthenticate(): IUnauthenticate {
   };
 }
 export interface IAuthenticateAdmin {
-  type: constants.AUTHENTICATEADMIN;
+  type: constants.AUTHENTICATEADMINTYPE;
 }
 function authenticateAdmin() {
   return {
@@ -32,18 +31,16 @@ export type AuthenticationAction =
   | IAuthenticateAdmin;
 export function logIn(token: string, isAdmin: boolean) {
   return async (dispatch: Dispatch<AuthenticationAction, {}, any>) => {
-    await window.localStorage.setItem("authenticated", "true");
-    await window.localStorage.setItem("token", token);
-    await window.localStorage.setItem("admin", isAdmin.toString());
+    setLocalStorage("true", token, isAdmin.toString());
+
+
     if (isAdmin) dispatch(authenticateAdmin());
     else dispatch(authenticate());
   };
 }
 export function logOut() {
   return async (dispatch: Dispatch<AuthenticationAction, {}, any>) => {
-    await window.localStorage.setItem("token", "");
-    await window.localStorage.setItem("authenticated", "false");
-    await window.localStorage.setItem("admin", "false");
+    setLocalStorage("false", "", "false");
     dispatch(unauthenticate());
   };
 }
@@ -78,4 +75,9 @@ export function checkAdmin() {
       formattedAdmin ? dispatch(authenticateAdmin()) : dispatch(authenticate());
     }
   };
+}
+async function setLocalStorage(auth : string,token: string,admin: string){
+  await window.localStorage.setItem("token", token);
+  await window.localStorage.setItem("authenticated", auth);
+  await window.localStorage.setItem("admin", admin);
 }
