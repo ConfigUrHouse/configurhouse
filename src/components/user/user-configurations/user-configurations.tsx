@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCogs,
@@ -27,12 +28,13 @@ import { apiRequest } from '../../../api/utils';
 import { Configuration, HouseModel } from '../../../models';
 import {
   UserConfigurationsFormValues,
+  UserConfigurationsProps,
   UserConfigurationsState,
 } from './models';
 import './user-configurations.css';
 
-export default class UserConfigurations extends React.Component<
-  {},
+class UserConfigurations extends React.Component<
+  UserConfigurationsProps,
   UserConfigurationsState
 > {
   private initialValues: UserConfigurationsFormValues = {
@@ -68,7 +70,7 @@ export default class UserConfigurations extends React.Component<
     },
   ];
 
-  constructor(props: {}) {
+  constructor(props: UserConfigurationsProps) {
     super(props);
     this.fetchHouseModels = this.fetchHouseModels.bind(this);
     this.fetchConfigurations = this.fetchConfigurations.bind(this);
@@ -127,8 +129,8 @@ export default class UserConfigurations extends React.Component<
     }
   }
 
-  handleEdit(id: number) {
-    console.log('Edit');
+  handleEdit(id: number): void {
+    this.props.history.push(`config/${id}`);
   }
 
   private async handleDelete(id: number): Promise<void> {
@@ -282,3 +284,5 @@ export default class UserConfigurations extends React.Component<
     );
   }
 }
+
+export default withRouter(UserConfigurations);

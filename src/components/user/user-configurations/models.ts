@@ -1,5 +1,6 @@
-import { Configuration, HouseModel } from "../../../models";
-import { PaginatedResponse } from "../../../utils/pagination";
+import { RouteComponentProps } from 'react-router';
+import { Configuration, HouseModel } from '../../../models';
+import { PaginatedResponse } from '../../../utils/pagination';
 
 export interface UserConfigurationsFormValues {
   name: string;
@@ -11,3 +12,9 @@ export interface UserConfigurationsState {
   formValues: UserConfigurationsFormValues;
   paginatedItems: PaginatedResponse<Configuration>;
 }
+
+export interface UserConfigurationsPathParams {
+  id: string;
+}
+
+export type UserConfigurationsProps = RouteComponentProps<UserConfigurationsPathParams>;
