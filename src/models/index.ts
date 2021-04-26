@@ -15,6 +15,16 @@ export interface User {
   active: number;
 }
 
+export interface Role {
+  id: number;
+  name: string;
+}
+
+export interface UserRole {
+  id: number;
+  id_User: number;
+}
+
 export interface HouseModel {
   id: number;
   name: string;

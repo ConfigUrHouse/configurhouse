@@ -19,7 +19,7 @@ import { withRouter } from "react-router";
 import * as Yup from "yup";
 import { ApiResponseError } from "../../../api/models";
 import { apiRequest } from "../../../api/utils";
-import { Role, User, UserRole } from "../models";
+import { Role, User, UserRole } from "../../../models";
 import { FormValues, UserEditProps, UserEditState } from "./models";
 import "./user-edit.css";
 

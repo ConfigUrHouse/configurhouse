@@ -1,15 +1,15 @@
-import React from 'react';
-import { withRouter } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from "react";
+import { withRouter } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCogs,
   faPlus,
   faKeyboard,
   faHome,
   faSearch,
-} from '@fortawesome/free-solid-svg-icons';
-import { ItemsTableColumn } from '../../templates/items-table/models';
-import { Formik } from 'formik';
+} from "@fortawesome/free-solid-svg-icons";
+import { ItemsTableColumn } from "../../templates/items-table/models";
+import { Formik } from "formik";
 import {
   Button,
   Form,
@@ -17,33 +17,33 @@ import {
   InputGroup,
   Row,
   Col,
-} from 'react-bootstrap';
-import { ItemsTable } from '../../templates/items-table/items-table';
-import * as Yup from 'yup';
+} from "react-bootstrap";
+import { ItemsTable } from "../../templates/items-table/items-table";
+import * as Yup from "yup";
 import {
   emptyPaginatedData,
   PaginatedResponse,
-} from '../../../utils/pagination';
-import { apiRequest } from '../../../api/utils';
-import { Configuration, HouseModel } from '../../../models';
+} from "../../../utils/pagination";
+import { apiRequest } from "../../../api/utils";
+import { Configuration, HouseModel } from "../../../models";
 import {
   UserConfigurationsFormValues,
   UserConfigurationsProps,
   UserConfigurationsState,
-} from './models';
-import './user-configurations.css';
+} from "./models";
+import "./user-configurations.css";
 
 class UserConfigurations extends React.Component<
   UserConfigurationsProps,
   UserConfigurationsState
 > {
   private initialValues: UserConfigurationsFormValues = {
-    name: '',
+    name: "",
     houseModelId: 0,
   };
 
   private schema = Yup.object().shape({
-    name: Yup.string().min(2, 'Trop court !'),
+    name: Yup.string().min(2, "Trop court !"),
     houseModelId: Yup.lazy(() =>
       Yup.number().oneOf([
         ...this.state.houseModels.map((houseModel) => houseModel.id),
@@ -54,18 +54,18 @@ class UserConfigurations extends React.Component<
 
   private columns: ItemsTableColumn<Configuration>[] = [
     {
-      name: 'id',
-      displayName: 'ID',
+      name: "id",
+      displayName: "ID",
     },
     {
-      name: 'name',
-      displayName: 'Nom',
+      name: "name",
+      displayName: "Nom",
     },
     {
-      name: 'houseModel',
-      displayName: 'Modèle',
+      name: "houseModel",
+      displayName: "Modèle",
       component(item) {
-        return item.houseModel?.name ?? 'Inconnu';
+        return item.houseModel?.name ?? "Inconnu";
       },
     },
   ];
@@ -92,8 +92,8 @@ class UserConfigurations extends React.Component<
   async fetchHouseModels() {
     try {
       const paginatedHouseModels: PaginatedResponse<HouseModel> = await apiRequest(
-        'houseModel',
-        'GET'
+        "houseModel",
+        "GET"
       );
 
       this.setState({ houseModels: paginatedHouseModels.items });
@@ -118,8 +118,8 @@ class UserConfigurations extends React.Component<
 
     try {
       const paginatedItems: PaginatedResponse<Configuration> = await apiRequest(
-        'configuration',
-        'GET',
+        "configuration",
+        "GET",
         queryParams
       );
 
@@ -134,7 +134,7 @@ class UserConfigurations extends React.Component<
   }
 
   private async handleDelete(id: number): Promise<void> {
-    apiRequest(`configuration/${id}`, 'DELETE', [])
+    apiRequest(`configuration/${id}`, "DELETE", [])
       .then((response) => {
         this.fetchConfigurations();
       })
@@ -261,7 +261,7 @@ class UserConfigurations extends React.Component<
                   </Col>
                 </Row>
                 <Button variant="primary" type="submit">
-                  RECHERCHER{' '}
+                  RECHERCHER{" "}
                   <FontAwesomeIcon className="ml-2" icon={faSearch} />
                 </Button>
               </Form>

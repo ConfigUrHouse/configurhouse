@@ -1,6 +1,6 @@
-import { RouteComponentProps } from 'react-router-dom';
-import { ApiResponseError } from '../../../api/models';
-import { Configuration } from '../../../models';
+import { RouteComponentProps } from "react-router-dom";
+import { ApiResponseError } from "../../../api/models";
+import { Configuration } from "../../../models";
 
 export interface UserConfigurationEditState {
   item: Configuration;

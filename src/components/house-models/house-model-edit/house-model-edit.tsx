@@ -2,7 +2,8 @@ import {
   faHome,
   faSave,
   faTimes,
-  faFileAlt,
+  faKeyboard,
+  faImage,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Formik } from "formik";
@@ -172,7 +173,7 @@ class HouseModelEdit extends React.Component<
                     <InputGroup className="mb-3">
                       <InputGroup.Prepend>
                         <InputGroup.Text id="NameIcon">
-                          <FontAwesomeIcon icon={faFileAlt} />
+                          <FontAwesomeIcon icon={faKeyboard} />
                         </InputGroup.Text>
                       </InputGroup.Prepend>
                       <FormControl
@@ -218,7 +219,7 @@ class HouseModelEdit extends React.Component<
                     <InputGroup className="mb-3">
                       <InputGroup.Prepend>
                         <InputGroup.Text id="ModelIcon">
-                          <FontAwesomeIcon icon={faHome} />
+                          <FontAwesomeIcon icon={faImage} />
                         </InputGroup.Text>
                       </InputGroup.Prepend>
                       <FormControl
