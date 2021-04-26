@@ -6,11 +6,9 @@ export async function apiRequest(
 ) {
   //TODO add authentification token if exists
 
-  const queryParams = params
-    ? `?${
-        typeof params === "string" ? params : params.filter((p) => p).join("&")
-      }`
-    : "";
+  const queryParams = `?${
+    typeof params === "string" ? params : params.filter((p) => p).join("&")
+  }`;
 
   let queryBody = (!["GET", "DELETE"].includes(method) && body) || null;
   if (queryBody && typeof queryBody !== "string") {
