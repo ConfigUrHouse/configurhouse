@@ -11,6 +11,7 @@ import {
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ItemsTableProps, ItemsTableState } from "./models";
+import "./items-table.css";
 
 export class ItemsTable<T extends Record<string, any>> extends React.Component<
   ItemsTableProps<T>,
@@ -142,7 +143,7 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
         <Table
           bordered
           hover
-          className={`${canSelectItems ? "" : "mt-5"} text-center`}
+          className={`${canSelectItems ? "" : "mt-5"} items-table text-center`}
         >
           <thead>
             <tr>

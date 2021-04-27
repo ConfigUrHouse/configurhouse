@@ -31,9 +31,8 @@ interface IProps {
 }
 
 const Nav = ({ isAuthenticated, isAdmin }: IProps) => {
-
   let accountIcon = faUser;
-  if(isAdmin){
+  if (isAdmin) {
     accountIcon = faUserShield;
   }
 

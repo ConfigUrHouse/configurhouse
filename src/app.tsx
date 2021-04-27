@@ -11,6 +11,7 @@ import Mentions from "./components/mentions/mentions";
 import Contact from "./components/contact/contact";
 import HouseModelList from "./components/house-models/house-model-list/house-model-list";
 import HouseModelEdit from "./components/house-models/house-model-edit/house-model-edit";
+import UserConfigurationEdit from "./components/user/user-configuration-edit/user-configuration-edit";
 import { ICurrent } from "./types";
 import { checkAuthentication, checkAdmin } from "./actions/current";
 import { connect } from "react-redux";
@@ -27,10 +28,7 @@ interface IProps {
   isAdmin: boolean | null;
 }
 
-const App = ({
-  checkAuthenticationConnect,
-  isAuthenticated,
-}: IProps) => {
+const App = ({ checkAuthenticationConnect, isAuthenticated }: IProps) => {
   React.useEffect(() => {
     checkAuthenticationConnect();
     checkAdmin();
@@ -41,6 +39,11 @@ const App = ({
       <Router>
         <Sidebar />
         <Switch>
+          <LoggedInRoute
+            path="/config/:id"
+            exact={true}
+            component={UserConfigurationEdit}
+          />
           <Route path="/config">
             <Configurator />
           </Route>

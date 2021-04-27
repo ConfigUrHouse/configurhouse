@@ -29,7 +29,7 @@ import { UsersListState, FormValues, UserListProps } from "./models";
 import { apiRequest } from "../../../api/utils";
 import { ItemsTableColumn } from "../../templates/items-table/models";
 import { ItemsTable } from "../../templates/items-table/items-table";
-import { Role, User } from "../models";
+import { Role, User } from "../../../models";
 import { withRouter } from "react-router";
 import "./user-list.css";
 import { ApiResponseError } from "../../../api/models";
@@ -243,16 +243,11 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
     subject: string,
     content: string
   ) {
-    apiRequest(
-      `utils/sendEmails`,
-      "POST",
-      [],
-      JSON.stringify({
-        emails: emailList,
-        subject: subject,
-        content: content,
-      })
-    )
+    apiRequest(`utils/sendEmails`, "POST", [], {
+      emails: emailList,
+      subject: subject,
+      content: content,
+    })
       .then((response) => {
         if (response.status === "error") {
           this.setState({ error: response as ApiResponseError });

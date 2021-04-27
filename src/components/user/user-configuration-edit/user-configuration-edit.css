@@ -12,8 +12,3 @@
 main {
   min-height: 100vh;
 }
-
-td svg {
-  margin-left: 5px;
-  margin-right: 5px;
-}

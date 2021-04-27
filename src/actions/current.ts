@@ -33,7 +33,6 @@ export function logIn(token: string, isAdmin: boolean) {
   return async (dispatch: Dispatch<AuthenticationAction, {}, any>) => {
     setLocalStorage("true", token, isAdmin.toString());
 
-
     if (isAdmin) dispatch(authenticateAdmin());
     else dispatch(authenticate());
   };
@@ -76,7 +75,7 @@ export function checkAdmin() {
     }
   };
 }
-async function setLocalStorage(auth : string,token: string,admin: string){
+async function setLocalStorage(auth: string, token: string, admin: string) {
   await window.localStorage.setItem("token", token);
   await window.localStorage.setItem("authenticated", auth);
   await window.localStorage.setItem("admin", admin);

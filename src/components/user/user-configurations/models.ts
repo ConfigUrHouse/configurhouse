@@ -1,3 +1,4 @@
+import { RouteComponentProps } from "react-router";
 import { Configuration, HouseModel } from "../../../models";
 import { PaginatedResponse } from "../../../utils/pagination";
 
@@ -11,3 +12,7 @@ export interface UserConfigurationsState {
   formValues: UserConfigurationsFormValues;
   paginatedItems: PaginatedResponse<Configuration>;
 }
+
+export interface UserConfigurationsPathParams {}
+
+export type UserConfigurationsProps = RouteComponentProps<UserConfigurationsPathParams>;

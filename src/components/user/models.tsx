@@ -1,17 +1,7 @@
-export interface User {
-  id: number;
-  firstname: string;
-  lastname: string;
-  email: string;
-  active: number;
-}
+import { RouteComponentProps } from "react-router";
 
-export interface Role {
-  id: number;
-  name: string;
-}
+export interface UserState {}
 
-export interface UserRole {
-  id: number;
-  id_User: number;
-}
+export interface UserPathParams {}
+
+export type UserProps = RouteComponentProps<UserPathParams>;

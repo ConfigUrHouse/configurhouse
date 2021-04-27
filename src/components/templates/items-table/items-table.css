@@ -2,3 +2,7 @@
   padding: 0px !important;
   background: transparent !important;
 }
+
+.items {
+  overflow-x: auto;
+}

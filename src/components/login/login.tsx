@@ -83,15 +83,19 @@ class Login extends React.Component<any, any> {
   render() {
     let alertDiv;
     if (this.state.success == 1) {
-      alertDiv = <div className="alert alert-success mb-4">
-                  <FontAwesomeIcon icon={faCheck} /> Connexion réussie, vous
-                  allez être redirigé...
-                </div>;
-    } else if(this.state.success == -1) {
-      alertDiv = <div className="alert alert-danger m-4">
-                  <FontAwesomeIcon icon={faTimes} /> L'identifiant ou le mot de
-                  passe est incorrect.
-                </div>;
+      alertDiv = (
+        <div className="alert alert-success mb-4">
+          <FontAwesomeIcon icon={faCheck} /> Connexion réussie, vous allez être
+          redirigé...
+        </div>
+      );
+    } else if (this.state.success == -1) {
+      alertDiv = (
+        <div className="alert alert-danger m-4">
+          <FontAwesomeIcon icon={faTimes} /> L'identifiant ou le mot de passe
+          est incorrect.
+        </div>
+      );
     }
 
     return (
