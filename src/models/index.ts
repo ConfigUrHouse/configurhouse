@@ -7,6 +7,15 @@ export interface Configuration {
   houseModel?: HouseModel;
 }
 
+export interface ConfigurationOption {
+  id: number;
+  name: string;
+  id_HouseModel: number;
+  id_Mesh: number;
+  houseModel?: HouseModel;
+  mesh?: Mesh;
+}
+
 export interface User {
   id: number;
   firstname: string;
@@ -50,4 +59,11 @@ export interface Asset {
   id: number;
   value: string;
   id_AssetType: number;
+}
+
+export interface Mesh {
+  id: number;
+  name: string;
+  id_Asset: number;
+  asset?: Asset;
 }

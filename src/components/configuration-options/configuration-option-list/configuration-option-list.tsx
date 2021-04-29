@@ -2,11 +2,13 @@ import React from "react";
 import { faTimes, faHome, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { withRouter } from "react-router";
-import "./house-model-list.css";
 import { ApiResponseError } from "../../../api/models";
 import { ItemsTableColumn } from "../../templates/items-table/models";
-import { HouseModel } from "../../../models";
-import { HouseModelsProps, HouseModelsState } from "./models";
+import { ConfigurationOption } from "../../../models";
+import {
+  ConfigurationOptionListProps,
+  ConfigurationOptionListState,
+} from "./models";
 import {
   emptyPaginatedData,
   PaginatedResponse,
@@ -14,12 +16,13 @@ import {
 import { apiRequest } from "../../../api/utils";
 import { ItemsTable } from "../../templates/items-table/items-table";
 import { Button } from "react-bootstrap";
+import "./configuration-option-list.css";
 
-class HouseModelList extends React.Component<
-  HouseModelsProps,
-  HouseModelsState
+class ConfigurationOptionList extends React.Component<
+  ConfigurationOptionListProps,
+  ConfigurationOptionListState
 > {
-  private columns: ItemsTableColumn<HouseModel>[] = [
+  private columns: ItemsTableColumn<ConfigurationOption>[] = [
     {
       name: "id",
       displayName: "ID",
@@ -30,70 +33,80 @@ class HouseModelList extends React.Component<
     },
     {
       name: "modelType",
-      displayName: "Type de Modèle",
+      displayName: "Modèle",
       component(item) {
-        return item.modelType?.name ?? "Inconnu";
+        return item.houseModel?.name ?? "Inconnu";
+      },
+    },
+    {
+      name: "mesh",
+      displayName: "Mesh",
+      component(item) {
+        return item.mesh?.name ?? "Inconnu";
       },
     },
   ];
 
-  constructor(props: HouseModelsProps) {
+  constructor(props: ConfigurationOptionListProps) {
     super(props);
-    this.fetchHouseModels = this.fetchHouseModels.bind(this);
+    this.fetchConfigurationOptions = this.fetchConfigurationOptions.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handlePageChange = this.handlePageChange.bind(this);
 
     this.state = {
-      paginatedItems: emptyPaginatedData<HouseModel>(),
+      paginatedItems: emptyPaginatedData<ConfigurationOption>(),
       error: undefined,
     };
   }
 
   componentDidMount() {
-    this.fetchHouseModels();
+    this.fetchConfigurationOptions();
   }
 
-  private async fetchHouseModels() {
+  private async fetchConfigurationOptions() {
     const {
       paginatedItems: { currentPage },
     } = this.state;
 
     const queryParams = [`page=${currentPage}`, `size=10`];
 
-    apiRequest("houseModel", "GET", queryParams)
+    apiRequest("optionConf", "GET", queryParams)
       .then((response) => {
         if (response.status === "error") {
           this.setState({ error: response as ApiResponseError });
         } else {
-          const paginatedItems = response as PaginatedResponse<HouseModel>;
+          const paginatedItems = response as PaginatedResponse<ConfigurationOption>;
           this.setState({ paginatedItems });
         }
       })
       .catch((error) => console.log(error));
 
-    this.setState({ paginatedItems: emptyPaginatedData<HouseModel>() });
+    this.setState({
+      paginatedItems: emptyPaginatedData<ConfigurationOption>(),
+    });
   }
 
   private handleEdit(id: number): void {
-    this.props.history.push(`houseModels/${id}`);
+    this.props.history.push(`configurationOptions/${id}`);
   }
 
   private async handleDelete(id: number): Promise<void> {
-    return apiRequest(`houseModel/${id}`, "DELETE", [])
-      .then((response) => {
-        if (response.status === "error") {
-          this.setState({ error: response as ApiResponseError });
-        } else {
-          this.fetchHouseModels();
-        }
-      })
-      .catch((error) => console.log(error));
+    try {
+      const response = await apiRequest(`optionConf/${id}`, "DELETE", []);
+
+      if (response.status === "error") {
+        this.setState({ error: response as ApiResponseError });
+      } else {
+        this.fetchConfigurationOptions();
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  private deleteMessage(item: HouseModel): string {
-    return `Voulez-vous supprimer le modèle ${item.name} ?`;
-  }
+  private deleteMessage = (item: ConfigurationOption) =>
+    `Voulez-vous supprimer l'option ${item.name} ?`;
 
   private handlePageChange(value: number): void {
     const paginatedItems = { ...this.state.paginatedItems };
@@ -103,9 +116,7 @@ class HouseModelList extends React.Component<
       {
         paginatedItems,
       },
-      () => {
-        this.fetchHouseModels();
-      }
+      this.fetchConfigurationOptions
     );
   }
 
@@ -126,15 +137,15 @@ class HouseModelList extends React.Component<
           <div className="d-flex justify-content-between">
             <h3 className="mb-2">
               <FontAwesomeIcon className="mr-2" icon={faHome} />
-              Liste des modèles
+              Liste des options de configurations
             </h3>
-            <Button variant="primary" href="/houseModels/add">
+            <Button variant="primary" href="/configurationOptions/add">
               <FontAwesomeIcon className="mr-2" icon={faPlus} />
               AJOUTER
             </Button>
           </div>
 
-          <ItemsTable<HouseModel>
+          <ItemsTable<ConfigurationOption>
             paginatedItems={paginatedItems}
             columns={this.columns}
             handlePageChange={this.handlePageChange}
@@ -148,4 +159,4 @@ class HouseModelList extends React.Component<
   }
 }
 
-export default withRouter(HouseModelList);
+export default withRouter(ConfigurationOptionList);

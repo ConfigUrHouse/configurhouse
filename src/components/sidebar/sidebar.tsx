@@ -8,6 +8,7 @@ import {
   faUsers,
   faUserShield,
   faKey,
+  faCogs,
 } from "@fortawesome/free-solid-svg-icons";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
@@ -55,6 +56,10 @@ const Nav = ({ isAuthenticated, isAdmin }: IProps) => {
         <MenuItem className="m-5">
           <FontAwesomeIcon icon={faAddressBook} size="lg" className="mr-2" />{" "}
           <Link to="/contact">Contact</Link>
+        </MenuItem>
+        <MenuItem className="m-5">
+          <FontAwesomeIcon icon={faCogs} size="lg" className="mr-2" />{" "}
+          <Link to="/configurationOptions">Options de Configuration</Link>
         </MenuItem>
         <MenuItem className="m-5">
           <FontAwesomeIcon icon={faHome} size="lg" className="mr-2" />{" "}
