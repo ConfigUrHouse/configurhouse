@@ -50,6 +50,7 @@ class Login extends React.Component<any, any> {
     })
       .then((response) => response.json())
       .then((datas) => {
+        console.log(datas);
         if (datas.success) {
           this.setState({ success: 1 });
           apiRequest("userRole/" + datas.userId, "GET", [])

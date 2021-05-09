@@ -8,8 +8,6 @@ export interface HouseModelsState {
   error?: ApiResponseError;
 }
 
-export interface HouseModelsPathParams {
-  id: string;
-}
+export interface HouseModelsPathParams {}
 
 export type HouseModelsProps = RouteComponentProps<HouseModelsPathParams>;
