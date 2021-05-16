@@ -17,16 +17,10 @@ const LoggedOutRoute = ({
     return <Redirect to="/account" />;
   }
   return (
-    <>
-      <Route
-        render={() => (
-          <>
-            <Component {...otherProps} />
-          </>
-        )}
-      />
-    </>
-  );
+    <Route {...otherProps} render={(props) => (
+      <Component {...props} />
+    )}/>
+  )
 };
 const mapStateToProps = (state: ICurrent) => ({
   isAuthenticated: state.isAuthenticated,

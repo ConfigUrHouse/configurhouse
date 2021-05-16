@@ -17,16 +17,10 @@ const AdminRoute = ({
     return <Redirect to="/login" />;
   }
   return (
-    <>
-      <Route
-        render={() => (
-          <>
-            <Component {...otherProps} />
-          </>
-        )}
-      />
-    </>
-  );
+    <Route {...otherProps} render={(props) => (
+      <Component {...props} />
+    )}/>
+  )
 };
 const mapStateToProps = (state: ICurrent) => ({
   isAdmin: state.isAdmin,

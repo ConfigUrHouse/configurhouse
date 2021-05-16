@@ -62,7 +62,7 @@ class Login extends React.Component<any, any> {
                 if (
                   response.filter(
                     (role: any) =>
-                      role.id == process.env.REACT_APP_ADMIN_ROLE_NUMBER
+                      role.id_Role == process.env.REACT_APP_ADMIN_ROLE_NUMBER
                   ).length > 0
                 ) {
                   isAdmin = true;
