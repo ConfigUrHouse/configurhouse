@@ -29,9 +29,9 @@ export type AuthenticationAction =
   | IAuthenticate
   | IUnauthenticate
   | IAuthenticateAdmin;
-export function logIn(token: string, isAdmin: boolean) {
+export function logIn(token: string, isAdmin: boolean, userId: number) {
   return async (dispatch: Dispatch<AuthenticationAction, {}, any>) => {
-    setLocalStorage("true", token, isAdmin.toString());
+    setLocalStorage("true", token, isAdmin.toString(), userId);
 
     if (isAdmin) dispatch(authenticateAdmin());
     else dispatch(authenticate());
@@ -39,7 +39,7 @@ export function logIn(token: string, isAdmin: boolean) {
 }
 export function logOut() {
   return async (dispatch: Dispatch<AuthenticationAction, {}, any>) => {
-    setLocalStorage("false", "", "false");
+    setLocalStorage("false", "", "false", -1);
     dispatch(unauthenticate());
   };
 }
@@ -75,8 +75,10 @@ export function checkAdmin() {
     }
   };
 }
-async function setLocalStorage(auth: string, token: string, admin: string) {
+async function setLocalStorage(auth: string, token: string, admin: string, userId: number) {
   await window.localStorage.setItem("token", token);
   await window.localStorage.setItem("authenticated", auth);
   await window.localStorage.setItem("admin", admin);
+  await window.localStorage.setItem("userId", userId.toString());
+
 }
