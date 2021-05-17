@@ -76,6 +76,7 @@ class UserConfigurations extends React.Component<
     this.fetchConfigurations = this.fetchConfigurations.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.handleSeeMore = this.handleSeeMore.bind(this);
 
     this.state = {
       houseModels: [],
@@ -132,7 +133,9 @@ class UserConfigurations extends React.Component<
   handleEdit(id: number): void {
     this.props.history.push(`config/${id}`);
   }
-
+  handleSeeMore(id: number): void {
+    this.props.history.push(`configuration/${id}`);
+  }
   private async handleDelete(id: number): Promise<void> {
     apiRequest(`configuration/${id}`, "DELETE", [])
       .then((response) => {
@@ -275,6 +278,8 @@ class UserConfigurations extends React.Component<
             handleEdit={this.handleEdit}
             handleDelete={this.handleDelete}
             deleteMessage={this.deleteMessage}
+            handleSeeMore={this.handleSeeMore}
+
           ></ItemsTable>
         </div>
 

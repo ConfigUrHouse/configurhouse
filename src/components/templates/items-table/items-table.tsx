@@ -8,7 +8,7 @@ import {
   Row,
   Table,
 } from "react-bootstrap";
-import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faSearchPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ItemsTableProps, ItemsTableState } from "./models";
 import "./items-table.css";
@@ -90,10 +90,11 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
       handlePageChange,
       handleEdit,
       handleDelete,
+      handleSeeMore,
       globalActions,
       deleteMessage,
     } = this.props;
-    const hasActions = !!(handleEdit || handleDelete);
+    const hasActions = !!(handleEdit || handleDelete || handleSeeMore);
     const canSelectItems = !!globalActions?.actions.length;
 
     return (
@@ -245,6 +246,12 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
                         <FontAwesomeIcon
                           icon={faTrash}
                           onClick={() => this.confirmDelete(item)}
+                        />
+                      )}
+                      {handleSeeMore && (
+                        <FontAwesomeIcon
+                          icon={faSearchPlus}
+                          onClick={() => handleSeeMore(item.id)}
                         />
                       )}
                     </td>

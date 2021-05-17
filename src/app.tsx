@@ -22,6 +22,7 @@ import Login from "./components/login/login";
 import React from "react";
 import ConfigurationOptionList from "./components/configuration-options/configuration-option-list/configuration-option-list";
 import ConfigurationOptionEdit from "./components/configuration-options/configuration-option-edit/configuration-option-edit";
+import Configuration from "./components/configuration/configuration";
 
 interface IProps {
   checkAuthenticationConnect: () => void;
@@ -60,6 +61,8 @@ const App = ({ checkAuthenticationConnect, isAuthenticated }: IProps) => {
           </Route>
           <LoggedOutRoute path="/login" exact={true} component={Login} />
           <LoggedInRoute path="/account" exact={true} component={User} />
+
+          <LoggedInRoute path="/configuration/:id" exact={true} component={Configuration} />
 
           <AdminRoute
             path="/users"
