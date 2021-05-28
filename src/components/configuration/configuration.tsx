@@ -27,13 +27,11 @@ class Configuration extends React.Component<any, any> {
   }
 
   componentDidMount() {
-
     this.fetchConfiguration();
   }
 
   async fetchConfiguration(): Promise<void> {
-    try {
-      const response: any = await apiRequest(
+      await apiRequest(
         `configuration/`+this.state.id,
         "GET",
         []
@@ -41,22 +39,20 @@ class Configuration extends React.Component<any, any> {
         this.setState({ configuration: response });
         this.fetchConfigurationOptions();
         this.fetchHouseModel();
+      }).catch(error => {
+        this.setState({ error: error as ApiResponseError });
       });
-    } catch (error: any) {
-      console.error(error);
-      this.setState({ error: error as ApiResponseError });
-    }
+    
   }
 
   async fetchHouseModel(): Promise<void> {
-    try {
+ 
       const response: any = await apiRequest(
         `houseModel/`+this.state.configuration.id_HouseModel,
         "GET",
         []
       ).then((model : any) => {
-        console.log(model)
-        const modelDetails: any = apiRequest(
+        apiRequest(
           `modelType/`+model.id_ModelType,
           "GET",
           []
@@ -69,26 +65,23 @@ class Configuration extends React.Component<any, any> {
             modelDescription: modelDetails.description,
             modelId: modelDetails.id,
           }})
+        }).catch(error => {
+          this.setState({ error: error as ApiResponseError });
         });
+      }).catch(error => {
+        this.setState({ error: error as ApiResponseError });
       });
       this.setState({ model: response });
-    } catch (error: any) {
-      console.error(error);
-      this.setState({ error: error as ApiResponseError });
-    }
+
   }
   async fetchConfigurationOptions(): Promise<void> {
-    try {
-      const response: any = await apiRequest(
+      await apiRequest(
         `configurationValue/`+this.state.id,
         "GET",
         []
       ).then(response => {
         response.forEach((element : any) => {
-
-
-          try {
-            const option: any = apiRequest(
+            apiRequest(
               `value/`+element.id_Value,
               "GET",
               []
@@ -98,24 +91,16 @@ class Configuration extends React.Component<any, any> {
                 options: this.state.options.concat([option])
               })
               
+            }).catch(error => {
+              this.setState({ error: error as ApiResponseError });
             });
-  
-           
-          } catch (error: any) {
-            console.error(error);
-            this.setState({ error: error as ApiResponseError });
-          }
+
         });
-      });
-      
-     
-    } catch (error: any) {
-      console.error(error);
-      this.setState({ error: error as ApiResponseError });
-    }
+      }).catch(error => {
+        this.setState({ error: error as ApiResponseError });
+      })
   }
   render() {
-    const { id } = this.state;
     return (
       <main className="p-5 w-100 bg configuration-infos">
           <h2 className="text-green mb-2"><FontAwesomeIcon icon={faSearchPlus} /> Détails de votre configuration : <strong>{this.state.configuration.name}</strong></h2>
