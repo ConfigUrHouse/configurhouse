@@ -13,6 +13,7 @@ export interface ItemsTableProps<T extends Record<string, any>> {
   handlePageChange(page: number): void;
   handleEdit?(id: number): void;
   handleDelete?(id: number): void;
+  handleSeeMore?(id: number): void;
   deleteMessage?(item: T): string;
   globalActions?: {
     actions: {

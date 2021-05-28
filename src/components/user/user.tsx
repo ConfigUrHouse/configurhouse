@@ -12,7 +12,7 @@ class User extends React.Component<UserProps, UserState> {
   }
 
   render() {
-    const defaultTab = "policies";
+    const defaultTab = "configs";
     let selectedTab = this.props.location.search;
     if (selectedTab) {
       const result = this.props.location.search.match(/tab=([^&]*)/);
