@@ -8,7 +8,11 @@ import {
   Row,
   Table,
 } from "react-bootstrap";
-import { faPen, faSearchPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPen,
+  faSearchPlus,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ItemsTableProps, ItemsTableState } from "./models";
 import "./items-table.css";

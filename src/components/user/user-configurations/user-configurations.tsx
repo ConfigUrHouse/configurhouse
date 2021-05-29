@@ -92,10 +92,8 @@ class UserConfigurations extends React.Component<
 
   async fetchHouseModels() {
     try {
-      const paginatedHouseModels: PaginatedResponse<HouseModel> = await apiRequest(
-        "houseModel",
-        "GET"
-      );
+      const paginatedHouseModels: PaginatedResponse<HouseModel> =
+        await apiRequest("houseModel", "GET");
 
       this.setState({ houseModels: paginatedHouseModels.items });
     } catch (error) {
@@ -279,7 +277,6 @@ class UserConfigurations extends React.Component<
             handleDelete={this.handleDelete}
             deleteMessage={this.deleteMessage}
             handleSeeMore={this.handleSeeMore}
-
           ></ItemsTable>
         </div>
 

@@ -16,11 +16,7 @@ const AdminRoute = ({
   if (isAdmin === false) {
     return <Redirect to="/login" />;
   }
-  return (
-    <Route {...otherProps} render={(props) => (
-      <Component {...props} />
-    )}/>
-  )
+  return <Route {...otherProps} render={(props) => <Component {...props} />} />;
 };
 const mapStateToProps = (state: ICurrent) => ({
   isAdmin: state.isAdmin,

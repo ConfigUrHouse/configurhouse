@@ -15,4 +15,5 @@ export interface UserConfigurationsState {
 
 export interface UserConfigurationsPathParams {}
 
-export type UserConfigurationsProps = RouteComponentProps<UserConfigurationsPathParams>;
+export type UserConfigurationsProps =
+  RouteComponentProps<UserConfigurationsPathParams>;
