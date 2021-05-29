@@ -75,10 +75,14 @@ export function checkAdmin() {
     }
   };
 }
-async function setLocalStorage(auth: string, token: string, admin: string, userId: number) {
+async function setLocalStorage(
+  auth: string,
+  token: string,
+  admin: string,
+  userId: number
+) {
   await window.localStorage.setItem("token", token);
   await window.localStorage.setItem("authenticated", auth);
   await window.localStorage.setItem("admin", admin);
   await window.localStorage.setItem("userId", userId.toString());
-
 }

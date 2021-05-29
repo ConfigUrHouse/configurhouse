@@ -62,7 +62,11 @@ const App = ({ checkAuthenticationConnect, isAuthenticated }: IProps) => {
           <LoggedOutRoute path="/login" exact={true} component={Login} />
           <LoggedInRoute path="/account" exact={true} component={User} />
 
-          <LoggedInRoute path="/configuration/:id" exact={true} component={Configuration} />
+          <LoggedInRoute
+            path="/configuration/:id"
+            exact={true}
+            component={Configuration}
+          />
 
           <AdminRoute
             path="/users"

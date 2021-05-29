@@ -11,4 +11,5 @@ export interface UserConfigurationPathParams {
   id: string;
 }
 
-export type UserConfigurationEditProps = RouteComponentProps<UserConfigurationPathParams>;
+export type UserConfigurationEditProps =
+  RouteComponentProps<UserConfigurationPathParams>;

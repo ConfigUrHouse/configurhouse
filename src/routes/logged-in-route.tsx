@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { Redirect, Route } from "react-router-dom";
 import { ICurrent } from "../types";
 
-
 interface IProps {
   exact?: boolean;
   isAuthenticated: boolean | null;
@@ -15,15 +14,10 @@ const LoggedInRoute = ({
   isAuthenticated,
   ...otherProps
 }: IProps) => {
-
   if (isAuthenticated === false) {
     return <Redirect to="/login" />;
   }
-  return (
-    <Route {...otherProps} render={(props) => (
-      <Component {...props} />
-    )}/>
-  )
+  return <Route {...otherProps} render={(props) => <Component {...props} />} />;
 };
 const mapStateToProps = (state: ICurrent) => ({
   isAuthenticated: state.isAuthenticated,

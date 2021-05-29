@@ -10,4 +10,5 @@ export interface ConfigurationOptionListState {
 
 export interface ConfigurationOptionListPathParams {}
 
-export type ConfigurationOptionListProps = RouteComponentProps<ConfigurationOptionListPathParams>;
+export type ConfigurationOptionListProps =
+  RouteComponentProps<ConfigurationOptionListPathParams>;

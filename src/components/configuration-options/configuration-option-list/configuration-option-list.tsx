@@ -76,7 +76,8 @@ class ConfigurationOptionList extends React.Component<
         if (response.status === "error") {
           this.setState({ error: response as ApiResponseError });
         } else {
-          const paginatedItems = response as PaginatedResponse<ConfigurationOption>;
+          const paginatedItems =
+            response as PaginatedResponse<ConfigurationOption>;
           this.setState({ paginatedItems });
         }
       })

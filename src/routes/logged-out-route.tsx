@@ -16,11 +16,7 @@ const LoggedOutRoute = ({
   if (isAuthenticated === true) {
     return <Redirect to="/account" />;
   }
-  return (
-    <Route {...otherProps} render={(props) => (
-      <Component {...props} />
-    )}/>
-  )
+  return <Route {...otherProps} render={(props) => <Component {...props} />} />;
 };
 const mapStateToProps = (state: ICurrent) => ({
   isAuthenticated: state.isAuthenticated,
