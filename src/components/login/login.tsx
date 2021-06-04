@@ -40,7 +40,7 @@ class Login extends React.Component<any, any> {
     password: "",
   };
   login(values: FormValues) {
-    fetch("http://localhost:7000/user/login", {
+    fetch(`${process.env.REACT_APP_API_BASE_URL}/user/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
