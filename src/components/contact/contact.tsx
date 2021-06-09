@@ -53,7 +53,7 @@ class Contact extends React.Component<any, any> {
     this.setState({ [nam]: val });
   }
   sendEmail(values: FormValues) {
-    fetch("http://localhost:7000/utils/sendEmail", {
+    fetch(`${process.env.REACT_APP_API_BASE_URL}/utils/sendEmail`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
