@@ -42,6 +42,7 @@ const App = ({ checkAuthenticationConnect, isAuthenticated }: IProps) => {
       <Router>
         <Sidebar />
         <Switch>
+
           <LoggedInRoute
             path="/config/:id"
             exact={true}
@@ -110,6 +111,7 @@ const App = ({ checkAuthenticationConnect, isAuthenticated }: IProps) => {
             exact={true}
             component={HouseModelList}
           />
+
           <Route path="/">
             <Home />
           </Route>
