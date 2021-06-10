@@ -11,7 +11,7 @@ import {
   faSearchPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Col, Row, Table } from "react-bootstrap";
+import { Button, Col, Modal, Row, Table } from "react-bootstrap";
 import "./configuration.css";
 
 class Configuration extends React.Component<any, any> {
@@ -29,6 +29,12 @@ class Configuration extends React.Component<any, any> {
   componentDidMount() {
     this.fetchConfiguration();
     this.sendConfiguration = this.sendConfiguration.bind(this);
+    this.downloadConsommation = this.downloadConsommation.bind(this);
+    this.handleModalClose = this.handleModalClose.bind(this);
+  }
+
+  private handleModalClose(): void {
+    this.setState({ error: undefined });
   }
 
   async fetchConfiguration(): Promise<void> {
@@ -94,7 +100,18 @@ class Configuration extends React.Component<any, any> {
 
   private async sendConfiguration(): Promise<void> {
     try {
-      await apiRequest(`configuration/${this.state.id}/send`, "GET", []);
+      const response = await apiRequest(`configuration/${this.state.id}/send`, "GET", []);
+      if (response.status === "error") {
+        this.setState({ error: response as ApiResponseError });
+      }
+    } catch (error) {
+      this.setState({ error: error as ApiResponseError });
+    }
+  }
+
+  private async downloadConsommation(): Promise<void> {
+    try {
+      await apiRequest(`configuration/${this.state.id}/conso/download`, "GET", []);
     } catch (error) {
       this.setState({ error: error as ApiResponseError });
     }
@@ -184,7 +201,7 @@ class Configuration extends React.Component<any, any> {
                 </Button>
               </div>
               <div className="d-flex justify-content-center mt-4">
-                <Button variant="primary" href="/" className="p-3">
+                <Button variant="primary" className="p-3" href={`${process.env.REACT_APP_API_BASE_URL}/configuration/${this.state.id}/conso/download`}>
                   <FontAwesomeIcon className="mr-2" icon={faDownload} />
                   Télécharger la consommation détaillée
                 </Button>
@@ -202,6 +219,17 @@ class Configuration extends React.Component<any, any> {
             </div>
           </Col>
         </Row>
+        {this.state.error && (
+            <Modal show={!!this.state.error} onHide={this.handleModalClose} variant="danger">
+            <Modal.Header closeButton>
+              <Modal.Title>Erreur</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <p>Une erreur est survenue :</p>
+              <p>{this.state.error.message}</p>
+            </Modal.Body>
+          </Modal>
+          )}
         <div className="circle1"></div>
         <div className="circle2"></div>
       </main>
