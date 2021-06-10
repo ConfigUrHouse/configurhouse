@@ -1,6 +1,8 @@
-import React, { Suspense, useRef, useState, useEffect } from "react"
-import { Canvas, useFrame } from "react-three-fiber"
-import { ContactShadows, Environment, useGLTF, OrbitControls } from "drei"
+import React, { Suspense, useRef, useState, useEffect } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { useGLTF } from '@react-three/drei/core/useGLTF';
+import { OrbitControls } from '@react-three/drei/core/OrbitControls';
+import { ContactShadows } from '@react-three/drei/core/ContactShadows';
 import { HexColorPicker } from "react-colorful"
 import { proxy, useProxy } from "valtio"
 
@@ -33,7 +35,7 @@ function Shoe() {
   // Drei's useGLTF hook sets up draco automatically, that's how it differs from useLoader(GLTFLoader, url)
   // { nodes, materials } are extras that come from useLoader, these do not exist in threejs/GLTFLoader
   // nodes is a named collection of meshes, materials a named collection of materials
-  const { nodes, materials } = useGLTF("shoe-draco.glb")
+  const { nodes, materials } = useGLTF("shoe-draco.glb") as any
 
   // Animate model
   useFrame((state) => {
@@ -58,10 +60,10 @@ function Shoe() {
     <group
       ref={ref}
       dispose={null}
-      onPointerOver={(e) => (e.stopPropagation(), set((e.object as any).material.name))}
+      onPointerOver={(e) => (e.stopPropagation(), set(((e as any).object as any).material.name))}
       onPointerOut={(e) => e.intersections.length === 0 && set(null)}
       onPointerMissed={() => (state.current = null)}
-      onPointerDown={(e) => (e.stopPropagation(), (state.current = (e.object as any).material.name))}>
+      onPointerDown={(e) => (e.stopPropagation(), (state.current = ((e as any).object as any).material.name))}>
       <mesh geometry={(nodes.shoe as any).geometry} material={materials.laces} material-color={snap.items.laces} />
       <mesh geometry={(nodes.shoe_1 as any).geometry} material={materials.mesh} material-color={snap.items.mesh} />
       <mesh geometry={(nodes.shoe_2 as any).geometry} material={materials.caps} material-color={snap.items.caps} />
@@ -74,30 +76,18 @@ function Shoe() {
   )
 }
 
-function Picker() {
-  const snap = useProxy(state)
-  return (
-    <div style={{ display: snap.current ? "block" : "none" }}>
-      <HexColorPicker className="picker" color={snap.items[snap.current]} onChange={(color) => (state.items[snap.current] = color)} />
-      <h1>{snap.current}</h1>
-    </div>
-  )
-}
-
 export default function Model() {
   return (
     <>
-      <Canvas concurrent pixelRatio={[1, 2]} camera={{ position: [0, 0, 2.75] }}>
+      <Canvas className="Canva" camera={{ position: [0, 0, 2.75] }}>
         <ambientLight intensity={0.3} />
         <spotLight intensity={0.3} angle={0.1} penumbra={1} position={[5, 25, 20]} />
         <Suspense fallback={null}>
           <Shoe />
-          <Environment files="royal_esplanade_1k.hdr" />
           <ContactShadows rotation-x={Math.PI / 2} position={[0, -0.8, 0]} opacity={0.25} width={10} height={10} blur={2} far={1} />
         </Suspense>
         <OrbitControls minPolarAngle={Math.PI / 2} maxPolarAngle={Math.PI / 2} enableZoom={false} enablePan={false} />
       </Canvas>
-      <Picker />
     </>
   )
 }

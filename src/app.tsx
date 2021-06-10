@@ -23,6 +23,8 @@ import React from "react";
 import ConfigurationOptionList from "./components/configuration-options/configuration-option-list/configuration-option-list";
 import ConfigurationOptionEdit from "./components/configuration-options/configuration-option-edit/configuration-option-edit";
 import Configuration from "./components/configuration/configuration";
+import Model from './components/3d/trois';
+
 
 interface IProps {
   checkAuthenticationConnect: () => void;
@@ -110,6 +112,12 @@ const App = ({ checkAuthenticationConnect, isAuthenticated }: IProps) => {
             path="/houseModels"
             exact={true}
             component={HouseModelList}
+          />
+
+          <AdminRoute
+            path="/3d"
+            exact={true}
+            component={Model}
           />
 
           <Route path="/">
