@@ -24,6 +24,7 @@ import React from "react";
 import ConfigurationOptionList from "./components/configuration-options/configuration-option-list/configuration-option-list";
 import ConfigurationOptionEdit from "./components/configuration-options/configuration-option-edit/configuration-option-edit";
 import Configuration from "./components/configuration/configuration";
+import Register from "./components/register/register";
 
 interface IProps {
   checkAuthenticationConnect: () => void;
@@ -60,6 +61,7 @@ const App = ({ checkAuthenticationConnect, isAuthenticated }: IProps) => {
           <Route path="/mentions">
             <Mentions />
           </Route>
+          <LoggedOutRoute path="/register" exact={true} component={Register} />
           <LoggedOutRoute path="/login" exact={true} component={Login} />
           <LoggedInRoute path="/account" exact={true} component={User} />
 

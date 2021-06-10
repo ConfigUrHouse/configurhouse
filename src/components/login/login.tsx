@@ -4,7 +4,8 @@ import * as Yup from "yup";
 import { apiRequest } from "../../api/utils";
 import { logIn } from "../../actions/current";
 import { connect } from "react-redux";
-
+import { Link } from "react-router-dom";
+  
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAt,
@@ -172,7 +173,7 @@ class Login extends React.Component<any, any> {
                         {errors.password}
                       </Form.Control.Feedback>
                     </InputGroup>
-
+                    <Link to="/register" className="text-center"><p>Je m'inscris</p></Link>
                     <Button
                       variant="primary"
                       className="d-block mx-auto mt-3 p-3"
