@@ -1,0 +1,8 @@
+.login {
+  background: #fff;
+  border-radius: 50px;
+  padding: 30px;
+  -webkit-box-shadow: 4px 4px 5px 0px rgba(0, 0, 0, 0.06);
+  -moz-box-shadow: 4px 4px 5px 0px rgba(0, 0, 0, 0.06);
+  box-shadow: 4px 4px 5px 0px rgba(0, 0, 0, 0.06);
+}
