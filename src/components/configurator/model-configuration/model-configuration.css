@@ -1,5 +1,6 @@
 .CanvaContainer {
     position: relative !important;
+    height: 400px;
 }
 
 .Canva {
