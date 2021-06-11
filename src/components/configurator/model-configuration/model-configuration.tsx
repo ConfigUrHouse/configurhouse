@@ -10,23 +10,14 @@ import { HexColorPicker } from "react-colorful"
 import { proxy, useProxy } from "valtio"
 
 interface test {
-  current: any,
   items: any
 } 
 
-// Using a Valtio state model to bridge reactivity between
-// the canvas and the dom, both can write to it and/or react to it.
 const objectTest : test = {
-  current: null,
   items: {
-    laces: "#ffffff",
-    mesh: "#ffffff",
-    caps: "#ffffff",
-    inner: "#ffffff",
-    sole: "#ffffff",
-    stripes: "#ffffff",
-    band: "#ffffff",
-    patch: "#ffffff",
+    MurCote: "#ffffff",
+    MurFond: "#ffffff",
+    Sol: "#ffffff",
   },
 }
 
@@ -35,10 +26,8 @@ const state = proxy(objectTest);
 function Shoe() {
   const ref = useRef()
   const snap = useProxy(state)
-  // Drei's useGLTF hook sets up draco automatically, that's how it differs from useLoader(GLTFLoader, url)
-  // { nodes, materials } are extras that come from useLoader, these do not exist in threejs/GLTFLoader
-  // nodes is a named collection of meshes, materials a named collection of materials
-  const { nodes, materials } = useGLTF("Test.glb") as any
+
+  const { nodes, materials } = useGLTF("Test8.glb") as any
 
   console.log("nodes", nodes);
   console.log("-------------------------");
@@ -46,28 +35,20 @@ function Shoe() {
   console.log("-------------------------");
   console.log("Cylinder010", (nodes.Cylinder010 as any).geometry);
   console.log("MurCote", (nodes.MurCote as any).geometry);
-  // Animate model
-  //useFrame((state) => {
-  //  const t = state.clock.getElapsedTime();
-//
-  //  (ref as any).current.rotation.z = -0.2 - (1 + Math.sin(t / 1.5)) / 20;
-  //  (ref as any).current.rotation.x = Math.cos(t / 4) / 8;
-  //  (ref as any).current.rotation.y = Math.sin(t / 4) / 8;
-  //  (ref as any).current.position.y = (1 + Math.sin(t / 1.5)) / 10;
-  //})
 
-  // Using the GLTFJSX output here to wire in app-state and hook up events
   return (
     <group
       ref={ref}
+      castShadow
+      receiveShadow
       dispose={null}>
-      <mesh ref={(nodes.MurCote as any)} />
-      <mesh ref={(nodes.MurFond as any)} />
-      <mesh ref={(nodes.Sol as any)} />
-      <mesh geometry={(nodes.Cylinder010 as any).geometry} material={(nodes.Cylinder010 as any).material} />
-      <mesh geometry={(nodes.Cylinder010_1 as any).geometry} material={(nodes.Cylinder010_1 as any).material} />
-      <mesh geometry={(nodes.Cylinder010_2 as any).geometry} material={(nodes.Cylinder010_2 as any).material} />
-      <mesh geometry={(nodes.Cylinder010_3 as any).geometry} material={(nodes.Cylinder010_3 as any).material} />
+      <mesh castShadow receiveShadow geometry={(nodes.MurCote as any).geometry} material={(nodes.MurCote as any).material}  material-color="#2b768f"/>
+      <mesh castShadow receiveShadow geometry={(nodes.MurFond as any).geometry} material={(nodes.MurFond as any).material} material-color="#003f54"/>
+      <mesh castShadow receiveShadow geometry={(nodes.Sol as any).geometry} material={(nodes.Sol as any).material}/>
+      <mesh castShadow receiveShadow geometry={(nodes.Cylinder010 as any).geometry} material={(nodes.Cylinder010 as any).material} />
+      <mesh castShadow receiveShadow geometry={(nodes.Cylinder010_1 as any).geometry} material={(nodes.Cylinder010_1 as any).material} />
+      <mesh castShadow receiveShadow geometry={(nodes.Cylinder010_2 as any).geometry} material={(nodes.Cylinder010_2 as any).material} />
+      <mesh castShadow receiveShadow geometry={(nodes.Cylinder010_3 as any).geometry} material={(nodes.Cylinder010_3 as any).material} />
     </group>
   )
 }
@@ -77,6 +58,7 @@ class ModelConfiguration extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
   }
+
   render() {
     return (
       <div>
@@ -84,14 +66,13 @@ class ModelConfiguration extends React.Component<any, any> {
           <Col md={8} className="col">
             <div className="content CanvaContainer">
               <h5>Visualisation du modèle {this.props.model.name}</h5>
-              <Canvas className="Canva" camera={{ position: [0, 0, 10] }}>
-                <ambientLight intensity={0.3} />
-                <spotLight intensity={0.3} angle={0.1} penumbra={1} position={[5, 25, 20]} />
+              <Canvas shadows className="Canva" camera={{ position: [0, 8, 8], fov: 60  }}>
+                <spotLight shadow-mapSize-width={5120} shadow-mapSize-height={5120} shadowBias={-0.0000005} intensity={0.75} angle={0.1} penumbra={1} position={[40, 80, 40]} castShadow/>
+                <ambientLight intensity={0.45} />
                 <Suspense fallback={null}>
                   <Shoe />
-                  <ContactShadows rotation-x={Math.PI / 2} position={[0, -0.8, 0]} opacity={0.25} width={10} height={10} blur={2} far={1} />
                 </Suspense>
-                <OrbitControls minPolarAngle={Math.PI / 2} maxPolarAngle={Math.PI / 2} enableZoom={false} enablePan={false} />
+                <OrbitControls />
               </Canvas>
             </div>
           </Col>
