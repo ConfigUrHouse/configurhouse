@@ -92,8 +92,10 @@ class UserConfigurations extends React.Component<
 
   async fetchHouseModels() {
     try {
-      const paginatedHouseModels: PaginatedResponse<HouseModel> =
-        await apiRequest("houseModel", "GET");
+      const paginatedHouseModels: PaginatedResponse<HouseModel> = await apiRequest(
+        "houseModel",
+        "GET"
+      );
 
       this.setState({ houseModels: paginatedHouseModels.items });
     } catch (error) {

@@ -100,7 +100,11 @@ class Configuration extends React.Component<any, any> {
 
   private async sendConfiguration(): Promise<void> {
     try {
-      const response = await apiRequest(`configuration/${this.state.id}/send`, "GET", []);
+      const response = await apiRequest(
+        `configuration/${this.state.id}/send`,
+        "GET",
+        []
+      );
       if (response.status === "error") {
         this.setState({ error: response as ApiResponseError });
       }
@@ -111,7 +115,11 @@ class Configuration extends React.Component<any, any> {
 
   private async downloadConsommation(): Promise<void> {
     try {
-      await apiRequest(`configuration/${this.state.id}/conso/download`, "GET", []);
+      await apiRequest(
+        `configuration/${this.state.id}/conso/download`,
+        "GET",
+        []
+      );
     } catch (error) {
       this.setState({ error: error as ApiResponseError });
     }
@@ -201,7 +209,11 @@ class Configuration extends React.Component<any, any> {
                 </Button>
               </div>
               <div className="d-flex justify-content-center mt-4">
-                <Button variant="primary" className="p-3" href={`${process.env.REACT_APP_API_BASE_URL}/configuration/${this.state.id}/conso/download`}>
+                <Button
+                  variant="primary"
+                  className="p-3"
+                  href={`${process.env.REACT_APP_API_BASE_URL}/configuration/${this.state.id}/conso/download`}
+                >
                   <FontAwesomeIcon className="mr-2" icon={faDownload} />
                   Télécharger la consommation détaillée
                 </Button>
@@ -220,7 +232,7 @@ class Configuration extends React.Component<any, any> {
           </Col>
         </Row>
         {this.state.error && (
-            <Modal show={!!this.state.error} onHide={this.handleModalClose} variant="danger">
+          <Modal show={!!this.state.error} onHide={this.handleModalClose}>
             <Modal.Header closeButton>
               <Modal.Title>Erreur</Modal.Title>
             </Modal.Header>
@@ -229,7 +241,7 @@ class Configuration extends React.Component<any, any> {
               <p>{this.state.error.message}</p>
             </Modal.Body>
           </Modal>
-          )}
+        )}
         <div className="circle1"></div>
         <div className="circle2"></div>
       </main>

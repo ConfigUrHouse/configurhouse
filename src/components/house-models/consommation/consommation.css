@@ -1,0 +1,13 @@
+table caption {
+  caption-side: top;
+}
+
+.doughnutChart {
+  height: 300px;
+  width: 300px;
+}
+
+.barChart {
+  height: 300px;
+  width: 500px;
+}
