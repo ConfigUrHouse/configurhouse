@@ -160,8 +160,7 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
         if (response.status === "error") {
           this.setState({ error: response as ApiResponseError });
         } else {
-          const paginatedItems: PaginatedResponse<User> =
-            response as PaginatedResponse<User>;
+          const paginatedItems: PaginatedResponse<User> = response as PaginatedResponse<User>;
           this.setState({ paginatedItems });
         }
       })
@@ -190,8 +189,7 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
           this.setState({ error: response as ApiResponseError });
           return [];
         } else {
-          const paginatedItems: PaginatedResponse<User> =
-            response as PaginatedResponse<User>;
+          const paginatedItems: PaginatedResponse<User> = response as PaginatedResponse<User>;
           return paginatedItems.items;
         }
       })

@@ -11,6 +11,7 @@ import Mentions from "./components/mentions/mentions";
 import Contact from "./components/contact/contact";
 import HouseModelList from "./components/house-models/house-model-list/house-model-list";
 import HouseModelEdit from "./components/house-models/house-model-edit/house-model-edit";
+import HouseModelDetails from "./components/house-models/house-model-details/house-model-details";
 import UserConfigurationEdit from "./components/user/user-configuration-edit/user-configuration-edit";
 import { ICurrent } from "./types";
 import { checkAuthentication, checkAdmin } from "./actions/current";
@@ -106,6 +107,11 @@ const App = ({ checkAuthenticationConnect, isAuthenticated }: IProps) => {
             path="/houseModels/:id"
             exact={true}
             component={HouseModelEdit}
+          />
+          <AdminRoute
+            path="/houseModels/:id/details"
+            exact={true}
+            component={HouseModelDetails}
           />
           <AdminRoute
             path="/houseModels"
