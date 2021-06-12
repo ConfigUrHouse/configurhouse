@@ -11,3 +11,18 @@ table caption {
   height: 300px;
   width: 500px;
 }
+
+.consommation .rect {
+  border-radius: 25px;
+  background-color: #fff;
+  -webkit-box-shadow: 4px 4px 5px 0px rgba(0, 0, 0, 0.06);
+  -moz-box-shadow: 4px 4px 5px 0px rgba(0, 0, 0, 0.06);
+  box-shadow: 4px 4px 5px 0px rgba(0, 0, 0, 0.06);
+
+  padding: 30px;
+  min-height: 300px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
