@@ -1,18 +1,15 @@
-import { faLightbulb } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
-import { Table } from "react-bootstrap";
-import { withRouter } from "react-router";
-import { ApiResponseError } from "../../../api/models";
-import { apiRequest } from "../../../api/utils";
-import { ConsommationProps, ConsommationState } from "./models";
-import "./consommation.css";
-import { Bar, Chart, Doughnut } from "react-chartjs-2";
+import { faLightbulb } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from 'react';
+import { Table } from 'react-bootstrap';
+import { withRouter } from 'react-router';
+import { ApiResponseError } from '../../../api/models';
+import { apiRequest } from '../../../api/utils';
+import { ConsommationProps, ConsommationState } from './models';
+import './consommation.css';
+import { Bar, Chart, Doughnut } from 'react-chartjs-2';
 
-class Consommation extends React.Component<
-  ConsommationProps,
-  ConsommationState
-> {
+class Consommation extends React.Component<ConsommationProps, ConsommationState> {
   constructor(props: ConsommationProps) {
     super(props);
 
@@ -23,9 +20,9 @@ class Consommation extends React.Component<
     };
 
     Chart.defaults.plugins.legend.display = true;
-    Chart.defaults.plugins.legend.position = "right";
+    Chart.defaults.plugins.legend.position = 'right';
     Chart.defaults.plugins.legend.labels.usePointStyle = true;
-    Chart.defaults.plugins.legend.labels.pointStyle = "circle";
+    Chart.defaults.plugins.legend.labels.pointStyle = 'circle';
   }
 
   private repartitionChartRef = {};
@@ -34,69 +31,50 @@ class Consommation extends React.Component<
 
   private async fetchConso() {
     try {
-      const response = await apiRequest(
-        `configuration/${this.props.match.params.id}/conso`,
-        "GET"
-      );
-      if (response.status === "error") {
+      const response = await apiRequest(`configuration/${this.props.match.params.id}/conso`, 'GET');
+      if (response.status === 'error') {
         this.setState({ error: response as ApiResponseError });
       } else {
         this.setState({ conso: response });
         const repartition = {
-          labels: this.state.conso?.byPosteConso.config.map(
-            (item: any) => item.posteConso
-          ),
+          labels: this.state.conso?.byPosteConso.config.map((item: any) => item.posteConso),
           datasets: [
             {
-              label: "# of Consommation",
-              data: this.state.conso?.byPosteConso.config.map(
-                (item: any) => item.conso
-              ),
-              backgroundColor: ["#1a7c7d", "#a8cfcf", "#09444d", "#18b9ba"],
+              label: '# of Consommation',
+              data: this.state.conso?.byPosteConso.config.map((item: any) => item.conso),
+              backgroundColor: ['#1a7c7d', '#a8cfcf', '#09444d', '#18b9ba'],
               borderWidth: 0,
             },
           ],
         };
         const repartitionRef = {
-          labels: this.state.conso?.byPosteConso.reference.map(
-            (item: any) => item.posteConso.name
-          ),
+          labels: this.state.conso?.byPosteConso.reference.map((item: any) => item.posteConso.name),
           datasets: [
             {
-              label: "# of Consommation",
-              data: this.state.conso?.byPosteConso.reference.map(
-                (item: any) => item.conso
-              ),
-              backgroundColor: ["#1a7c7d", "#a8cfcf", "#09444d", "#18b9ba"],
+              label: '# of Consommation',
+              data: this.state.conso?.byPosteConso.reference.map((item: any) => item.conso),
+              backgroundColor: ['#1a7c7d', '#a8cfcf', '#09444d', '#18b9ba'],
               borderWidth: 0,
             },
           ],
         };
         const differences = {
-          labels: ["Total"].concat(
-            this.state.conso?.byPosteConso.reference.map(
-              (item: any) => item.posteConso.name
-            )
-          ),
+          labels: ['Total'].concat(this.state.conso?.byPosteConso.reference.map((item: any) => item.posteConso.name)),
           datasets: [
             {
-              label: "Configuration",
+              label: 'Configuration',
               data: [this.state.conso?.global.config].concat(
-                this.state.conso?.byPosteConso.config.map(
-                  (item: any) => item.conso
-                )
+                this.state.conso?.byPosteConso.config.map((item: any) => item.conso)
               ),
-              backgroundColor: "#1a7c7d",
+              backgroundColor: '#1a7c7d',
               borderWidth: 0,
             },
             {
-              label: "Référence",
+              label: 'Référence',
               data: [this.state.conso?.global.reference].concat(
-                this.state.conso?.byPosteConso.reference.map(
-                  (item: any) => item.conso
-                )
+                this.state.conso?.byPosteConso.reference.map((item: any) => item.conso)
               ),
-              backgroundColor: "#a8cfcf",
+              backgroundColor: '#a8cfcf',
               borderWidth: 0,
             },
           ],
@@ -129,17 +107,14 @@ class Consommation extends React.Component<
           <FontAwesomeIcon icon={faLightbulb} /> Estimation de consommation
         </h2>
         <h6 className="text-center mt-2 mb-5">
-          Voici une estimation de la consommation du modèle avec sa
-          configuration par défaut, par rapport à une consommation de référence.
+          Voici une estimation de la consommation du modèle avec sa configuration par défaut, par rapport à une
+          consommation de référence.
         </h6>
         <hr />
         {this.state.conso && (
           <div>
             <h4 className="mt-5 text-green mb-4">Contexte</h4>
-            <span>
-              Consommation d'énergie par an, pour{" "}
-              {this.state.conso.context.occupants} personnes
-            </span>
+            <span>Consommation d'énergie par an, pour {this.state.conso.context.occupants} personnes</span>
             <Table bordered hover className="mt-5 text-center">
               <caption>Options choisies</caption>
               <thead>
@@ -149,16 +124,14 @@ class Consommation extends React.Component<
                 </tr>
               </thead>
               <tbody>
-                {this.state.conso.context.options.map(
-                  (option: any, index: number) => {
-                    return (
-                      <tr key={index}>
-                        <td>{option.option}</td>
-                        <td>{option.value}</td>
-                      </tr>
-                    );
-                  }
-                )}
+                {this.state.conso.context.options.map((option: any, index: number) => {
+                  return (
+                    <tr key={index}>
+                      <td>{option.option}</td>
+                      <td>{option.value}</td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </Table>
             <div className="doughnutChart">
@@ -170,7 +143,7 @@ class Consommation extends React.Component<
                     tooltip: {
                       callbacks: {
                         label: function (context: any) {
-                          var label = context.parsed + " kWh";
+                          var label = context.parsed + ' kWh';
                           return label;
                         },
                       },
@@ -191,9 +164,9 @@ class Consommation extends React.Component<
                     tooltip: {
                       callbacks: {
                         label: function (context: any) {
-                          var label = context.parsed || "";
+                          var label = context.parsed || '';
                           if (label) {
-                            label += " kWh";
+                            label += ' kWh';
                           }
                           return label;
                         },
@@ -224,19 +197,18 @@ class Consommation extends React.Component<
                       callbacks: {
                         label: function (context: any) {
                           console.log(context);
-                          var label = context.formattedValue || "";
+                          var label = context.formattedValue || '';
                           if (label) {
-                            label += " kWh";
+                            label += ' kWh';
                           }
                           if (context.datasetIndex === 0) {
                             const posteConso = conso.byPosteConso.config.find(
-                              (posteConso: any) =>
-                                posteConso.posteConso === context.label
+                              (posteConso: any) => posteConso.posteConso === context.label
                             );
                             const percentage = posteConso
                               ? posteConso.diffPercentageOfPosteConsoReference
                               : conso.global.diffPercentage;
-                            label += " (" + percentage + "%)";
+                            label += ' (' + percentage + '%)';
                           }
                           return label;
                         },
@@ -250,13 +222,11 @@ class Consommation extends React.Component<
               />
             </div>
             <div>
-              {this.state.conso.byPosteConso.reference.map(
-                (conso: any, index: any) => (
-                  <div key={index}>
-                    {conso.posteConso.name} : {conso.posteConso.description}
-                  </div>
-                )
-              )}
+              {this.state.conso.byPosteConso.reference.map((conso: any, index: any) => (
+                <div key={index}>
+                  {conso.posteConso.name} : {conso.posteConso.description}
+                </div>
+              ))}
             </div>
           </div>
         )}
