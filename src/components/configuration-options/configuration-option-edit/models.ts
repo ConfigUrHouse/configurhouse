@@ -14,5 +14,4 @@ export interface ConfigurationOptionPathParams {
   id: string;
 }
 
-export type ConfigurationOptionEditProps =
-  RouteComponentProps<ConfigurationOptionPathParams>;
+export type ConfigurationOptionEditProps = RouteComponentProps<ConfigurationOptionPathParams>;
