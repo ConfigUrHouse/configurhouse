@@ -42,7 +42,7 @@ class Consommation extends React.Component<
   private async fetchConso() {
     try {
       const response = await apiRequest(
-        `configuration/${this.props.match.params.id}/conso`,
+        `houseModel/${this.props.match.params.id}/conso`,
         "GET"
       );
       if (response.status === "error") {
