@@ -42,7 +42,7 @@ class Consommation extends React.Component<
   private async fetchConso() {
     try {
       const response = await apiRequest(
-        `configuration/${this.props.match.params.id}/conso`,
+        `houseModel/${this.props.match.params.id}/conso`,
         "GET"
       );
       if (response.status === "error") {
@@ -172,10 +172,11 @@ class Consommation extends React.Component<
                                   label += " kWh";
                                 }
                                 if (context.datasetIndex === 0) {
-                                  const posteConso = conso.byPosteConso.config.find(
-                                    (posteConso: any) =>
-                                      posteConso.posteConso === context.label
-                                  );
+                                  const posteConso =
+                                    conso.byPosteConso.config.find(
+                                      (posteConso: any) =>
+                                        posteConso.posteConso === context.label
+                                    );
                                   const percentage = posteConso
                                     ? posteConso.diffPercentageOfPosteConsoReference
                                     : conso.global.diffPercentage;
