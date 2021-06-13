@@ -203,7 +203,11 @@ class Configuration extends React.Component<any, any> {
                 <FontAwesomeIcon icon={faMousePointer} /> Actions
               </h3>
               <div className="d-flex justify-content-center mt-4">
-                <Button variant="primary" href="/" className="p-3">
+                <Button
+                  variant="primary"
+                  className="p-3"
+                  href={`${process.env.REACT_APP_API_BASE_URL}/configuration/${this.state.id}/downloadEstimate`}
+                >
                   <FontAwesomeIcon className="mr-2" icon={faDownload} />
                   Télécharger le devis
                 </Button>

@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import { apiRequest } from "../../api/utils";
 import { logIn } from "../../actions/current";
 import { connect } from "react-redux";
+import ReCAPTCHA from "react-google-recaptcha";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -33,18 +34,21 @@ class Register extends React.Component<any, any> {
       password: null,
       firstname: null,
       lastname: null,
-      confirmpassword: null
+      confirmpassword: null,
+      recaptcha: null,
     };
     this.register = this.register.bind(this);
-  
-    }
+  }
 
   schema = Yup.object().shape({
     email: Yup.string().email("L'email doit avoir un format valide"),
     password: Yup.string().required("Le mot de passe est requis"),
     firstname: Yup.string().required("Le prénom est requis"),
     lastname: Yup.string().required("Le nom de famille est requis"),
-    confirmpassword: Yup.string().oneOf([Yup.ref('password'), null], 'Les mots de passes doivent correspondres')
+    confirmpassword: Yup.string().oneOf(
+      [Yup.ref("password"), null],
+      "Les mots de passes doivent correspondres"
+    ),
   });
   initialValues: FormValues = {
     email: "",
@@ -52,10 +56,10 @@ class Register extends React.Component<any, any> {
     firstname: "",
     lastname: "",
     confirmpassword: "",
-    phone: ""
+    phone: "",
   };
   register(values: FormValues) {
-    console.log(values)
+    console.log(values);
     fetch(`${process.env.REACT_APP_API_BASE_URL}/user`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -70,7 +74,6 @@ class Register extends React.Component<any, any> {
       .then((datas) => {
         if (datas.success) {
           this.setState({ success: 1 });
-       
         } else {
           this.setState({ success: -1 });
         }
@@ -86,14 +89,15 @@ class Register extends React.Component<any, any> {
     if (this.state.success == 1) {
       alertDiv = (
         <div className="alert alert-success mb-4">
-          <FontAwesomeIcon icon={faCheck} /> Inscription réussie, vous allez être
-          redirigé...
+          <FontAwesomeIcon icon={faCheck} /> Inscription réussie, vous allez
+          être redirigé...
         </div>
       );
     } else if (this.state.success == -1) {
       alertDiv = (
         <div className="alert alert-danger m-4">
-          <FontAwesomeIcon icon={faTimes} /> Une erreur est survenue, veuillez réessayer plus tard
+          <FontAwesomeIcon icon={faTimes} /> Une erreur est survenue, veuillez
+          réessayer plus tard
         </div>
       );
     }
@@ -117,24 +121,24 @@ class Register extends React.Component<any, any> {
                   this.register(values);
                   resetForm({
                     values: {
-                        firstname: "",
-                        lastname: "",
-                        email: "",
-                        password: "",
-                        confirmpassword: "",
-                        phone: ""
+                      firstname: "",
+                      lastname: "",
+                      email: "",
+                      password: "",
+                      confirmpassword: "",
+                      phone: "",
                     },
                   });
                 }}
                 initialValues={this.initialValues}
               >
-                {({ handleSubmit, handleChange, values, errors }) => (
+                {({ handleSubmit, handleChange, values, errors, isValid }) => (
                   <Form
                     noValidate
                     className="form shadow-none"
                     onSubmit={handleSubmit}
                   >
-                        <InputGroup className="mb-3">
+                    <InputGroup className="mb-3">
                       <InputGroup.Prepend>
                         <InputGroup.Text id="EMailIcon">
                           <FontAwesomeIcon icon={faAt} />
@@ -256,10 +260,15 @@ class Register extends React.Component<any, any> {
                         {errors.phone}
                       </Form.Control.Feedback>
                     </InputGroup>
+                    <ReCAPTCHA
+                      sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY ?? ""}
+                      onChange={(recaptcha) => this.setState({ recaptcha })}
+                    />
                     <Button
                       variant="primary"
                       className="d-block mx-auto mt-3 p-3"
                       type="submit"
+                      disabled={!this.state.recaptcha || !isValid}
                     >
                       S'INSCRIRE
                       <FontAwesomeIcon className="ml-2" icon={faUserPlus} />

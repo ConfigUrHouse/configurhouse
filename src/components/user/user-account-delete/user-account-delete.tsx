@@ -9,12 +9,15 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Form, Row, Col, FormControl, Button } from "react-bootstrap";
 import ReactDOMServer from "react-dom/server";
+import ReCAPTCHA from "react-google-recaptcha";
+import "./user-account-delete.css";
 
 class UserAccountDelete extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
       reason: "",
+      recaptcha: "",
       user: {
         id: 1,
         firstname: "prenom",
@@ -117,10 +120,17 @@ class UserAccountDelete extends React.Component<any, any> {
                   this.setState({ reason: e.target.value });
                 }}
               ></FormControl>
+              <div className="recaptcha-container">
+                <ReCAPTCHA
+                  sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY ?? ""}
+                  onChange={(recaptcha) => this.setState({ recaptcha })}
+                />
+              </div>
               <Button
                 variant="primary"
                 className="d-block mx-auto mt-3 p-3"
                 onClick={this.sendEmail}
+                disabled={!this.state.reason || !this.state.recaptcha}
               >
                 ENVOYER LA DEMANDE{" "}
                 <FontAwesomeIcon className="ml-2" icon={faPaperPlane} />

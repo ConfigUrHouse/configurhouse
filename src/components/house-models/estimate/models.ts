@@ -1,10 +1,9 @@
 import { RouteComponentProps } from "react-router-dom";
 import { ApiResponseError } from "../../../api/models";
 
-export type ConsommationProps = RouteComponentProps<{ id?: string }>;
+export type EstimateProps = RouteComponentProps<{ id?: string }>;
 
-export interface ConsommationState {
+export interface EstimateState {
   error?: ApiResponseError;
-  conso: any;
   data?: any;
 }

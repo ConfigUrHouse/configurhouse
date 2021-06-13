@@ -7,15 +7,13 @@ import { apiRequest } from "../../../api/utils";
 class ModelChoice extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
-    this.state = { modelSelected:null,models: []};
+    this.state = { modelSelected: null, models: [] };
     this.fetchHouseModels();
-
   }
   selectModel(model: any) {
     this.setState({ modelSelected: model });
     this.props.onChange(model);
   }
-  
 
   async fetchHouseModels(): Promise<void> {
     apiRequest(`houseModel`, "GET", [])
@@ -23,22 +21,24 @@ class ModelChoice extends React.Component<any, any> {
         if (response.status === "error") {
           this.setState({ error: response as ApiResponseError });
         } else {
-          this.setState({ models: response.items, modelSelected: response.items[0]});
+          this.setState({
+            models: response.items,
+            modelSelected: response.items[0],
+          });
           this.props.onChange(this.state.modelSelected);
-
         }
       })
       .catch((error) => console.log(error));
   }
 
   render() {
-    const { models } = this.state
+    const { models } = this.state;
     return (
-        <div className="models-choice">
-            <Row>
-            {models.map((item: any) => {
-              return (
-                <Col>
+      <div className="models-choice">
+        <Row>
+          {models.map((item: any) => {
+            return (
+              <Col>
                 <div
                   className={`model ${
                     this.state.modelSelected == item ? "selected" : ""
@@ -50,7 +50,9 @@ class ModelChoice extends React.Component<any, any> {
                   <Table bordered hover className="mt-5 text-center">
                     <thead>
                       <tr>
-                        <th colSpan={2}>Caractéristique du modèle {item.name}</th>
+                        <th colSpan={2}>
+                          Caractéristique du modèle {item.name}
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -88,10 +90,10 @@ class ModelChoice extends React.Component<any, any> {
                   </Table>
                 </div>
               </Col>
-              )
-            })}
-            </Row>
-          </div>
+            );
+          })}
+        </Row>
+      </div>
     );
   }
 }
