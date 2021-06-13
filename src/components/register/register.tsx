@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import { apiRequest } from "../../api/utils";
 import { logIn } from "../../actions/current";
 import { connect } from "react-redux";
+import ReCAPTCHA from "react-google-recaptcha";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -34,6 +35,7 @@ class Register extends React.Component<any, any> {
       firstname: null,
       lastname: null,
       confirmpassword: null,
+      recaptcha: null,
     };
     this.register = this.register.bind(this);
   }
@@ -130,7 +132,7 @@ class Register extends React.Component<any, any> {
                 }}
                 initialValues={this.initialValues}
               >
-                {({ handleSubmit, handleChange, values, errors }) => (
+                {({ handleSubmit, handleChange, values, errors, isValid }) => (
                   <Form
                     noValidate
                     className="form shadow-none"
@@ -258,10 +260,15 @@ class Register extends React.Component<any, any> {
                         {errors.phone}
                       </Form.Control.Feedback>
                     </InputGroup>
+                    <ReCAPTCHA
+                      sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY ?? ""}
+                      onChange={(recaptcha) => this.setState({ recaptcha })}
+                    />
                     <Button
                       variant="primary"
                       className="d-block mx-auto mt-3 p-3"
                       type="submit"
+                      disabled={!this.state.recaptcha || !isValid}
                     >
                       S'INSCRIRE
                       <FontAwesomeIcon className="ml-2" icon={faUserPlus} />
