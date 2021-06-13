@@ -8,7 +8,7 @@ class ModelConfiguration extends React.Component<any, any> {
   }
   render() {
     return (
-        <div>
+      <div>
         <Row>
           <Col md={8} className="col">
             <div className="content">
@@ -114,15 +114,14 @@ class ModelConfiguration extends React.Component<any, any> {
                 <Col md={7}>
                   <h5>Aperçu de la consommation</h5>
                   <p>
-                    Comparer la consommation de ce logement par rapport à
-                    des logements de références.
+                    Comparer la consommation de ce logement par rapport à des
+                    logements de références.
                   </p>
                 </Col>
                 <Col md={5}></Col>
               </Row>
             </div>
           </Col>
-         
         </Row>
       </div>
     );

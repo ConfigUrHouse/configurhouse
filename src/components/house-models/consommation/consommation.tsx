@@ -172,11 +172,10 @@ class Consommation extends React.Component<
                                   label += " kWh";
                                 }
                                 if (context.datasetIndex === 0) {
-                                  const posteConso =
-                                    conso.byPosteConso.config.find(
-                                      (posteConso: any) =>
-                                        posteConso.posteConso === context.label
-                                    );
+                                  const posteConso = conso.byPosteConso.config.find(
+                                    (posteConso: any) =>
+                                      posteConso.posteConso === context.label
+                                  );
                                   const percentage = posteConso
                                     ? posteConso.diffPercentageOfPosteConsoReference
                                     : conso.global.diffPercentage;
