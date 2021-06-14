@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Tab, Tabs } from "react-bootstrap";
 import { withRouter } from "react-router";
 import { HouseModelDetailsProps } from "./models";
-import Consommation from "../consommation/consommation";
+import Consommation from "../../configurator/consommation/consommation";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Estimate from "../estimate/estimate";
