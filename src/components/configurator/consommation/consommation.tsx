@@ -1,7 +1,6 @@
 import {
   faBolt,
   faChartPie,
-  faEuroSign,
   faHome,
   faLightbulb,
   faList,
@@ -41,37 +40,47 @@ class Consommation extends React.Component<
 
   private async fetchConso() {
     try {
-      const response = await apiRequest(
-        `houseModel/${this.props.match.params.id}/conso`,
-        "GET"
-      );
+      let response: any;
+      if (!this.props.optionValues) {
+        response = await apiRequest(
+          `houseModel/${this.props.match.params.id}/conso`,
+          "GET"
+        );
+      } else {
+        response = await apiRequest(
+          `houseModel/${this.props.houseModelId}/conso`,
+          "POST",
+          "",
+          {
+            valueIds: this.props.optionValues,
+          }
+        );
+      }
       if (response.status === "error") {
         this.setState({ error: response as ApiResponseError });
       } else {
         this.setState({ conso: response });
         const repartition = {
-          labels: this.state.conso?.byPosteConso.config.map(
+          labels: response.byPosteConso.config.map(
             (item: any) => item.posteConso
           ),
           datasets: [
             {
               label: "# of Consommation",
-              data: this.state.conso?.byPosteConso.config.map(
-                (item: any) => item.conso
-              ),
+              data: response.byPosteConso.config.map((item: any) => item.conso),
               backgroundColor: ["#1a7c7d", "#a8cfcf", "#09444d", "#18b9ba"],
               borderWidth: 0,
             },
           ],
         };
         const repartitionRef = {
-          labels: this.state.conso?.byPosteConso.reference.map(
+          labels: response.byPosteConso.reference.map(
             (item: any) => item.posteConso.name
           ),
           datasets: [
             {
               label: "# of Consommation",
-              data: this.state.conso?.byPosteConso.reference.map(
+              data: response.byPosteConso.reference.map(
                 (item: any) => item.conso
               ),
               backgroundColor: ["#1a7c7d", "#a8cfcf", "#09444d", "#18b9ba"],
@@ -79,7 +88,7 @@ class Consommation extends React.Component<
             },
           ],
         };
-        const postesConso = this.state.conso?.byPosteConso.reference.map(
+        const postesConso = response.byPosteConso.reference.map(
           (item: any) => item.posteConso.name
         );
         const differences = {
@@ -87,12 +96,12 @@ class Consommation extends React.Component<
           datasets: [
             {
               label: "Configuration",
-              data: [this.state.conso?.global.config].concat(
+              data: [response.global.config].concat(
                 postesConso.map(
                   (posteConso: string) =>
-                    this.state.conso?.byPosteConso.config.find(
+                    response.byPosteConso.config.find(
                       (item: any) => item.posteConso === posteConso
-                    ).conso
+                    )?.conso
                 )
               ),
               backgroundColor: "#1a7c7d",
@@ -100,10 +109,8 @@ class Consommation extends React.Component<
             },
             {
               label: "Référence",
-              data: [this.state.conso?.global.reference].concat(
-                this.state.conso?.byPosteConso.reference.map(
-                  (item: any) => item.conso
-                )
+              data: [response.global.reference].concat(
+                response.byPosteConso.reference.map((item: any) => item.conso)
               ),
               backgroundColor: "#a8cfcf",
               borderWidth: 0,
@@ -122,6 +129,7 @@ class Consommation extends React.Component<
         (this.differencesChartRef as any).chartInstance.update();
       }
     } catch (error) {
+      console.log(error);
       this.setState({ error: error as ApiResponseError });
     }
   }
@@ -137,11 +145,13 @@ class Consommation extends React.Component<
         <h2 className="text-green text-center">
           <FontAwesomeIcon icon={faLightbulb} /> Estimation de consommation
         </h2>
-        <h6 className="text-center mt-2 mb-5">
-          Voici une estimation de la consommation du modèle avec sa
-          configuration par défaut, par rapport à une consommation de référence.
-        </h6>
-        <hr />
+        {!this.props.optionValues && (
+          <h6 className="text-center mt-2 mb-5">
+            Voici une estimation de la consommation du modèle avec sa
+            configuration par défaut, par rapport à une consommation de
+            référence.
+          </h6>
+        )}
         {this.state.conso && (
           <div>
             <Row>
