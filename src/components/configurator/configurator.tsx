@@ -1,6 +1,7 @@
 import React from "react";
 import ModelChoice from "./model-choice/model-choice";
 import ModelConfiguration from "./model-configuration/model-configuration";
+import Consommation from "./consommation/consommation";
 import { Col, Row, Button } from "react-bootstrap";
 import "./configurator.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,7 +13,12 @@ import {
 class Configurator extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
-    this.state = { model: null, modelSelected: null, step: 0 };
+    this.state = {
+      model: null,
+      modelSelected: null,
+      step: 0,
+      optionValues: [2, 4], //TODO: use values from state
+    };
     this.next = this.next.bind(this);
     this.previous = this.previous.bind(this);
     this.changeModelChoice = this.changeModelChoice.bind(this);
@@ -83,6 +89,12 @@ class Configurator extends React.Component<any, any> {
         )}
         {this.state.step == 1 && (
           <ModelConfiguration model={this.state.model} />
+        )}
+        {this.state.step == 3 && (
+          <Consommation
+            optionValues={this.state.optionValues}
+            houseModelId={this.state.model.id}
+          />
         )}
         <Row className="justify-content-end">
           <Col md={2} className="col next">
