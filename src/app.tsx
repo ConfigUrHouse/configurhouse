@@ -22,13 +22,15 @@ import LoggedOutRoute from './routes/logged-out-route';
 import AdminRoute from './routes/admin-route';
 import Login from './components/login/login';
 import { useEffect } from 'react';
+import Asset from "./components/assets/assets-model-list/assets-model-list"
+import AssetDetails from "./components/assets/assets-model-details/assets-model-details"
+import React from "react";
 import ConfigurationOptionList from './components/configuration-options/configuration-option-list/configuration-option-list';
 import ConfigurationOptionEdit from './components/configuration-options/configuration-option-edit/configuration-option-edit';
 import Configuration from './components/configuration/configuration';
 import Register from './components/register/register';
 import { apiRequest } from './api/utils';
 import ConfigurationDetails from './components/configuration/configuration-details/configuration-details';
-
 
 interface IProps {
   checkAuthenticationConnect: () => void;
@@ -148,7 +150,16 @@ const App = ({
             exact={true}
             component={HouseModelList}
           />
-
+          <AdminRoute
+            path="/asset"
+            exact={true}
+            component={Asset}
+          />
+          <AdminRoute
+            path="/asset/:id/details"
+            exact={true}
+            component={AssetDetails}
+          />
           <Route path="/">
             <Home />
           </Route>

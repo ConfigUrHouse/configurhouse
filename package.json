@@ -21,6 +21,7 @@
     "bootstrap": "^4.6.0",
     "chart.js": "^3.3.2",
     "formik": "^2.2.6",
+    "query-string": "^7.0.0",
     "react": "^17.0.1",
     "react-animate-on-scroll": "^2.1.5",
     "react-bootstrap": "^1.4.3",

@@ -163,4 +163,4 @@ class HouseModelEdit extends React.Component<
   }
 }
 
-export default withRouter(HouseModelEdit);
+export default HouseModelEdit;
