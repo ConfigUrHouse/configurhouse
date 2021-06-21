@@ -4,8 +4,6 @@ export async function apiRequest(
   params: string[] | string = "",
   body: Record<string, any> | string = ""
 ) {
-  //TODO add authentification token if exists
-
   const queryParams = `?${
     typeof params === "string" ? params : params.filter((p) => p).join("&")
   }`;
