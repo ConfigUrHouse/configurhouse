@@ -352,7 +352,7 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
               <p>Message : {this.state.error.message}</p>
             </div>
           )}
-          <h3 className="mb-2">
+          <h3 className="mb-3">
             <FontAwesomeIcon className="mr-2" icon={faUser} />
             Liste des utilisateurs
           </h3>
@@ -370,7 +370,8 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
               isValid,
               errors,
             }) => (
-              <Form noValidate onSubmit={handleSubmit}>
+            
+            <Form noValidate className="ml-3 mr-3" onSubmit={handleSubmit}>
                 <Row>
                   <Col md={6}>
                     <InputGroup className="mb-3">

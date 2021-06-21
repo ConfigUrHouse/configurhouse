@@ -10,6 +10,7 @@ import User from "./components/user/user";
 import Mentions from "./components/mentions/mentions";
 import Contact from "./components/contact/contact";
 import HouseModelList from "./components/house-models/house-model-list/house-model-list";
+import RoleList from "./components/role/role";
 import HouseModelEdit from "./components/house-models/house-model-edit/house-model-edit";
 import HouseModelDetails from "./components/house-models/house-model-details/house-model-details";
 import UserConfigurationEdit from "./components/user/user-configuration-edit/user-configuration-edit";
@@ -70,12 +71,17 @@ const App = ({ checkAuthenticationConnect, isAuthenticated }: IProps) => {
             exact={true}
             component={Configuration}
           />
-
+          <AdminRoute
+            path="/roles"
+            exact={true}
+            component={RoleList}
+          />
           <AdminRoute
             path="/users"
             exact={true}
             component={UserListWithRouter}
           />
+
           <AdminRoute
             path="/user/:id/edit"
             exact={true}

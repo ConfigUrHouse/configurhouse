@@ -5,17 +5,33 @@
 .pro-sidebar * {
   background-color: #fff;
 }
-.pro-sidebar .title {
+.pro-sidebar .cfgTitle {
+  position: relative;
   font-weight: bold;
   color: #000;
-  margin: 30px;
+  margin: 20px 30px;
+  height: 65px;
 }
 .pro-sidebar li {
   list-style-type: none !important;
 }
-.pro-sidebar .title span {
+
+.pro-sidebar .cfgTitle .cfgTitleTop {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.pro-sidebar .cfgTitle .cfgTitleBottom {
+  position: absolute;
+  background-color: transparent;
+  top: 28px;
+  left: 0;
   color: var(--main-green) !important;
 }
 .pro-inner-item:focus {
   outline: none !important;
+}
+.cfgMenuItem
+{
+  margin: 2rem 2.5rem;
 }

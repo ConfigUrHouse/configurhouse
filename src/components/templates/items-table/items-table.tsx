@@ -130,7 +130,7 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
           </Modal>
         )}
         {canSelectItems && (
-          <div className="w-100 p-3 mt-5 d-flex justify-content-between">
+          <div className="w-100 p-3 mt-3 d-flex justify-content-between">
             <span className="selectedItems">
               {this.state.selectedItems.length} élément(s) sélectionné(s)
             </span>
