@@ -41,34 +41,38 @@ const Nav = ({ isAuthenticated, isAdmin }: IProps) => {
     <ProSidebar breakPoint="md" className="position-fixed">
       <SidebarHeader>
         <Link to="/">
-          <h2 className="title">
-            ConfigUr
-            <br />
-            <span>house.</span>
+          <h2 className="cfgTitle">
+            <span className="cfgTitleTop" >ConfigUr</span>
+            <span className="cfgTitleBottom" >house.</span>
           </h2>
         </Link>
       </SidebarHeader>
       <SidebarContent>
-        <MenuItem className="m-5">
+        <MenuItem className="cfgMenuItem">
           <FontAwesomeIcon icon={faCog} size="lg" className="mr-2" />{" "}
           <Link to="/config">Configurateur</Link>
         </MenuItem>
-        <MenuItem className="m-5">
+        <MenuItem className="cfgMenuItem">
           <FontAwesomeIcon icon={faAddressBook} size="lg" className="mr-2" />{" "}
           <Link to="/contact">Contact</Link>
         </MenuItem>
-        <MenuItem className="m-5">
-          <FontAwesomeIcon icon={faCogs} size="lg" className="mr-2" />{" "}
-          <Link to="/configurationOptions">Options de Configuration</Link>
-        </MenuItem>
-        <MenuItem className="m-5">
-          <FontAwesomeIcon icon={faHome} size="lg" className="mr-2" />{" "}
-          <Link to="/houseModels">Modèles</Link>
-        </MenuItem>
-        <MenuItem className="m-5">
-          <FontAwesomeIcon icon={faUsers} size="lg" className="mr-2" />{" "}
-          <Link to="/users">Utilisateurs</Link>
-        </MenuItem>
+        {isAdmin ? (
+          <>
+            <MenuItem className="cfgMenuItem">
+              <FontAwesomeIcon icon={faCogs} size="lg" className="mr-2" />{" "}
+              <Link to="/configurationOptions">Options de Configuration</Link>
+            </MenuItem>
+            <MenuItem className="cfgMenuItem">
+              <FontAwesomeIcon icon={faHome} size="lg" className="mr-2" />{" "}
+              <Link to="/houseModels">Modèles</Link>
+            </MenuItem>
+            <MenuItem className="cfgMenuItem">
+              <FontAwesomeIcon icon={faUsers} size="lg" className="mr-2" />{" "}
+              <Link to="/users">Utilisateurs</Link>
+            </MenuItem>
+          </>
+        )
+        : <></>}
       </SidebarContent>
       <SidebarFooter>
         {isAuthenticated ? (
