@@ -88,7 +88,13 @@ class Configurator extends React.Component<any, any> {
           />
         )}
         {this.state.step == 1 && (
-          <ModelConfiguration model={this.state.model} />
+          <ModelConfiguration
+            model={this.state.model}
+            optionValues={this.state.optionValues}
+            updateOptionValues={(optionValues: number[]) => {
+              this.setState({ optionValues });
+            }}
+          />
         )}
         {this.state.step == 3 && (
           <Consommation
