@@ -1,0 +1,27 @@
+.conso .content {
+  display: flex;
+  flex-direction: column;
+}
+
+.conso .content .row {
+  align-content: center;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.conso-label {
+  font-size: 12px;
+}
+
+.conso .percentage {
+  font-size: x-large;
+  background-color: var(--main-green);
+  border: 5px solid var(--main-lightgreen);
+  border-radius: 50%;
+  font-weight: bold;
+  color: #fff;
+  height: 70px;
+  width: 70px;
+  line-height: 2.5;
+  text-align: center;
+}
