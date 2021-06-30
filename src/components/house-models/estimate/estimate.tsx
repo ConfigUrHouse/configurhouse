@@ -70,6 +70,13 @@ class Estimate extends React.Component<EstimateProps, EstimateState> {
               </tr>
             </thead>
             <tbody>
+              {data.houseModel && (
+                <tr>
+                  <td>Modèle</td>
+                  <td>{data.houseModel.name}</td>
+                  <td className="price">{data.houseModel.price}</td>
+                </tr>
+              )}
               {data.estimate.map((e: any, i: number) => (
                 <tr key={i}>
                   <td>{e.option.name}</td>

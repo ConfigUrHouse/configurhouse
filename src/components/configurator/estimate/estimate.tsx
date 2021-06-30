@@ -1,12 +1,12 @@
 import { Component } from 'react';
 import { Col, Modal, Row, Table } from 'react-bootstrap';
-import { withRouter } from 'react-router-dom';
 import { faEuroSign } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ApiResponseError } from '../../../api/models';
 import { apiRequest } from '../../../api/utils';
 import { ConfigurationValue } from '../../../models';
 import { EstimateProps, EstimateState } from './models';
+import houseModelDetails from '../../house-models/house-model-details/house-model-details';
 
 class Estimate extends Component<EstimateProps, EstimateState> {
   constructor(props: EstimateProps) {
@@ -43,7 +43,7 @@ class Estimate extends Component<EstimateProps, EstimateState> {
     const { data } = this.state;
 
     return (
-      <div className="p-5 w-100 bg configuration-infos">
+      <div className="w-100 bg configuration-infos">
         {data && (
           <Row>
             <Col md={12} className="p-4">
@@ -60,6 +60,13 @@ class Estimate extends Component<EstimateProps, EstimateState> {
                     </tr>
                   </thead>
                   <tbody>
+                    {data?.houseModel && (
+                      <tr>
+                        <td>Modèle</td>
+                        <td>{data.houseModel.name}</td>
+                        <td className="price">{data.houseModel.price}</td>
+                      </tr>
+                    )}
                     {data?.estimate?.map((e: any, i: number) => (
                       <tr key={i}>
                         <td>{e.option.name}</td>
