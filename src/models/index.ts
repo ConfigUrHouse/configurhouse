@@ -1,3 +1,21 @@
+export interface Value {
+  id: number;
+  name: string;
+  price: number;
+  is_default: number;
+  id_OptionConf: number;
+  id_Asset: number;
+  asset?: Asset;
+  optionConf?: ConfigurationOption;
+}
+
+export interface ConfigurationValue {
+  id_Value: number;
+  id_Configuration: number;
+  value?: Value;
+  configuration?: Configuration;
+}
+
 export interface Configuration {
   id: number;
   name: string;
@@ -5,6 +23,7 @@ export interface Configuration {
   id_HouseModel: number;
   user?: User;
   houseModel?: HouseModel;
+  configurationValues?: ConfigurationValue[];
 }
 
 export interface ConfigurationOption {

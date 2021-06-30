@@ -1,12 +1,12 @@
-import "./register.css";
-import { InputGroup, FormControl, Button, Form } from "react-bootstrap";
-import * as Yup from "yup";
-import { apiRequest } from "../../api/utils";
-import { logIn } from "../../actions/current";
-import { connect } from "react-redux";
-import ReCAPTCHA from "react-google-recaptcha";
+import './register.css';
+import { InputGroup, FormControl, Button, Form } from 'react-bootstrap';
+import * as Yup from 'yup';
+import { apiRequest } from '../../api/utils';
+import { logIn } from '../../actions/current';
+import { connect } from 'react-redux';
+import ReCAPTCHA from 'react-google-recaptcha';
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faAt,
   faCheck,
@@ -17,11 +17,12 @@ import {
   faUser,
   faUserPlus,
   faPhone,
-} from "@fortawesome/free-solid-svg-icons";
-import React from "react";
-import { Formik } from "formik";
-import { FormValues } from "./form-value";
-import { ApiResponseError } from "../../api/models";
+} from '@fortawesome/free-solid-svg-icons';
+import React from 'react';
+import { Formik } from 'formik';
+import { FormValues } from './form-value';
+import { ApiResponseError } from '../../api/models';
+import { withRouter } from 'react-router-dom';
 interface IProps {
   logInConnect: () => void;
 }
@@ -42,27 +43,28 @@ class Register extends React.Component<any, any> {
 
   schema = Yup.object().shape({
     email: Yup.string().email("L'email doit avoir un format valide"),
-    password: Yup.string().required("Le mot de passe est requis"),
-    firstname: Yup.string().required("Le prénom est requis"),
-    lastname: Yup.string().required("Le nom de famille est requis"),
+    password: Yup.string().required('Le mot de passe est requis'),
+    firstname: Yup.string().required('Le prénom est requis'),
+    lastname: Yup.string().required('Le nom de famille est requis'),
     confirmpassword: Yup.string().oneOf(
-      [Yup.ref("password"), null],
-      "Les mots de passes doivent correspondres"
+      [Yup.ref('password'), null],
+      'Les mots de passes doivent correspondres'
     ),
   });
   initialValues: FormValues = {
-    email: "",
-    password: "",
-    firstname: "",
-    lastname: "",
-    confirmpassword: "",
-    phone: "",
+    email: '',
+    password: '',
+    firstname: '',
+    lastname: '',
+    confirmpassword: '',
+    phone: '',
   };
   register(values: FormValues) {
+    const { location, history } = this.props;
     console.log(values);
     fetch(`${process.env.REACT_APP_API_BASE_URL}/user`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email: values.email,
         password: values.password,
@@ -72,8 +74,14 @@ class Register extends React.Component<any, any> {
     })
       .then((response) => response.json())
       .then((datas) => {
+        console.log(datas);
         if (datas.success) {
           this.setState({ success: 1 });
+          if (location.state?.from) {
+            history.push(location.state.from, location.state.state);
+          } else {
+            history.push('/login');
+          }
         } else {
           this.setState({ success: -1 });
         }
@@ -121,12 +129,12 @@ class Register extends React.Component<any, any> {
                   this.register(values);
                   resetForm({
                     values: {
-                      firstname: "",
-                      lastname: "",
-                      email: "",
-                      password: "",
-                      confirmpassword: "",
-                      phone: "",
+                      firstname: '',
+                      lastname: '',
+                      email: '',
+                      password: '',
+                      confirmpassword: '',
+                      phone: '',
                     },
                   });
                 }}
@@ -261,7 +269,7 @@ class Register extends React.Component<any, any> {
                       </Form.Control.Feedback>
                     </InputGroup>
                     <ReCAPTCHA
-                      sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY ?? ""}
+                      sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY ?? ''}
                       onChange={(recaptcha) => this.setState({ recaptcha })}
                     />
                     <Button
@@ -284,4 +292,4 @@ class Register extends React.Component<any, any> {
   }
 }
 
-export default Register;
+export default withRouter(Register);

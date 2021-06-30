@@ -1,11 +1,11 @@
-import "./login.css";
-import { InputGroup, FormControl, Button, Form } from "react-bootstrap";
-import * as Yup from "yup";
-import { apiRequest } from "../../api/utils";
-import { logIn } from "../../actions/current";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import './login.css';
+import { InputGroup, FormControl, Button, Form } from 'react-bootstrap';
+import * as Yup from 'yup';
+import { apiRequest } from '../../api/utils';
+import { logIn } from '../../actions/current';
+import { connect } from 'react-redux';
+import { Link, withRouter } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faAt,
   faCheck,
@@ -13,11 +13,11 @@ import {
   faSignInAlt,
   faKey,
   faLock,
-} from "@fortawesome/free-solid-svg-icons";
-import React from "react";
-import { Formik } from "formik";
-import { FormValues } from "./form-value";
-import { ApiResponseError } from "../../api/models";
+} from '@fortawesome/free-solid-svg-icons';
+import React from 'react';
+import { Formik } from 'formik';
+import { FormValues } from './form-value';
+import { ApiResponseError } from '../../api/models';
 interface IProps {
   logInConnect: () => void;
 }
@@ -33,16 +33,18 @@ class Login extends React.Component<any, any> {
 
   schema = Yup.object().shape({
     email: Yup.string().email("L'email doit avoir un format valide"),
-    password: Yup.string().required("Le mot de passe est requis"),
+    password: Yup.string().required('Le mot de passe est requis'),
   });
   initialValues: FormValues = {
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   };
   login(values: FormValues) {
+    const { location, history } = this.props;
+
     fetch(`${process.env.REACT_APP_API_BASE_URL}/user/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email: values.email,
         password: values.password,
@@ -53,9 +55,9 @@ class Login extends React.Component<any, any> {
         console.log(datas);
         if (datas.success) {
           this.setState({ success: 1 });
-          apiRequest("userRole/" + datas.userId, "GET", [])
+          apiRequest('userRole/' + datas.userId, 'GET', [])
             .then((response) => {
-              if (response.status === "error") {
+              if (response.status === 'error') {
                 this.setState({ error: response as ApiResponseError });
               } else {
                 let isAdmin = false;
@@ -68,6 +70,9 @@ class Login extends React.Component<any, any> {
                   isAdmin = true;
                 }
                 this.props.logInConnect(datas.token, isAdmin, datas.userId);
+                if (location.state?.from) {
+                  history.push(location.state.from, location.state.state);
+                }
               }
             })
             .catch((error) => console.log(error));
@@ -82,6 +87,8 @@ class Login extends React.Component<any, any> {
     this.setState({ [nam]: val });
   }
   render() {
+    const { location } = this.props;
+
     let alertDiv;
     if (this.state.success == 1) {
       alertDiv = (
@@ -118,8 +125,8 @@ class Login extends React.Component<any, any> {
                   this.login(values);
                   resetForm({
                     values: {
-                      email: "",
-                      password: "",
+                      email: '',
+                      password: '',
                     },
                   });
                 }}
@@ -172,7 +179,17 @@ class Login extends React.Component<any, any> {
                         {errors.password}
                       </Form.Control.Feedback>
                     </InputGroup>
-                    <Link to="/register" className="text-center">
+                    <Link
+                      to={
+                        location.state?.from
+                          ? {
+                              pathname: '/register',
+                              state: location.state.state,
+                            }
+                          : '/register'
+                      }
+                      className="text-center"
+                    >
                       <p>Je m'inscris</p>
                     </Link>
                     <Button
@@ -197,4 +214,4 @@ class Login extends React.Component<any, any> {
 const mapDispatchToProps = {
   logInConnect: logIn,
 };
-export default connect(null, mapDispatchToProps)(Login);
+export default connect(null, mapDispatchToProps)(withRouter(Login));
