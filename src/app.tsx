@@ -15,30 +15,50 @@ import HouseModelEdit from './components/house-models/house-model-edit/house-mod
 import HouseModelDetails from './components/house-models/house-model-details/house-model-details';
 import UserConfigurationEdit from './components/user/user-configuration-edit/user-configuration-edit';
 import { ICurrent } from './types';
-import { checkAuthentication, checkAdmin } from './actions/current';
+import { checkAuthentication, checkAdmin, logIn } from './actions/current';
 import { connect } from 'react-redux';
 import LoggedInRoute from './routes/logged-in-route';
 import LoggedOutRoute from './routes/logged-out-route';
 import AdminRoute from './routes/admin-route';
 import Login from './components/login/login';
-import React from 'react';
+import React, { useEffect } from 'react';
 import ConfigurationOptionList from './components/configuration-options/configuration-option-list/configuration-option-list';
 import ConfigurationOptionEdit from './components/configuration-options/configuration-option-edit/configuration-option-edit';
 import Configuration from './components/configuration/configuration';
 import Register from './components/register/register';
+import { apiRequest } from './api/utils';
 
 interface IProps {
   checkAuthenticationConnect: () => void;
   isAuthenticated: boolean | null;
   checkAdmin: () => void;
   isAdmin: boolean | null;
+  login: Function;
 }
 
-const App = ({ checkAuthenticationConnect, isAuthenticated }: IProps) => {
-  React.useEffect(() => {
+let refreshInterval: NodeJS.Timeout;
+
+const App = ({
+  checkAuthenticationConnect,
+  isAuthenticated,
+  login,
+  isAdmin,
+}: IProps) => {
+  useEffect(() => {
     checkAuthenticationConnect();
     checkAdmin();
   }, []);
+
+  useEffect(() => {
+    refreshInterval = setInterval(async () => {
+      if (isAuthenticated) {
+        const { token } = await apiRequest('user/refresh-token');
+        login(token, isAdmin, window.localStorage.getItem('userId'));
+      }
+    }, 1800000);
+
+    return () => clearInterval(refreshInterval);
+  });
 
   const app =
     isAuthenticated !== null ? (
@@ -138,6 +158,7 @@ const mapStateToProps = (state: ICurrent) => ({
 const mapDispatchToProps = {
   checkAuthenticationConnect: checkAuthentication,
   checkAdmin: checkAdmin,
+  login: logIn,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

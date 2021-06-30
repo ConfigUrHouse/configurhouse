@@ -30,6 +30,7 @@ class Configurator extends React.Component<any, any> {
       step: 0,
       optionValues: [2, 4], //TODO: use values from state
       id,
+      configuration: {},
       ...existingState,
     };
 
@@ -48,15 +49,18 @@ class Configurator extends React.Component<any, any> {
   async fetchConfiguration(confId: number | null = null) {
     const id = confId || this.state.id;
     try {
-      const item: Configuration = await apiRequest(
+      const configuration: Configuration = await apiRequest(
         `configuration/${id}`,
         'GET',
         []
       );
+      console.log(configuration);
       this.setState({
-        model: item.houseModel,
-        optionValues: item.configurationValues?.map((cv) => cv.id_Value) ?? [],
+        model: configuration.houseModel,
+        optionValues:
+          configuration.configurationValues?.map((cv) => cv.id_Value) ?? [],
         id,
+        configuration,
       });
     } catch (error: any) {
       console.error(error);
@@ -66,6 +70,36 @@ class Configurator extends React.Component<any, any> {
 
   changeModelChoice(model: any) {
     this.setState({ modelSelected: model });
+  }
+
+  async saveConfiguration() {
+    try {
+      const {
+        id,
+        model,
+        configuration,
+        optionValues: configurationValues,
+      } = this.state;
+
+      if (id) {
+        await apiRequest(`configuration/${id}`, 'PUT', '', {
+          ...configuration,
+          configurationValues,
+          id_HouseModel: model.id,
+        });
+      } else {
+        await apiRequest('configuration', 'POST', '', {
+          configurationValues,
+          id_HouseModel: model.id,
+        }).then(
+          async ({ config }) =>
+            await this.fetchConfiguration(config.id as number)
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      this.setState({ error });
+    }
   }
 
   async next() {
@@ -79,27 +113,7 @@ class Configurator extends React.Component<any, any> {
           state: this.state,
         });
       } else {
-        try {
-          const { id, model, optionValues: configurationValues } = this.state;
-          if (id) {
-            await apiRequest(`configuration/${id}`, 'PUT', '', {
-              configurationValues,
-              id_HouseModel: model.id,
-            });
-          } else {
-            console.log('id', id);
-            await apiRequest('configuration', 'POST', '', {
-              configurationValues,
-              id_HouseModel: model.id,
-            }).then(
-              async ({ config }) =>
-                await this.fetchConfiguration(config.id as number)
-            );
-          }
-        } catch (error) {
-          console.log(error);
-          this.setState({ error });
-        }
+        await this.saveConfiguration();
       }
     } else if (this.state.step == 2) {
     }

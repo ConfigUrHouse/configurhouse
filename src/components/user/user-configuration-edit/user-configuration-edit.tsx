@@ -3,10 +3,10 @@ import {
   faSave,
   faTimes,
   faKeyboard,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Formik } from "formik";
-import React from "react";
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Formik } from 'formik';
+import React from 'react';
 import {
   Button,
   Col,
@@ -14,17 +14,17 @@ import {
   FormControl,
   InputGroup,
   Row,
-} from "react-bootstrap";
-import { withRouter } from "react-router";
-import * as Yup from "yup";
-import { ApiResponseError } from "../../../api/models";
-import { apiRequest } from "../../../api/utils";
+} from 'react-bootstrap';
+import { withRouter } from 'react-router';
+import * as Yup from 'yup';
+import { ApiResponseError } from '../../../api/models';
+import { apiRequest } from '../../../api/utils';
 import {
   UserConfigurationEditProps,
   UserConfigurationEditState,
-} from "./models";
-import "./user-configuration-edit.css";
-import { Configuration } from "../../../models";
+} from './models';
+import './user-configuration-edit.css';
+import { Configuration } from '../../../models';
 
 class HouseModelEdit extends React.Component<
   UserConfigurationEditProps,
@@ -32,13 +32,13 @@ class HouseModelEdit extends React.Component<
 > {
   private schema = Yup.object().shape({
     name: Yup.string()
-      .min(4, "Le nom doit faire plus de 3 charactères")
-      .required("Le nom ne peut pas être vide"),
+      .min(4, 'Le nom doit faire plus de 3 charactères')
+      .required('Le nom ne peut pas être vide'),
   });
 
   private initialItem: Configuration = {
     id: 0,
-    name: "",
+    name: '',
     id_User: 0,
     id_HouseModel: 0,
   };
@@ -62,9 +62,9 @@ class HouseModelEdit extends React.Component<
   }
 
   async fetchConfiguration(): Promise<void> {
-    apiRequest(`configuration/${this.state.item.id}`, "GET", [])
+    apiRequest(`configuration/${this.state.item.id}`, 'GET', [])
       .then((response) => {
-        if (response.status === "error") {
+        if (response.status === 'error') {
           this.setState({ error: response as ApiResponseError });
         } else {
           this.setState({ item: response as Configuration });
@@ -74,12 +74,17 @@ class HouseModelEdit extends React.Component<
   }
 
   async submitForm(values: Configuration): Promise<void> {
-    apiRequest(`configuration/${values.id}`, "PUT", "", values)
+    const configurationValues =
+      values.configurationValues?.map((cv) => cv.id_Value) ?? [];
+    apiRequest(`configuration/${values.id}`, 'PUT', '', {
+      ...values,
+      configurationValues,
+    })
       .then((response) => {
-        if (response.status === "error") {
+        if (response.status === 'error') {
           this.setState({ error: response as ApiResponseError });
         } else {
-          this.props.history.push("/account?tab=configs");
+          this.props.history.push('/account?tab=configs');
         }
       })
       .catch((error) => console.log(error));
@@ -139,7 +144,7 @@ class HouseModelEdit extends React.Component<
                         {errors.name}
                       </Form.Control.Feedback>
                     </InputGroup>
-                  </Col>{" "}
+                  </Col>{' '}
                 </Row>
                 <Button
                   variant="primary"

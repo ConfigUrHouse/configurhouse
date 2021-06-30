@@ -64,6 +64,7 @@ class Configuration extends React.Component<any, any> {
               houseModel: {
                 id: model.id,
                 name: model.name,
+                price: model.price,
                 modelName: modelDetails.name,
                 modelDescription: modelDetails.description,
                 modelId: modelDetails.id,
@@ -190,13 +191,12 @@ class Configuration extends React.Component<any, any> {
                   ))}
                   <tr className="bg-lightgreen font-weight-bold">
                     <td>Coût total des options</td>
-                    <td>
+                    <td className="price">
                       {this.state.options.reduce(
                         (a: any, b: any) =>
                           parseInt(a) + (parseInt(b['price']) || 0),
                         0
-                      )}{' '}
-                      €
+                      )}
                     </td>
                   </tr>
                 </tbody>
@@ -221,6 +221,7 @@ class Configuration extends React.Component<any, any> {
                     <td>Nom</td>
                     <td>Catégorie du modèle</td>
                     <td>Description du modèle</td>
+                    <td>Prix du modèle</td>
                   </tr>
                 </thead>
                 <tbody>
@@ -228,6 +229,7 @@ class Configuration extends React.Component<any, any> {
                     <td>{this.state.houseModel.name}</td>
                     <td>{this.state.houseModel.modelName}</td>
                     <td>{this.state.houseModel.modelDescription}</td>
+                    <td className="price">{this.state.houseModel.price}</td>
                   </tr>
                 </tbody>
               </Table>
