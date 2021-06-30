@@ -1,6 +1,6 @@
-import React from "react";
-import { ApiResponseError } from "../../api/models";
-import { apiRequest } from "../../api/utils";
+import React from 'react';
+import { ApiResponseError } from '../../api/models';
+import { apiRequest } from '../../api/utils';
 import {
   faDownload,
   faEuroSign,
@@ -9,10 +9,10 @@ import {
   faMousePointer,
   faPaperPlane,
   faSearchPlus,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Col, Modal, Row, Table } from "react-bootstrap";
-import "./configuration.css";
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Modal, Row, Table } from 'react-bootstrap';
+import './configuration.css';
 
 class Configuration extends React.Component<any, any> {
   constructor(props: any) {
@@ -22,7 +22,8 @@ class Configuration extends React.Component<any, any> {
       configuration: {},
       options: [],
       houseModel: {},
-      id: parseInt(props.match.params.id ?? 0),
+      id: parseInt(props.match.params.id ?? '0'),
+      estimateModalIsOpen: false,
     };
   }
 
@@ -38,7 +39,7 @@ class Configuration extends React.Component<any, any> {
   }
 
   async fetchConfiguration(): Promise<void> {
-    await apiRequest(`configuration/` + this.state.id, "GET", [])
+    await apiRequest(`configuration/` + this.state.id, 'GET', [])
       .then((response) => {
         this.setState({ configuration: response });
         this.fetchConfigurationOptions();
@@ -52,11 +53,11 @@ class Configuration extends React.Component<any, any> {
   async fetchHouseModel(): Promise<void> {
     const response: any = await apiRequest(
       `houseModel/` + this.state.configuration.id_HouseModel,
-      "GET",
+      'GET',
       []
     )
       .then((model: any) => {
-        apiRequest(`modelType/` + model.id_ModelType, "GET", [])
+        apiRequest(`modelType/` + model.id_ModelType, 'GET', [])
           .then((modelDetails: any) => {
             console.log(modelDetails);
             this.setState({
@@ -79,10 +80,10 @@ class Configuration extends React.Component<any, any> {
     this.setState({ model: response });
   }
   async fetchConfigurationOptions(): Promise<void> {
-    await apiRequest(`configurationValue/` + this.state.id, "GET", [])
+    await apiRequest(`configurationValue/` + this.state.id, 'GET', [])
       .then((response) => {
         response.forEach((element: any) => {
-          apiRequest(`value/` + element.id_Value, "GET", [])
+          apiRequest(`value/` + element.id_Value, 'GET', [])
             .then((option) => {
               this.setState({
                 options: this.state.options.concat([option]),
@@ -102,10 +103,10 @@ class Configuration extends React.Component<any, any> {
     try {
       const response = await apiRequest(
         `configuration/${this.state.id}/send`,
-        "GET",
+        'GET',
         []
       );
-      if (response.status === "error") {
+      if (response.status === 'error') {
         this.setState({ error: response as ApiResponseError });
       }
     } catch (error) {
@@ -117,7 +118,7 @@ class Configuration extends React.Component<any, any> {
     try {
       await apiRequest(
         `configuration/${this.state.id}/conso/download`,
-        "GET",
+        'GET',
         []
       );
     } catch (error) {
@@ -128,6 +129,41 @@ class Configuration extends React.Component<any, any> {
   render() {
     return (
       <main className="p-5 w-100 bg configuration-infos">
+        <Modal
+          show={!!this.state.estimateModalIsOpen}
+          onHide={() => this.setState({ estimateModalIsOpen: false })}
+        >
+          <Modal.Header>
+            <Modal.Title>Téléchargement de devis</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>En quel format voulez vous télécharger le devis ?</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="secondary"
+              onClick={() => this.setState({ estimateModalIsOpen: false })}
+            >
+              Annuler
+            </Button>
+            <Button
+              variant="primary"
+              type="submit"
+              href={`${process.env.REACT_APP_API_BASE_URL}/configuration/${this.state.id}/estimate/download?mode=csv`}
+              onClick={() => this.setState({ estimateModalIsOpen: false })}
+            >
+              CSV
+            </Button>
+            <Button
+              variant="primary"
+              type="submit"
+              href={`${process.env.REACT_APP_API_BASE_URL}/configuration/${this.state.id}/estimate/download?mode=pdf`}
+              onClick={() => this.setState({ estimateModalIsOpen: false })}
+            >
+              PDF
+            </Button>
+          </Modal.Footer>
+        </Modal>
         <h2 className="text-green mb-2">
           <FontAwesomeIcon icon={faSearchPlus} /> Détails de votre configuration
           : <strong>{this.state.configuration.name}</strong>
@@ -157,9 +193,9 @@ class Configuration extends React.Component<any, any> {
                     <td>
                       {this.state.options.reduce(
                         (a: any, b: any) =>
-                          parseInt(a) + (parseInt(b["price"]) || 0),
+                          parseInt(a) + (parseInt(b['price']) || 0),
                         0
-                      )}{" "}
+                      )}{' '}
                       €
                     </td>
                   </tr>
@@ -206,7 +242,7 @@ class Configuration extends React.Component<any, any> {
                 <Button
                   variant="primary"
                   className="p-3"
-                  href={`${process.env.REACT_APP_API_BASE_URL}/configuration/${this.state.id}/downloadEstimate`}
+                  onClick={() => this.setState({ estimateModalIsOpen: true })}
                 >
                   <FontAwesomeIcon className="mr-2" icon={faDownload} />
                   Télécharger le devis
