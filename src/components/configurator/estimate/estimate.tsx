@@ -66,20 +66,24 @@ class Estimate extends Component<EstimateProps, EstimateState> {
                   <tr>
                     <td>Modèle</td>
                     <td>{data.houseModel.name}</td>
-                    <td className="price">{data.houseModel.price}</td>
+                    <td className="price">
+                      {parseFloat(data.houseModel.price).toFixed(2)}
+                    </td>
                   </tr>
                 )}
                 {data?.estimate?.map((e: any, i: number) => (
                   <tr key={i}>
                     <td>{e.option.name}</td>
                     <td>{e.value.name}</td>
-                    <td className="price">{e.value.price}</td>
+                    <td className="price">
+                      {parseFloat(e.value.price).toFixed(2)}
+                    </td>
                   </tr>
                 ))}
                 <tr className="bg-lightgreen font-weight-bold">
                   <td>Coût total des options</td>
                   <td></td>
-                  <td className="price">{data.total}</td>
+                  <td className="price">{parseFloat(data.total).toFixed(2)}</td>
                 </tr>
               </tbody>
             </Table>

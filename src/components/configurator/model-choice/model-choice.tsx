@@ -1,9 +1,9 @@
-import React from "react";
-import { ApiResponseError } from "../../../api/models";
-import { Col, Row, Table } from "react-bootstrap";
-import home_3D from "../../../assets/images/home-3D.png";
-import "./model-choice.css";
-import { apiRequest } from "../../../api/utils";
+import React from 'react';
+import { ApiResponseError } from '../../../api/models';
+import { Col, Row, Table } from 'react-bootstrap';
+import home_3D from '../../../assets/images/home-3D.png';
+import './model-choice.css';
+import { apiRequest } from '../../../api/utils';
 class ModelChoice extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
@@ -16,9 +16,9 @@ class ModelChoice extends React.Component<any, any> {
   }
 
   async fetchHouseModels(): Promise<void> {
-    apiRequest(`houseModel`, "GET", [])
+    apiRequest(`houseModel`, 'GET', [])
       .then((response) => {
-        if (response.status === "error") {
+        if (response.status === 'error') {
           this.setState({ error: response as ApiResponseError });
         } else {
           this.setState({
@@ -38,10 +38,10 @@ class ModelChoice extends React.Component<any, any> {
         <Row>
           {models.map((item: any) => {
             return (
-              <Col>
+              <Col key={item.id}>
                 <div
                   className={`model ${
-                    this.state.modelSelected == item ? "selected" : ""
+                    this.state.modelSelected == item ? 'selected' : ''
                   }`}
                   onClick={(e) => this.selectModel(item)}
                 >
