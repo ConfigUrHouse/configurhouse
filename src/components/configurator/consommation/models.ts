@@ -4,6 +4,7 @@ import { ApiResponseError } from "../../../api/models";
 interface IConsommationProps extends RouteComponentProps<{ id?: string }> {
   optionValues?: number[];
   houseModelId?: number;
+  configurationId?: number;
 }
 export type ConsommationProps = IConsommationProps;
 

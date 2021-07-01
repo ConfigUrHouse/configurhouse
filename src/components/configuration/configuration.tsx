@@ -13,6 +13,8 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Col, Modal, Row, Table } from 'react-bootstrap';
 import './configuration.css';
+import { Bar, Chart } from 'react-chartjs-2';
+import { getChartData } from '../../utils/conso';
 
 class Configuration extends React.Component<any, any> {
   constructor(props: any) {
@@ -22,20 +24,32 @@ class Configuration extends React.Component<any, any> {
       configuration: {},
       options: [],
       houseModel: {},
-      id: parseInt(props.match.params.id ?? '0'),
+      id: parseInt(props.match.params.id ?? 0),
+      conso: undefined,
       estimateModalIsOpen: false,
     };
+
+    Chart.defaults.plugins.legend.display = true;
+    Chart.defaults.plugins.legend.position = 'bottom';
+    Chart.defaults.plugins.legend.labels.usePointStyle = true;
+    Chart.defaults.plugins.legend.labels.pointStyle = 'circle';
   }
 
   componentDidMount() {
     this.fetchConfiguration();
+    this.fetchConsommation();
     this.sendConfiguration = this.sendConfiguration.bind(this);
     this.downloadConsommation = this.downloadConsommation.bind(this);
     this.handleModalClose = this.handleModalClose.bind(this);
+    this.seeConsoDetails = this.seeConsoDetails.bind(this);
   }
 
   private handleModalClose(): void {
     this.setState({ error: undefined });
+  }
+
+  private seeConsoDetails(): void {
+    this.props.history.push(`${this.state.id}/details?tab=conso`);
   }
 
   async fetchConfiguration(): Promise<void> {
@@ -80,6 +94,7 @@ class Configuration extends React.Component<any, any> {
       });
     this.setState({ model: response });
   }
+
   async fetchConfigurationOptions(): Promise<void> {
     await apiRequest(`configurationValue/` + this.state.id, 'GET', [])
       .then((response) => {
@@ -127,7 +142,25 @@ class Configuration extends React.Component<any, any> {
     }
   }
 
+  private async fetchConsommation(): Promise<void> {
+    try {
+      const response = await apiRequest(
+        `configuration/${this.state.id}/conso`,
+        'GET',
+        []
+      );
+      if (response.status === 'error') {
+        this.setState({ error: response as ApiResponseError });
+      } else {
+        this.setState({ conso: response, data: getChartData(response) });
+      }
+    } catch (error) {
+      this.setState({ error: error as ApiResponseError });
+    }
+  }
+
   render() {
+    const conso = this.state.conso;
     return (
       <main className="p-5 w-100 bg configuration-infos">
         <Modal
@@ -208,6 +241,57 @@ class Configuration extends React.Component<any, any> {
               <h3 className="text-green text-center">
                 <FontAwesomeIcon icon={faLightbulb} /> Bilan energétique
               </h3>
+              {this.state.conso && (
+                <div className="barChart">
+                  <Bar
+                    options={{
+                      responsive: true,
+                      maintainAspectRatio: true,
+                      scales: {
+                        y: {
+                          display: false,
+                        },
+                      },
+                      plugins: {
+                        tooltip: {
+                          callbacks: {
+                            label: function (context: any) {
+                              var label = context.formattedValue || '';
+                              if (label) {
+                                label += ' kWh';
+                              }
+                              if (context.datasetIndex === 0) {
+                                const posteConso =
+                                  conso.byPosteConso.config.find(
+                                    (posteConso: any) =>
+                                      posteConso.posteConso === context.label
+                                  );
+                                const percentage = posteConso
+                                  ? posteConso.diffPercentageOfPosteConsoReference
+                                  : conso.global.diffPercentage;
+                                label += ' (' + percentage + ')';
+                              }
+                              return label;
+                            },
+                          },
+                        },
+                      },
+                    }}
+                    data={this.state.data?.differences}
+                    type={Bar}
+                  />
+                </div>
+              )}
+              <div className="d-flex justify-content-center mt-4">
+                <Button
+                  variant="primary"
+                  className="p-3"
+                  onClick={this.seeConsoDetails}
+                >
+                  <FontAwesomeIcon className="mr-2" icon={faSearchPlus} />
+                  Voir le détail
+                </Button>
+              </div>
             </div>
           </Col>
           <Col md={6} className="p-4">
