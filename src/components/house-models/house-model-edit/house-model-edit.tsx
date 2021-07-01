@@ -30,7 +30,7 @@ class HouseModelEdit extends React.Component<
 > {
   private schema = Yup.object().shape({
     name: Yup.string()
-      .min(4, "Le nom doit faire plus de 3 charactères")
+      .min(2, "Le nom doit faire plus de 1 charactères")
       .required("Le nom ne peut pas être vide"),
     id_ModelType: Yup.lazy(() =>
       Yup.number().oneOf(
@@ -110,7 +110,7 @@ class HouseModelEdit extends React.Component<
         if (response.status === "error") {
           this.setState({ error: response as ApiResponseError });
         } else {
-          this.setState({ assets: response as Asset[] });
+          this.setState({ assets: response.items as Asset[] });
         }
       })
       .catch((error) => console.log(error));

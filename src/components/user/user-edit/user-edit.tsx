@@ -97,7 +97,7 @@ export class UserEdit extends React.Component<UserEditProps, UserEditState> {
         if (response.status === "error") {
           this.setState({ error: response as ApiResponseError });
         } else {
-          const roles = response as Role[];
+          const roles = response.items as Role[];
           this.setState({ availableRoles: roles });
         }
       })
