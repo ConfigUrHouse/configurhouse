@@ -219,21 +219,39 @@ class Configuration extends React.Component<any, any> {
                   {this.state.options.map((option: any, i: number) => (
                     <tr key={i}>
                       <td>{option.name}</td>
-                      <td>{option.price} €</td>
+                      <td className="price">
+                        {parseFloat(option.price).toFixed(2)}
+                      </td>
                     </tr>
                   ))}
                   <tr className="bg-lightgreen font-weight-bold">
                     <td>Coût total des options</td>
                     <td className="price">
-                      {this.state.options.reduce(
-                        (a: any, b: any) =>
-                          parseInt(a) + (parseInt(b['price']) || 0),
-                        0
-                      )}
+                      {parseFloat(
+                        this.state.options.reduce(
+                          (a: any, b: any) =>
+                            parseInt(a) + (parseInt(b['price']) || 0),
+                          0
+                        )
+                      ).toFixed(2)}
                     </td>
                   </tr>
                 </tbody>
               </Table>
+              <div className="d-flex justify-content-center mt-4">
+                <Button
+                  variant="primary"
+                  className="p-3"
+                  onClick={() =>
+                    this.props.history.push(
+                      `${this.state.id}/details?tab=estimate`
+                    )
+                  }
+                >
+                  <FontAwesomeIcon className="mr-2" icon={faSearchPlus} />
+                  Voir le détail
+                </Button>
+              </div>
             </div>
           </Col>
           <Col md={6} className="p-4">
@@ -313,7 +331,9 @@ class Configuration extends React.Component<any, any> {
                     <td>{this.state.houseModel.name}</td>
                     <td>{this.state.houseModel.modelName}</td>
                     <td>{this.state.houseModel.modelDescription}</td>
-                    <td className="price">{this.state.houseModel.price}</td>
+                    <td className="price">
+                      {parseFloat(this.state.houseModel.price).toFixed(2)}
+                    </td>
                   </tr>
                 </tbody>
               </Table>
