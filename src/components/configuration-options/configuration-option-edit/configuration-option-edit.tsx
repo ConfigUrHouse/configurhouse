@@ -4,6 +4,7 @@ import {
   faTimes,
   faKeyboard,
   faCube,
+  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Formik, Field, Form as Form2, ErrorMessage, FieldArray } from "formik";
@@ -382,7 +383,7 @@ class ConfigurationOptionEdit extends React.Component<
                                             remove(index)
                                           }}
                                         >
-                                          X
+                                          <FontAwesomeIcon className="ml-2" icon={faTrash} />
                                         </Button>
                                       </td>
                                     </tr>

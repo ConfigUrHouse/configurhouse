@@ -175,7 +175,7 @@ class ModelConfiguration extends React.Component<any, any> {
               <h5>Aperçu de la consommation</h5>
               <Row>
                 <Col md={4}>
-                  {this.state.conso && (
+                  {this.state.conso && this.state.conso.global && (
                     <div className="percentage">
                       {this.state.conso.global.diffPercentage}
                     </div>

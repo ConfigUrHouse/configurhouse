@@ -1,11 +1,11 @@
+import './app.css';
 import Home from './components/home/home';
 import Sidebar from './components/sidebar/sidebar';
 import Configurator from './components/configurator/configurator';
 import Policies from './components/policies/policies';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { UserListWithRouter } from './components/user/user-list/user-list';
-import { UserEditWithRouter } from './components/user/user-edit/user-edit'
-import AssetAddWithRouter from "./components/assets/assets-option-add/assets-add";;
+import { UserEditWithRouter } from './components/user/user-edit/user-edit';
 import User from './components/user/user';
 import Mentions from './components/mentions/mentions';
 import Contact from './components/contact/contact';
@@ -30,7 +30,7 @@ import Configuration from './components/configuration/configuration';
 import Register from './components/register/register';
 import { apiRequest } from './api/utils';
 import ConfigurationDetails from './components/configuration/configuration-details/configuration-details';
-import './app.css';
+import AssetAddWithRouter from "./components/assets/assets-option-add/assets-add";
 
 interface IProps {
   checkAuthenticationConnect: () => void;
@@ -69,6 +69,7 @@ const App = ({
       <Router>
         <Sidebar />
         <Switch>
+
           <LoggedInRoute
             path="/config_edit/:id"
             exact={true}
@@ -153,14 +154,14 @@ const App = ({
             component={Asset}
           />
           <AdminRoute
-            path="/asset/:id/details"
-            exact={true}
-            component={AssetDetails}
-          />
-          <AdminRoute
             path="/asset/add"
             exact={true}
             component={AssetAddWithRouter}
+          />
+          <AdminRoute
+            path="/asset/:id/details"
+            exact={true}
+            component={AssetDetails}
           />
           <Route path="/">
             <Home />
