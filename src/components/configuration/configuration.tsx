@@ -1,6 +1,6 @@
-import React from "react";
-import { ApiResponseError } from "../../api/models";
-import { apiRequest } from "../../api/utils";
+import React from 'react';
+import { ApiResponseError } from '../../api/models';
+import { apiRequest } from '../../api/utils';
 import {
   faDownload,
   faEuroSign,
@@ -9,12 +9,12 @@ import {
   faMousePointer,
   faPaperPlane,
   faSearchPlus,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Col, Modal, Row, Table } from "react-bootstrap";
-import "./configuration.css";
-import { Bar, Chart } from "react-chartjs-2";
-import { getChartData } from "../../utils/conso";
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Col, Modal, Row, Table } from 'react-bootstrap';
+import './configuration.css';
+import { Bar, Chart } from 'react-chartjs-2';
+import { getChartData } from '../../utils/conso';
 
 class Configuration extends React.Component<any, any> {
   constructor(props: any) {
@@ -30,9 +30,9 @@ class Configuration extends React.Component<any, any> {
     };
 
     Chart.defaults.plugins.legend.display = true;
-    Chart.defaults.plugins.legend.position = "bottom";
+    Chart.defaults.plugins.legend.position = 'bottom';
     Chart.defaults.plugins.legend.labels.usePointStyle = true;
-    Chart.defaults.plugins.legend.labels.pointStyle = "circle";
+    Chart.defaults.plugins.legend.labels.pointStyle = 'circle';
   }
 
   componentDidMount() {
@@ -53,7 +53,7 @@ class Configuration extends React.Component<any, any> {
   }
 
   async fetchConfiguration(): Promise<void> {
-    await apiRequest(`configuration/` + this.state.id, "GET", [])
+    await apiRequest(`configuration/` + this.state.id, 'GET', [])
       .then((response) => {
         this.setState({ configuration: response });
         this.fetchConfigurationOptions();
@@ -67,11 +67,11 @@ class Configuration extends React.Component<any, any> {
   async fetchHouseModel(): Promise<void> {
     const response: any = await apiRequest(
       `houseModel/` + this.state.configuration.id_HouseModel,
-      "GET",
+      'GET',
       []
     )
       .then((model: any) => {
-        apiRequest(`modelType/` + model.id_ModelType, "GET", [])
+        apiRequest(`modelType/` + model.id_ModelType, 'GET', [])
           .then((modelDetails: any) => {
             console.log(modelDetails);
             this.setState({
@@ -96,10 +96,10 @@ class Configuration extends React.Component<any, any> {
   }
 
   async fetchConfigurationOptions(): Promise<void> {
-    await apiRequest(`configurationValue/` + this.state.id, "GET", [])
+    await apiRequest(`configurationValue/` + this.state.id, 'GET', [])
       .then((response) => {
         response.forEach((element: any) => {
-          apiRequest(`value/` + element.id_Value, "GET", [])
+          apiRequest(`value/` + element.id_Value, 'GET', [])
             .then((option) => {
               this.setState({
                 options: this.state.options.concat([option]),
@@ -119,10 +119,10 @@ class Configuration extends React.Component<any, any> {
     try {
       const response = await apiRequest(
         `configuration/${this.state.id}/send`,
-        "GET",
+        'GET',
         []
       );
-      if (response.status === "error") {
+      if (response.status === 'error') {
         this.setState({ error: response as ApiResponseError });
       }
     } catch (error) {
@@ -134,7 +134,7 @@ class Configuration extends React.Component<any, any> {
     try {
       await apiRequest(
         `configuration/${this.state.id}/conso/download`,
-        "GET",
+        'GET',
         []
       );
     } catch (error) {
@@ -146,10 +146,10 @@ class Configuration extends React.Component<any, any> {
     try {
       const response = await apiRequest(
         `configuration/${this.state.id}/conso`,
-        "GET",
+        'GET',
         []
       );
-      if (response.status === "error") {
+      if (response.status === 'error') {
         this.setState({ error: response as ApiResponseError });
       } else {
         this.setState({ conso: response, data: getChartData(response) });
@@ -227,7 +227,7 @@ class Configuration extends React.Component<any, any> {
                     <td className="price">
                       {this.state.options.reduce(
                         (a: any, b: any) =>
-                          parseInt(a) + (parseInt(b["price"]) || 0),
+                          parseInt(a) + (parseInt(b['price']) || 0),
                         0
                       )}
                     </td>
@@ -256,9 +256,9 @@ class Configuration extends React.Component<any, any> {
                         tooltip: {
                           callbacks: {
                             label: function (context: any) {
-                              var label = context.formattedValue || "";
+                              var label = context.formattedValue || '';
                               if (label) {
-                                label += " kWh";
+                                label += ' kWh';
                               }
                               if (context.datasetIndex === 0) {
                                 const posteConso =
@@ -269,7 +269,7 @@ class Configuration extends React.Component<any, any> {
                                 const percentage = posteConso
                                   ? posteConso.diffPercentageOfPosteConsoReference
                                   : conso.global.diffPercentage;
-                                label += " (" + percentage + ")";
+                                label += ' (' + percentage + ')';
                               }
                               return label;
                             },

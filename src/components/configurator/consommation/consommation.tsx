@@ -4,17 +4,17 @@ import {
   faHome,
   faLightbulb,
   faList,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
-import { Col, ListGroup, Row, Table } from "react-bootstrap";
-import { withRouter } from "react-router";
-import { ApiResponseError } from "../../../api/models";
-import { apiRequest } from "../../../api/utils";
-import { ConsommationProps, ConsommationState } from "./models";
-import "./consommation.css";
-import { Bar, Chart, Doughnut } from "react-chartjs-2";
-import { getChartData } from "../../../utils/conso";
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from 'react';
+import { Col, ListGroup, Row, Table } from 'react-bootstrap';
+import { withRouter } from 'react-router';
+import { ApiResponseError } from '../../../api/models';
+import { apiRequest } from '../../../api/utils';
+import { ConsommationProps, ConsommationState } from './models';
+import './consommation.css';
+import { Bar, Chart, Doughnut } from 'react-chartjs-2';
+import { getChartData } from '../../../utils/conso';
 
 export class Consommation extends React.Component<
   ConsommationProps,
@@ -30,9 +30,9 @@ export class Consommation extends React.Component<
     };
 
     Chart.defaults.plugins.legend.display = true;
-    Chart.defaults.plugins.legend.position = "right";
+    Chart.defaults.plugins.legend.position = 'right';
     Chart.defaults.plugins.legend.labels.usePointStyle = true;
-    Chart.defaults.plugins.legend.labels.pointStyle = "circle";
+    Chart.defaults.plugins.legend.labels.pointStyle = 'circle';
   }
 
   private repartitionChartRef = {};
@@ -46,25 +46,25 @@ export class Consommation extends React.Component<
         if (this.props.configurationId) {
           response = await apiRequest(
             `configuration/${this.props.configurationId}/conso`,
-            "GET"
+            'GET'
           );
         } else {
           response = await apiRequest(
             `houseModel/${this.props.match.params.id}/conso`,
-            "GET"
+            'GET'
           );
         }
       } else {
         response = await apiRequest(
           `houseModel/${this.props.houseModelId}/conso`,
-          "POST",
-          "",
+          'POST',
+          '',
           {
             valueIds: this.props.optionValues,
           }
         );
       }
-      if (response.status === "error") {
+      if (response.status === 'error') {
         this.setState({ error: response as ApiResponseError });
       } else {
         this.setState({ conso: response });
@@ -121,9 +121,9 @@ export class Consommation extends React.Component<
                           tooltip: {
                             callbacks: {
                               label: function (context: any) {
-                                var label = context.formattedValue || "";
+                                var label = context.formattedValue || '';
                                 if (label) {
-                                  label += " kWh";
+                                  label += ' kWh';
                                 }
                                 if (context.datasetIndex === 0) {
                                   const posteConso =
@@ -134,7 +134,7 @@ export class Consommation extends React.Component<
                                   const percentage = posteConso
                                     ? posteConso.diffPercentageOfPosteConsoReference
                                     : conso.global.diffPercentage;
-                                  label += " (" + percentage + ")";
+                                  label += ' (' + percentage + ')';
                                 }
                                 return label;
                               },
@@ -168,7 +168,7 @@ export class Consommation extends React.Component<
                           tooltip: {
                             callbacks: {
                               label: function (context: any) {
-                                var label = context.parsed + " kWh";
+                                var label = context.parsed + ' kWh';
                                 return label;
                               },
                             },
@@ -199,9 +199,9 @@ export class Consommation extends React.Component<
                           tooltip: {
                             callbacks: {
                               label: function (context: any) {
-                                var label = context.parsed || "";
+                                var label = context.parsed || '';
                                 if (label) {
-                                  label += " kWh";
+                                  label += ' kWh';
                                 }
                                 return label;
                               },
@@ -226,7 +226,7 @@ export class Consommation extends React.Component<
                     <FontAwesomeIcon icon={faHome} /> Contexte
                   </h3>
                   <span>
-                    Consommation d'énergie par an, pour{" "}
+                    Consommation d'énergie par an, pour{' '}
                     {this.state.conso.context.occupants} personnes
                   </span>
                   <Table bordered hover className="mt-5 text-center">
