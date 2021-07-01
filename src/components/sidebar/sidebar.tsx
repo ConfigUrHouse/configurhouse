@@ -70,6 +70,14 @@ const Nav = ({ isAuthenticated, isAdmin }: IProps) => {
               <FontAwesomeIcon icon={faUsers} size="lg" className="mr-2" />{" "}
               <Link to="/users">Utilisateurs</Link>
             </MenuItem>
+            <MenuItem className="cfgMenuItem">
+              <FontAwesomeIcon icon={faUsers} size="lg" className="mr-2" />{" "}
+              <Link to="/roles">Roles</Link>
+            </MenuItem>
+            <MenuItem className="cfgMenuItem">
+              <FontAwesomeIcon icon={faUsers} size="lg" className="mr-2" />{" "}
+              <Link to="/asset">Asset</Link>
+            </MenuItem>
           </>
         )
         : <></>}

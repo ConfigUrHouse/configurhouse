@@ -27,13 +27,16 @@ class AssetList extends React.Component<
     {
       name: "value",
       displayName: "Value",
+    },
+    {
+      name: "id_AssetType",
+      displayName: "id_AssetType",
     }
   ];
 
   constructor(props: AssetProps) {
     super(props);
     this.fetchRoles = this.fetchRoles.bind(this);
-    this.handleEdit = this.handleEdit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handlePageChange = this.handlePageChange.bind(this);
     this.handleSeeMore = this.handleSeeMore.bind(this);
@@ -68,10 +71,6 @@ class AssetList extends React.Component<
       .catch((error) => console.log(error));
 
     this.setState({ paginatedItems: emptyPaginatedData<Asset>() });
-  }
-
-  private handleEdit(id: number): void {
-    this.props.history.push(`houseModels/${id}`);
   }
 
   private async handleDelete(id: number): Promise<void> {
@@ -127,7 +126,7 @@ class AssetList extends React.Component<
               <FontAwesomeIcon className="mr-2" icon={faHome} />
               Liste des assets
             </h3>
-            <Button variant="primary" href="/houseModels/add">
+            <Button variant="primary" href="/asset/add">
               <FontAwesomeIcon className="mr-2" icon={faPlus} />
               AJOUTER
             </Button>
@@ -137,7 +136,6 @@ class AssetList extends React.Component<
             paginatedItems={paginatedItems}
             columns={this.columns}
             handlePageChange={this.handlePageChange}
-            handleEdit={this.handleEdit}
             handleDelete={this.handleDelete}
             handleSeeMore={this.handleSeeMore}
             deleteMessage={this.deleteMessage}
