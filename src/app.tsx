@@ -21,12 +21,13 @@ import LoggedInRoute from './routes/logged-in-route';
 import LoggedOutRoute from './routes/logged-out-route';
 import AdminRoute from './routes/admin-route';
 import Login from './components/login/login';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import ConfigurationOptionList from './components/configuration-options/configuration-option-list/configuration-option-list';
 import ConfigurationOptionEdit from './components/configuration-options/configuration-option-edit/configuration-option-edit';
 import Configuration from './components/configuration/configuration';
 import Register from './components/register/register';
 import { apiRequest } from './api/utils';
+import ConfigurationDetails from './components/configuration/configuration-details/configuration-details';
 
 interface IProps {
   checkAuthenticationConnect: () => void;
@@ -90,6 +91,11 @@ const App = ({
             path="/configuration/:id"
             exact={true}
             component={Configuration}
+          />
+          <LoggedInRoute
+            path="/configuration/:id/details"
+            exact={true}
+            component={ConfigurationDetails}
           />
           <AdminRoute path="/roles" exact={true} component={RoleList} />
           <AdminRoute

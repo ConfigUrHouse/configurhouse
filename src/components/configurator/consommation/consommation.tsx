@@ -4,18 +4,19 @@ import {
   faHome,
   faLightbulb,
   faList,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
-import { Col, ListGroup, Row, Table } from "react-bootstrap";
-import { withRouter } from "react-router";
-import { ApiResponseError } from "../../../api/models";
-import { apiRequest } from "../../../api/utils";
-import { ConsommationProps, ConsommationState } from "./models";
-import "./consommation.css";
-import { Bar, Chart, Doughnut } from "react-chartjs-2";
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from 'react';
+import { Col, ListGroup, Row, Table } from 'react-bootstrap';
+import { withRouter } from 'react-router';
+import { ApiResponseError } from '../../../api/models';
+import { apiRequest } from '../../../api/utils';
+import { ConsommationProps, ConsommationState } from './models';
+import './consommation.css';
+import { Bar, Chart, Doughnut } from 'react-chartjs-2';
+import { getChartData } from '../../../utils/conso';
 
-class Consommation extends React.Component<
+export class Consommation extends React.Component<
   ConsommationProps,
   ConsommationState
 > {
@@ -29,9 +30,9 @@ class Consommation extends React.Component<
     };
 
     Chart.defaults.plugins.legend.display = true;
-    Chart.defaults.plugins.legend.position = "right";
+    Chart.defaults.plugins.legend.position = 'right';
     Chart.defaults.plugins.legend.labels.usePointStyle = true;
-    Chart.defaults.plugins.legend.labels.pointStyle = "circle";
+    Chart.defaults.plugins.legend.labels.pointStyle = 'circle';
   }
 
   private repartitionChartRef = {};
@@ -42,87 +43,33 @@ class Consommation extends React.Component<
     try {
       let response: any;
       if (!this.props.optionValues) {
-        response = await apiRequest(
-          `houseModel/${this.props.match.params.id}/conso`,
-          "GET"
-        );
+        if (this.props.configurationId) {
+          response = await apiRequest(
+            `configuration/${this.props.configurationId}/conso`,
+            'GET'
+          );
+        } else {
+          response = await apiRequest(
+            `houseModel/${this.props.match.params.id}/conso`,
+            'GET'
+          );
+        }
       } else {
         response = await apiRequest(
           `houseModel/${this.props.houseModelId}/conso`,
-          "POST",
-          "",
+          'POST',
+          '',
           {
             valueIds: this.props.optionValues,
           }
         );
       }
-      if (response.status === "error") {
+      if (response.status === 'error') {
         this.setState({ error: response as ApiResponseError });
       } else {
         this.setState({ conso: response });
-        const repartition = {
-          labels: response.byPosteConso.config.map(
-            (item: any) => item.posteConso
-          ),
-          datasets: [
-            {
-              label: "# of Consommation",
-              data: response.byPosteConso.config.map((item: any) => item.conso),
-              backgroundColor: ["#1a7c7d", "#a8cfcf", "#09444d", "#18b9ba"],
-              borderWidth: 0,
-            },
-          ],
-        };
-        const repartitionRef = {
-          labels: response.byPosteConso.reference.map(
-            (item: any) => item.posteConso.name
-          ),
-          datasets: [
-            {
-              label: "# of Consommation",
-              data: response.byPosteConso.reference.map(
-                (item: any) => item.conso
-              ),
-              backgroundColor: ["#1a7c7d", "#a8cfcf", "#09444d", "#18b9ba"],
-              borderWidth: 0,
-            },
-          ],
-        };
-        const postesConso = response.byPosteConso.reference.map(
-          (item: any) => item.posteConso.name
-        );
-        const differences = {
-          labels: ["Total"].concat(postesConso),
-          datasets: [
-            {
-              label: "Configuration",
-              data: [response.global.config].concat(
-                postesConso.map(
-                  (posteConso: string) =>
-                    response.byPosteConso.config.find(
-                      (item: any) => item.posteConso === posteConso
-                    )?.conso
-                )
-              ),
-              backgroundColor: "#1a7c7d",
-              borderWidth: 0,
-            },
-            {
-              label: "Référence",
-              data: [response.global.reference].concat(
-                response.byPosteConso.reference.map((item: any) => item.conso)
-              ),
-              backgroundColor: "#a8cfcf",
-              borderWidth: 0,
-            },
-          ],
-        };
         this.setState({
-          data: {
-            repartition,
-            repartitionRef,
-            differences,
-          },
+          data: getChartData(response),
         });
         (this.repartitionChartRef as any).chartInstance.update();
         (this.repartitionRefChartRef as any).chartInstance.update();
@@ -145,11 +92,16 @@ class Consommation extends React.Component<
         <h2 className="text-green text-center">
           <FontAwesomeIcon icon={faLightbulb} /> Estimation de consommation
         </h2>
-        {!this.props.optionValues && (
+        {!this.props.optionValues && !this.props.configurationId ? (
           <h6 className="text-center mt-2 mb-5">
             Voici une estimation de la consommation du modèle avec sa
             configuration par défaut, par rapport à une consommation de
             référence.
+          </h6>
+        ) : (
+          <h6 className="text-center mt-2 mb-5">
+            Voici une estimation de la consommation de la configuration, par
+            rapport à une consommation de référence.
           </h6>
         )}
         {this.state.conso && (
@@ -165,21 +117,13 @@ class Consommation extends React.Component<
                       options={{
                         responsive: true,
                         maintainAspectRatio: true,
-                        // scales: {
-                        //   x: {
-                        //     stacked: true,
-                        //   },
-                        //   y: {
-                        //     stacked: true,
-                        //   },
-                        // },
                         plugins: {
                           tooltip: {
                             callbacks: {
                               label: function (context: any) {
-                                var label = context.formattedValue || "";
+                                var label = context.formattedValue || '';
                                 if (label) {
-                                  label += " kWh";
+                                  label += ' kWh';
                                 }
                                 if (context.datasetIndex === 0) {
                                   const posteConso =
@@ -190,7 +134,7 @@ class Consommation extends React.Component<
                                   const percentage = posteConso
                                     ? posteConso.diffPercentageOfPosteConsoReference
                                     : conso.global.diffPercentage;
-                                  label += " (" + percentage + ")";
+                                  label += ' (' + percentage + ')';
                                 }
                                 return label;
                               },
@@ -224,7 +168,7 @@ class Consommation extends React.Component<
                           tooltip: {
                             callbacks: {
                               label: function (context: any) {
-                                var label = context.parsed + " kWh";
+                                var label = context.parsed + ' kWh';
                                 return label;
                               },
                             },
@@ -255,9 +199,9 @@ class Consommation extends React.Component<
                           tooltip: {
                             callbacks: {
                               label: function (context: any) {
-                                var label = context.parsed || "";
+                                var label = context.parsed || '';
                                 if (label) {
-                                  label += " kWh";
+                                  label += ' kWh';
                                 }
                                 return label;
                               },
@@ -282,7 +226,7 @@ class Consommation extends React.Component<
                     <FontAwesomeIcon icon={faHome} /> Contexte
                   </h3>
                   <span>
-                    Consommation d'énergie par an, pour{" "}
+                    Consommation d'énergie par an, pour{' '}
                     {this.state.conso.context.occupants} personnes
                   </span>
                   <Table bordered hover className="mt-5 text-center">

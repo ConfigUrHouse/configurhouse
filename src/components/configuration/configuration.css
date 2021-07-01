@@ -12,3 +12,8 @@ main {
   padding: 30px;
   min-height: 300px;
 }
+
+.configuration-infos .barChart {
+  height: auto;
+  width: auto;
+}
