@@ -131,7 +131,7 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
         if (response.status === "error") {
           this.setState({ error: response as ApiResponseError });
         } else {
-          const roles = response as Role[];
+          const roles: any = response.items as Role[];
           this.setState({ roles });
         }
       })

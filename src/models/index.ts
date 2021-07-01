@@ -33,6 +33,7 @@ export interface ConfigurationOption {
   id_Mesh: number;
   houseModel?: HouseModel;
   mesh?: Mesh;
+  values?: any;
 }
 
 export interface User {

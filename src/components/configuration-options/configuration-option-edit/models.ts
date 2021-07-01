@@ -3,6 +3,7 @@ import { ApiResponseError } from "../../../api/models";
 import { ConfigurationOption, HouseModel, Mesh } from "../../../models";
 
 export interface ConfigurationOptionEditState {
+  id: number;
   editMode: boolean;
   item: ConfigurationOption;
   houseModels: HouseModel[];
