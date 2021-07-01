@@ -5,6 +5,7 @@ import { ConfigurationDetailsProps } from './models';
 import Consommation from '../../configurator/consommation/consommation';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Estimate from '../../configurator/estimate/estimate';
 
 class ConfigurationDetails extends React.Component<
   ConfigurationDetailsProps,
@@ -44,7 +45,9 @@ class ConfigurationDetails extends React.Component<
             <Tab eventKey="conso" title="Consommation">
               <Consommation configurationId={id} />
             </Tab>
-            <Tab eventKey="estimate" title="Devis détaillé"></Tab>
+            <Tab eventKey="estimate" title="Devis détaillé">
+              <Estimate confId={id} />
+            </Tab>
           </Tabs>
         </div>
 
