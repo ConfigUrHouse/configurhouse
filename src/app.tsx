@@ -29,6 +29,7 @@ import Register from './components/register/register';
 import { apiRequest } from './api/utils';
 import ConfigurationDetails from './components/configuration/configuration-details/configuration-details';
 
+
 interface IProps {
   checkAuthenticationConnect: () => void;
   isAuthenticated: boolean | null;
@@ -66,6 +67,7 @@ const App = ({
       <Router>
         <Sidebar />
         <Switch>
+
           <LoggedInRoute
             path="/config_edit/:id"
             exact={true}
@@ -146,6 +148,7 @@ const App = ({
             exact={true}
             component={HouseModelList}
           />
+
           <Route path="/">
             <Home />
           </Route>
