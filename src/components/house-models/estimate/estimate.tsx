@@ -1,12 +1,12 @@
-import React from "react";
-import { ApiResponseError } from "../../../api/models";
-import { apiRequest } from "../../../api/utils";
-import { EstimateProps, EstimateState } from "./models";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalculator, faDownload } from "@fortawesome/free-solid-svg-icons";
-import { withRouter } from "react-router-dom";
-import { Button, Table } from "react-bootstrap";
-import "./estimate.css";
+import React from 'react';
+import { ApiResponseError } from '../../../api/models';
+import { apiRequest } from '../../../api/utils';
+import { EstimateProps, EstimateState } from './models';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCalculator, faDownload } from '@fortawesome/free-solid-svg-icons';
+import { withRouter } from 'react-router-dom';
+import { Button, Table } from 'react-bootstrap';
+import './estimate.css';
 
 class Estimate extends React.Component<EstimateProps, EstimateState> {
   constructor(props: EstimateProps) {
@@ -26,9 +26,9 @@ class Estimate extends React.Component<EstimateProps, EstimateState> {
     try {
       const response = await apiRequest(
         `houseModel/${this.props.match.params.id}/estimate`,
-        "GET"
+        'GET'
       );
-      if (response.status === "error") {
+      if (response.status === 'error') {
         this.setState({ error: response as ApiResponseError });
       } else {
         this.setState({ data: response });
@@ -70,6 +70,13 @@ class Estimate extends React.Component<EstimateProps, EstimateState> {
               </tr>
             </thead>
             <tbody>
+              {data.houseModel && (
+                <tr>
+                  <td>Modèle</td>
+                  <td>{data.houseModel.name}</td>
+                  <td className="price">{data.houseModel.price}</td>
+                </tr>
+              )}
               {data.estimate.map((e: any, i: number) => (
                 <tr key={i}>
                   <td>{e.option.name}</td>

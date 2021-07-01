@@ -26,6 +26,7 @@ class Configuration extends React.Component<any, any> {
       houseModel: {},
       id: parseInt(props.match.params.id ?? 0),
       conso: undefined,
+      estimateModalIsOpen: false,
     };
 
     Chart.defaults.plugins.legend.display = true;
@@ -77,6 +78,7 @@ class Configuration extends React.Component<any, any> {
               houseModel: {
                 id: model.id,
                 name: model.name,
+                price: model.price,
                 modelName: modelDetails.name,
                 modelDescription: modelDetails.description,
                 modelId: modelDetails.id,
@@ -161,6 +163,41 @@ class Configuration extends React.Component<any, any> {
     const conso = this.state.conso;
     return (
       <main className="p-5 w-100 bg configuration-infos">
+        <Modal
+          show={!!this.state.estimateModalIsOpen}
+          onHide={() => this.setState({ estimateModalIsOpen: false })}
+        >
+          <Modal.Header>
+            <Modal.Title>Téléchargement de devis</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>En quel format voulez vous télécharger le devis ?</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="secondary"
+              onClick={() => this.setState({ estimateModalIsOpen: false })}
+            >
+              Annuler
+            </Button>
+            <Button
+              variant="primary"
+              type="submit"
+              href={`${process.env.REACT_APP_API_BASE_URL}/configuration/${this.state.id}/estimate/download?mode=csv`}
+              onClick={() => this.setState({ estimateModalIsOpen: false })}
+            >
+              CSV
+            </Button>
+            <Button
+              variant="primary"
+              type="submit"
+              href={`${process.env.REACT_APP_API_BASE_URL}/configuration/${this.state.id}/estimate/download?mode=pdf`}
+              onClick={() => this.setState({ estimateModalIsOpen: false })}
+            >
+              PDF
+            </Button>
+          </Modal.Footer>
+        </Modal>
         <h2 className="text-green mb-2">
           <FontAwesomeIcon icon={faSearchPlus} /> Détails de votre configuration
           : <strong>{this.state.configuration.name}</strong>
@@ -187,13 +224,12 @@ class Configuration extends React.Component<any, any> {
                   ))}
                   <tr className="bg-lightgreen font-weight-bold">
                     <td>Coût total des options</td>
-                    <td>
+                    <td className="price">
                       {this.state.options.reduce(
                         (a: any, b: any) =>
                           parseInt(a) + (parseInt(b["price"]) || 0),
                         0
-                      )}{" "}
-                      €
+                      )}
                     </td>
                   </tr>
                 </tbody>
@@ -269,6 +305,7 @@ class Configuration extends React.Component<any, any> {
                     <td>Nom</td>
                     <td>Catégorie du modèle</td>
                     <td>Description du modèle</td>
+                    <td>Prix du modèle</td>
                   </tr>
                 </thead>
                 <tbody>
@@ -276,6 +313,7 @@ class Configuration extends React.Component<any, any> {
                     <td>{this.state.houseModel.name}</td>
                     <td>{this.state.houseModel.modelName}</td>
                     <td>{this.state.houseModel.modelDescription}</td>
+                    <td className="price">{this.state.houseModel.price}</td>
                   </tr>
                 </tbody>
               </Table>
@@ -290,7 +328,7 @@ class Configuration extends React.Component<any, any> {
                 <Button
                   variant="primary"
                   className="p-3"
-                  href={`${process.env.REACT_APP_API_BASE_URL}/configuration/${this.state.id}/downloadEstimate`}
+                  onClick={() => this.setState({ estimateModalIsOpen: true })}
                 >
                   <FontAwesomeIcon className="mr-2" icon={faDownload} />
                   Télécharger le devis
