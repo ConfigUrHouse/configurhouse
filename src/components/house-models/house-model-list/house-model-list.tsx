@@ -43,6 +43,7 @@ class HouseModelList extends React.Component<
     this.handleEdit = this.handleEdit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handlePageChange = this.handlePageChange.bind(this);
+    this.handleSeeMore = this.handleSeeMore.bind(this);
 
     this.state = {
       paginatedItems: emptyPaginatedData<HouseModel>(),
@@ -109,6 +110,10 @@ class HouseModelList extends React.Component<
     );
   }
 
+  private handleSeeMore(id: number) {
+    this.props.history.push(`houseModels/${id}/details`);
+  }
+
   render() {
     const { paginatedItems } = this.state;
     return (
@@ -140,6 +145,7 @@ class HouseModelList extends React.Component<
             handlePageChange={this.handlePageChange}
             handleEdit={this.handleEdit}
             handleDelete={this.handleDelete}
+            handleSeeMore={this.handleSeeMore}
             deleteMessage={this.deleteMessage}
           />
         </div>

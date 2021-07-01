@@ -49,10 +49,12 @@ function Shoe() {
 
 class ModelConfiguration extends React.Component<any, any> {
   constructor(props: any) {
+    //TODO: use this.props.updateOptionValues() + fetch conso on dropdown change
     super(props);
-  }
-
-  componentDidMount() {
+    this.state = {
+      error: undefined,
+      conso: undefined,
+    };
   }
 
   handleSelectMurCote(event : any) {
@@ -71,6 +73,31 @@ class ModelConfiguration extends React.Component<any, any> {
     let val = event.target.checked;
     console.log(val);
     state.items.Meuble = val;
+
+  async fetchConso() {
+    try {
+      const response = await apiRequest(
+        `houseModel/${this.props.model.id}/conso`,
+        "POST",
+        "",
+        {
+          valueIds: this.props.optionValues,
+        }
+      );
+      if (response.status === "error") {
+        this.setState({ error: response as ApiResponseError });
+      } else {
+        this.setState({ conso: response });
+      }
+    } catch (error) {
+      console.log(error);
+      this.setState({ error: error as ApiResponseError });
+    }
+  }
+
+  componentDidMount() {
+    this.fetchConso();
+
   }
 
   render() {
@@ -141,20 +168,24 @@ class ModelConfiguration extends React.Component<any, any> {
             </div>
           </Col>
           <Col md={4} className="col conso">
-            <div className="content">
+            <div className="content text-center">
+              <h5>Aperçu de la consommation</h5>
               <Row>
-                <Col md={7}>
-                  <h5>Aperçu de la consommation</h5>
-                  <p>
-                    Comparer la consommation de ce logement par rapport à
-                    des logements de références.
-                  </p>
+                <Col md={4}>
+                  {this.state.conso && (
+                    <div className="percentage">
+                      {this.state.conso.global.diffPercentage}
+                    </div>
+                  )}
                 </Col>
-                <Col md={5}></Col>
+                <Col md={8}>
+                  <div className="conso-label">
+                    d'économie par rapport à un logement de référence.
+                  </div>
+                </Col>
               </Row>
             </div>
           </Col>
-
         </Row>
       </div>
     );

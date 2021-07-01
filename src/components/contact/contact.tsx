@@ -21,12 +21,14 @@ import ReactDOMServer from "react-dom/server";
 import { Formik } from "formik";
 import { FormValues } from "./models";
 import * as Yup from "yup";
+import ReCAPTCHA from "react-google-recaptcha";
 
 class Contact extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
       success: 0,
+      recaptcha: "",
     };
     this.handleChange = this.handleChange.bind(this);
     this.sendEmail = this.sendEmail.bind(this);
@@ -155,7 +157,7 @@ class Contact extends React.Component<any, any> {
             }}
             initialValues={this.initialValues}
           >
-            {({ handleSubmit, handleChange, values, errors }) => (
+            {({ handleSubmit, handleChange, values, errors, isValid }) => (
               <Form noValidate onSubmit={handleSubmit}>
                 <Row>
                   <Col md={6}>
@@ -259,10 +261,17 @@ class Contact extends React.Component<any, any> {
                 <Form.Control.Feedback type="invalid">
                   {errors.content}
                 </Form.Control.Feedback>
+                <div className="recaptcha-container">
+                  <ReCAPTCHA
+                    sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY ?? ""}
+                    onChange={(recaptcha) => this.setState({ recaptcha })}
+                  />
+                </div>
                 <Button
                   variant="primary"
                   className="d-block mx-auto mt-3 p-3"
                   type="submit"
+                  disabled={!isValid || !this.state.recaptcha}
                 >
                   ENVOYER LE MESSAGE{" "}
                   <FontAwesomeIcon className="ml-2" icon={faPaperPlane} />

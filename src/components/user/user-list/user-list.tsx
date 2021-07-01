@@ -160,8 +160,7 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
         if (response.status === "error") {
           this.setState({ error: response as ApiResponseError });
         } else {
-          const paginatedItems: PaginatedResponse<User> =
-            response as PaginatedResponse<User>;
+          const paginatedItems: PaginatedResponse<User> = response as PaginatedResponse<User>;
           this.setState({ paginatedItems });
         }
       })
@@ -190,8 +189,7 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
           this.setState({ error: response as ApiResponseError });
           return [];
         } else {
-          const paginatedItems: PaginatedResponse<User> =
-            response as PaginatedResponse<User>;
+          const paginatedItems: PaginatedResponse<User> = response as PaginatedResponse<User>;
           return paginatedItems.items;
         }
       })
@@ -354,7 +352,7 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
               <p>Message : {this.state.error.message}</p>
             </div>
           )}
-          <h3 className="mb-2">
+          <h3 className="mb-3">
             <FontAwesomeIcon className="mr-2" icon={faUser} />
             Liste des utilisateurs
           </h3>
@@ -372,7 +370,8 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
               isValid,
               errors,
             }) => (
-              <Form noValidate onSubmit={handleSubmit}>
+            
+            <Form noValidate className="ml-3 mr-3" onSubmit={handleSubmit}>
                 <Row>
                   <Col md={6}>
                     <InputGroup className="mb-3">

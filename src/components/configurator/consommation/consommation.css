@@ -1,8 +1,18 @@
-main {
-  min-height: 100vh;
+table caption {
+  caption-side: top;
 }
 
-.configuration-infos .rect {
+.doughnutChart {
+  height: 300px;
+  width: 300px;
+}
+
+.consommation .barChart {
+  height: 300px;
+  width: 500px;
+}
+
+.consommation .rect {
   border-radius: 25px;
   background-color: #fff;
   -webkit-box-shadow: 4px 4px 5px 0px rgba(0, 0, 0, 0.06);
@@ -11,9 +21,8 @@ main {
 
   padding: 30px;
   min-height: 300px;
-}
 
-.configuration-infos .barChart {
-  height: auto;
-  width: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
