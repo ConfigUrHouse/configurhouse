@@ -1,12 +1,11 @@
-<<<<<<< HEAD
-import './app.css';
 import Home from './components/home/home';
 import Sidebar from './components/sidebar/sidebar';
 import Configurator from './components/configurator/configurator';
 import Policies from './components/policies/policies';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { UserListWithRouter } from './components/user/user-list/user-list';
-import { UserEditWithRouter } from './components/user/user-edit/user-edit';
+import { UserEditWithRouter } from './components/user/user-edit/user-edit'
+import AssetAddWithRouter from "./components/assets/assets-option-add/assets-add";;
 import User from './components/user/user';
 import Mentions from './components/mentions/mentions';
 import Contact from './components/contact/contact';
@@ -23,41 +22,15 @@ import LoggedOutRoute from './routes/logged-out-route';
 import AdminRoute from './routes/admin-route';
 import Login from './components/login/login';
 import { useEffect } from 'react';
-=======
-import "./app.css";
-import Home from "./components/home/home";
-import Sidebar from "./components/sidebar/sidebar";
-import Configurator from "./components/configurator/configurator";
-import Policies from "./components/policies/policies";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { UserListWithRouter } from "./components/user/user-list/user-list";
-import { UserEditWithRouter } from "./components/user/user-edit/user-edit";
-import AssetAddWithRouter from "./components/assets/assets-option-add/assets-add";
-import User from "./components/user/user";
-import Mentions from "./components/mentions/mentions";
-import Contact from "./components/contact/contact";
-import HouseModelList from "./components/house-models/house-model-list/house-model-list";
-import RoleList from "./components/role/role";
-import HouseModelEdit from "./components/house-models/house-model-edit/house-model-edit";
-import HouseModelDetails from "./components/house-models/house-model-details/house-model-details";
-import UserConfigurationEdit from "./components/user/user-configuration-edit/user-configuration-edit";
-import { ICurrent } from "./types";
-import { checkAuthentication, checkAdmin } from "./actions/current";
-import { connect } from "react-redux";
-import LoggedInRoute from "./routes/logged-in-route";
-import LoggedOutRoute from "./routes/logged-out-route";
-import AdminRoute from "./routes/admin-route";
-import Login from "./components/login/login";
->>>>>>> 🚧  WIP: Add asset
 import Asset from "./components/assets/assets-model-list/assets-model-list"
 import AssetDetails from "./components/assets/assets-model-details/assets-model-details"
-import React from "react";
 import ConfigurationOptionList from './components/configuration-options/configuration-option-list/configuration-option-list';
 import ConfigurationOptionEdit from './components/configuration-options/configuration-option-edit/configuration-option-edit';
 import Configuration from './components/configuration/configuration';
 import Register from './components/register/register';
 import { apiRequest } from './api/utils';
 import ConfigurationDetails from './components/configuration/configuration-details/configuration-details';
+import './app.css';
 
 interface IProps {
   checkAuthenticationConnect: () => void;
@@ -96,7 +69,6 @@ const App = ({
       <Router>
         <Sidebar />
         <Switch>
-
           <LoggedInRoute
             path="/config_edit/:id"
             exact={true}

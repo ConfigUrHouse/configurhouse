@@ -8,6 +8,8 @@ import { OrbitControls } from '@react-three/drei/core/OrbitControls';
 import { ContactShadows } from '@react-three/drei/core/ContactShadows';
 import { HexColorPicker } from "react-colorful"
 import { proxy, useProxy } from "valtio"
+import { ApiResponseError } from "../../../api/models";
+import { apiRequest } from '../../../api/utils';
 
 interface test {
   items: any
@@ -73,6 +75,7 @@ class ModelConfiguration extends React.Component<any, any> {
     let val = event.target.checked;
     console.log(val);
     state.items.Meuble = val;
+  }
 
   async fetchConso() {
     try {
