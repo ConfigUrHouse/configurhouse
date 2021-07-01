@@ -49,7 +49,7 @@ class Configuration extends React.Component<any, any> {
   }
 
   private seeConsoDetails(): void {
-    this.props.history.push(`${this.state.id}/details`);
+    this.props.history.push(`${this.state.id}/details?tab=conso`);
   }
 
   async fetchConfiguration(): Promise<void> {
