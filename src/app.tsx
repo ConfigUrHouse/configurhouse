@@ -26,6 +26,7 @@ import ConfigurationOptionList from "./components/configuration-options/configur
 import ConfigurationOptionEdit from "./components/configuration-options/configuration-option-edit/configuration-option-edit";
 import Configuration from "./components/configuration/configuration";
 import Register from "./components/register/register";
+import ConfigurationDetails from "./components/configuration/configuration-details/configuration-details";
 
 interface IProps {
   checkAuthenticationConnect: () => void;
@@ -71,11 +72,12 @@ const App = ({ checkAuthenticationConnect, isAuthenticated }: IProps) => {
             exact={true}
             component={Configuration}
           />
-          <AdminRoute
-            path="/roles"
+          <LoggedInRoute
+            path="/configuration/:id/details"
             exact={true}
-            component={RoleList}
+            component={ConfigurationDetails}
           />
+          <AdminRoute path="/roles" exact={true} component={RoleList} />
           <AdminRoute
             path="/users"
             exact={true}
