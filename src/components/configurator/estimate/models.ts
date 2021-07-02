@@ -7,4 +7,5 @@ export interface EstimateProps {
 export interface EstimateState {
   data: any;
   error: ApiResponseError | null;
+  modalIsOpen: boolean;
 }
