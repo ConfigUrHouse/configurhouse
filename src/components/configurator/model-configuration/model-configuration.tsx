@@ -27,7 +27,9 @@ const state = proxy(objectTest);
 function Shoe() {
   const ref = useRef();
   const snap = useProxy(state);
-  const { nodes, materials } = useGLTF('Test9.glb') as any;
+  const { nodes, materials } = useGLTF(
+    `${process.env.REACT_APP_BASE_URL}/Test9.glb`
+  ) as any;
 
   return (
     <group ref={ref} castShadow receiveShadow dispose={null}>
