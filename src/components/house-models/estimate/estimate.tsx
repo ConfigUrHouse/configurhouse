@@ -55,7 +55,7 @@ class Estimate extends React.Component<EstimateProps, EstimateState> {
               href={`${process.env.REACT_APP_API_BASE_URL}/houseModel/${this.props.match.params.id}/estimate/download`}
             >
               <FontAwesomeIcon className="mr-2" icon={faDownload} />
-              Download
+              Télécharger
             </Button>
           </div>
         </div>

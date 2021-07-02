@@ -50,13 +50,15 @@ export interface Role {
 }
 
 export interface UserRole {
-  id: number;
+  id_Role: number;
   id_User: number;
 }
 
 export interface HouseModel {
   id: number;
   name: string;
+  occupants: number;
+  price: number;
   id_ModelType: number;
   id_Asset: number;
   modelType?: ModelType;

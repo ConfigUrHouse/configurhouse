@@ -3,10 +3,10 @@ import {
   faSave,
   faTimes,
   faUser,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FieldArray, Formik } from "formik";
-import React from "react";
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FieldArray, Formik } from 'formik';
+import React from 'react';
 import {
   Button,
   Col,
@@ -14,14 +14,14 @@ import {
   FormControl,
   InputGroup,
   Row,
-} from "react-bootstrap";
-import { withRouter } from "react-router";
-import * as Yup from "yup";
-import { ApiResponseError } from "../../../api/models";
-import { apiRequest } from "../../../api/utils";
-import { Role, User, UserRole } from "../../../models";
-import { FormValues, UserEditProps, UserEditState } from "./models";
-import "./user-edit.css";
+} from 'react-bootstrap';
+import { withRouter } from 'react-router';
+import * as Yup from 'yup';
+import { ApiResponseError } from '../../../api/models';
+import { apiRequest } from '../../../api/utils';
+import { Role, User, UserRole } from '../../../models';
+import { FormValues, UserEditProps, UserEditState } from './models';
+import './user-edit.css';
 
 export class UserEdit extends React.Component<UserEditProps, UserEditState> {
   constructor(props: UserEditProps) {
@@ -38,17 +38,17 @@ export class UserEdit extends React.Component<UserEditProps, UserEditState> {
   }
 
   schema = Yup.object().shape({
-    firstname: Yup.string().min(2, "Trop court !"),
-    lastname: Yup.string().min(2, "Trop court !"),
+    firstname: Yup.string().min(2, 'Trop court !'),
+    lastname: Yup.string().min(2, 'Trop court !'),
     roles: Yup.array()
       .of(Yup.number())
-      .min(1, "Vous devez cocher au moins un rôle"),
+      .min(1, 'Vous devez cocher au moins un rôle'),
   });
 
   initialValues: FormValues = {
-    firstname: "",
-    lastname: "",
-    email: "",
+    firstname: '',
+    lastname: '',
+    email: '',
     verified: false,
     roles: [],
   };
@@ -60,9 +60,9 @@ export class UserEdit extends React.Component<UserEditProps, UserEditState> {
   }
 
   async fetchUser(): Promise<void> {
-    apiRequest(`user/${this.state.id}`, "GET", [])
+    apiRequest(`user/${this.state.id}`, 'GET', [])
       .then((response) => {
-        if (response.status === "error") {
+        if (response.status === 'error') {
           this.setState({ error: response as ApiResponseError });
         } else {
           const user = response as User;
@@ -79,22 +79,24 @@ export class UserEdit extends React.Component<UserEditProps, UserEditState> {
   }
 
   async fetchUserRoles(): Promise<void> {
-    apiRequest(`userRole/${this.state.id}`, "GET", [])
+    apiRequest(`userRole/${this.state.id}`, 'GET', [])
       .then((response) => {
-        if (response.status === "error") {
+        if (response.status === 'error') {
           this.setState({ error: response as ApiResponseError });
         } else {
           const userRoles = response as UserRole[];
-          this.initialValues.roles = userRoles.map((userRole) => userRole.id);
+          this.initialValues.roles = userRoles.map(
+            (userRole) => userRole.id_Role
+          );
         }
       })
       .catch((error) => console.log(error));
   }
 
   async fetchAvailableRoles(): Promise<void> {
-    apiRequest("role", "GET", [])
+    apiRequest('role', 'GET', [])
       .then((response) => {
-        if (response.status === "error") {
+        if (response.status === 'error') {
           this.setState({ error: response as ApiResponseError });
         } else {
           const roles = response.items as Role[];
@@ -105,16 +107,14 @@ export class UserEdit extends React.Component<UserEditProps, UserEditState> {
   }
 
   async submitForm(values: FormValues): Promise<void> {
-    apiRequest(
-      `user/${this.state.id}/update-roles`,
-      "PUT",
-      values.roles.map((role) => `roles=${role}`)
-    )
+    apiRequest(`user/${this.state.id}/update-roles`, 'PUT', '', {
+      roles: values.roles.filter((role) => role),
+    })
       .then((response) => {
-        if (response.status === "error") {
+        if (response.status === 'error') {
           this.setState({ error: response as ApiResponseError });
         } else {
-          this.props.history.push("/users");
+          this.props.history.push('/users');
         }
       })
       .catch((error) => console.log(error));
