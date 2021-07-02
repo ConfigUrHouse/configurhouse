@@ -4,10 +4,12 @@ import {
   faTimes,
   faKeyboard,
   faImage,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Formik } from "formik";
-import React from "react";
+  faEuroSign,
+  faUsers,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Formik } from 'formik';
+import React from 'react';
 import {
   Button,
   Col,
@@ -15,14 +17,14 @@ import {
   FormControl,
   InputGroup,
   Row,
-} from "react-bootstrap";
-import { withRouter } from "react-router";
-import * as Yup from "yup";
-import { ApiResponseError } from "../../../api/models";
-import { apiRequest } from "../../../api/utils";
-import { HouseModelEditProps, HouseModelEditState } from "./models";
-import "./house-model-edit.css";
-import { Asset, HouseModel, ModelType } from "../../../models";
+} from 'react-bootstrap';
+import { withRouter } from 'react-router';
+import * as Yup from 'yup';
+import { ApiResponseError } from '../../../api/models';
+import { apiRequest } from '../../../api/utils';
+import { HouseModelEditProps, HouseModelEditState } from './models';
+import './house-model-edit.css';
+import { Asset, HouseModel, ModelType } from '../../../models';
 
 class HouseModelEdit extends React.Component<
   HouseModelEditProps,
@@ -30,12 +32,20 @@ class HouseModelEdit extends React.Component<
 > {
   private schema = Yup.object().shape({
     name: Yup.string()
-      .min(2, "Le nom doit faire plus de 1 charactères")
-      .required("Le nom ne peut pas être vide"),
+      .min(2, 'Le nom doit faire plus de 1 charactères')
+      .required('Le nom ne peut pas être vide'),
+    price: Yup.number()
+      .min(0, 'Le prix doit être positif')
+      .max(10000000, 'Le prix ne peut pas dépasser 10000000€')
+      .required('Le prix ne peut pas être vide'),
+    occupants: Yup.number()
+      .min(0, "Le nombre d'habitants doit être positif")
+      .max(50, "Le nombre d'habitants ne peut pas dépasser 50")
+      .required("Le nombre d'habitants ne peut pas être vide"),
     id_ModelType: Yup.lazy(() =>
       Yup.number().oneOf(
         [...this.state.modelTypes.map((type) => type.id)],
-        "Le type ne peut pas être vide"
+        'Le type ne peut pas être vide'
       )
     ),
     id_Asset: Yup.lazy(() =>
@@ -48,7 +58,9 @@ class HouseModelEdit extends React.Component<
 
   private initialItem: HouseModel = {
     id: 0,
-    name: "",
+    name: '',
+    occupants: 0,
+    price: 0,
     id_ModelType: 0,
     id_Asset: 0,
   };
@@ -81,9 +93,9 @@ class HouseModelEdit extends React.Component<
   }
 
   async fetchHouseModel(): Promise<void> {
-    apiRequest(`houseModel/${this.state.item.id}`, "GET", [])
+    apiRequest(`houseModel/${this.state.item.id}`, 'GET', [])
       .then((response) => {
-        if (response.status === "error") {
+        if (response.status === 'error') {
           this.setState({ error: response as ApiResponseError });
         } else {
           this.setState({ item: response as HouseModel });
@@ -93,9 +105,9 @@ class HouseModelEdit extends React.Component<
   }
 
   async fetchModelTypes(): Promise<void> {
-    apiRequest(`modelType`, "GET", [])
+    apiRequest(`modelType`, 'GET', [])
       .then((response) => {
-        if (response.status === "error") {
+        if (response.status === 'error') {
           this.setState({ error: response as ApiResponseError });
         } else {
           this.setState({ modelTypes: response as ModelType[] });
@@ -105,9 +117,9 @@ class HouseModelEdit extends React.Component<
   }
 
   async fetchAssets(): Promise<void> {
-    apiRequest(`asset`, "GET", [])
+    apiRequest(`asset`, 'GET', [])
       .then((response) => {
-        if (response.status === "error") {
+        if (response.status === 'error') {
           this.setState({ error: response as ApiResponseError });
         } else {
           this.setState({ assets: response.items as Asset[] });
@@ -120,14 +132,14 @@ class HouseModelEdit extends React.Component<
     const { editMode } = this.state;
 
     (editMode
-      ? apiRequest(`houseModel/${values.id}`, "PUT", "", values)
-      : apiRequest(`houseModel`, "POST", "", values)
+      ? apiRequest(`houseModel/${values.id}`, 'PUT', '', values)
+      : apiRequest(`houseModel`, 'POST', '', values)
     )
       .then((response) => {
-        if (response.status === "error") {
+        if (response.status === 'error') {
           this.setState({ error: response as ApiResponseError });
         } else {
-          this.props.history.push("/houseModels");
+          this.props.history.push('/houseModels');
         }
       })
       .catch((error) => console.log(error));
@@ -148,7 +160,7 @@ class HouseModelEdit extends React.Component<
           )}
           <h3 className="mb-5">
             <FontAwesomeIcon className="mr-2" icon={faHome} />
-            {editMode ? "Editer" : "Ajouter"} un modèle
+            {editMode ? 'Editer' : 'Ajouter'} un modèle
           </h3>
           <Formik
             validationSchema={this.schema}
@@ -239,6 +251,46 @@ class HouseModelEdit extends React.Component<
                       </FormControl>
                       <Form.Control.Feedback type="invalid">
                         {errors.id_Asset}
+                      </Form.Control.Feedback>
+                    </InputGroup>
+                  </Col>
+                  <Col md={6} sm={12}>
+                    <InputGroup className="mb-3">
+                      <InputGroup.Prepend>
+                        <InputGroup.Text id="UsersIcon">
+                          <FontAwesomeIcon icon={faUsers} />
+                        </InputGroup.Text>
+                      </InputGroup.Prepend>
+                      <FormControl
+                        type="number"
+                        placeholder="Habitants"
+                        name="occupants"
+                        value={values.occupants}
+                        onChange={(e) => handleChange(e)}
+                        isInvalid={!!(submitCount > 0 && errors.occupants)}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.occupants}
+                      </Form.Control.Feedback>
+                    </InputGroup>
+                  </Col>
+                  <Col md={6} sm={12}>
+                    <InputGroup className="mb-3">
+                      <InputGroup.Prepend>
+                        <InputGroup.Text id="PriceIcon">
+                          <FontAwesomeIcon icon={faEuroSign} />
+                        </InputGroup.Text>
+                      </InputGroup.Prepend>
+                      <FormControl
+                        type="number"
+                        placeholder="Prix"
+                        name="price"
+                        value={values.price}
+                        onChange={(e) => handleChange(e)}
+                        isInvalid={!!(submitCount > 0 && errors.price)}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.price}
                       </Form.Control.Feedback>
                     </InputGroup>
                   </Col>

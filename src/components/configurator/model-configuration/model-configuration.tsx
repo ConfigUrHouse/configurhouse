@@ -1,53 +1,88 @@
-import React from "react";
-import { Col, Row, Form, Table, Button } from "react-bootstrap";
-import "./model-configuration.css";
-import { Suspense, useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import React from 'react';
+import { Col, Row, Form } from 'react-bootstrap';
+import './model-configuration.css';
+import { Suspense, useRef } from 'react';
+import { Canvas } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei/core/useGLTF';
 import { OrbitControls } from '@react-three/drei/core/OrbitControls';
-import { ContactShadows } from '@react-three/drei/core/ContactShadows';
-import { HexColorPicker } from "react-colorful"
-import { proxy, useProxy } from "valtio"
-import { ApiResponseError } from "../../../api/models";
+import { proxy, useProxy } from 'valtio';
+import { ApiResponseError } from '../../../api/models';
 import { apiRequest } from '../../../api/utils';
 
 interface test {
-  items: any
-} 
-
-const objectTest : test = {
-  items: {
-    MurCote: "#ffffff",
-    MurFond: "#ffffff",
-    Sol: "#ffffff",
-    Meuble: true
-  },
+  items: any;
 }
+
+const objectTest: test = {
+  items: {
+    MurCote: '#ffffff',
+    MurFond: '#ffffff',
+    Sol: '#ffffff',
+    Meuble: true,
+  },
+};
 
 const state = proxy(objectTest);
 
 function Shoe() {
-  const ref = useRef()
-  const snap = useProxy(state)
-  const { nodes, materials } = useGLTF("Test9.glb") as any
+  const ref = useRef();
+  const snap = useProxy(state);
+  const { nodes, materials } = useGLTF('Test9.glb') as any;
 
   return (
-    <group
-      ref={ref}
-      castShadow
-      receiveShadow
-      dispose={null}>
-      <mesh castShadow receiveShadow geometry={(nodes.MurCote as any).geometry} material={(nodes.MurCote as any).material}  material-color={snap.items.MurCote}/>
-      <mesh castShadow receiveShadow geometry={(nodes.MurFond as any).geometry} material={(nodes.MurFond as any).material} material-color={snap.items.MurFond}/>
-      <mesh castShadow receiveShadow geometry={(nodes.Sol as any).geometry} material={(nodes.Sol as any).material} material-color={snap.items.Sol}/>
-      <mesh visible={snap.items.Meuble} castShadow receiveShadow geometry={(nodes.Cylinder010 as any).geometry} material={(nodes.Cylinder010 as any).material} />
-      <mesh visible={snap.items.Meuble} castShadow receiveShadow geometry={(nodes.Cylinder010_1 as any).geometry} material={(nodes.Cylinder010_1 as any).material} />
-      <mesh visible={snap.items.Meuble} castShadow receiveShadow geometry={(nodes.Cylinder010_2 as any).geometry} material={(nodes.Cylinder010_2 as any).material} />
-      <mesh visible={snap.items.Meuble} castShadow receiveShadow geometry={(nodes.Cylinder010_3 as any).geometry} material={(nodes.Cylinder010_3 as any).material} />
+    <group ref={ref} castShadow receiveShadow dispose={null}>
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={(nodes.MurCote as any).geometry}
+        material={(nodes.MurCote as any).material}
+        material-color={snap.items.MurCote}
+      />
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={(nodes.MurFond as any).geometry}
+        material={(nodes.MurFond as any).material}
+        material-color={snap.items.MurFond}
+      />
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={(nodes.Sol as any).geometry}
+        material={(nodes.Sol as any).material}
+        material-color={snap.items.Sol}
+      />
+      <mesh
+        visible={snap.items.Meuble}
+        castShadow
+        receiveShadow
+        geometry={(nodes.Cylinder010 as any).geometry}
+        material={(nodes.Cylinder010 as any).material}
+      />
+      <mesh
+        visible={snap.items.Meuble}
+        castShadow
+        receiveShadow
+        geometry={(nodes.Cylinder010_1 as any).geometry}
+        material={(nodes.Cylinder010_1 as any).material}
+      />
+      <mesh
+        visible={snap.items.Meuble}
+        castShadow
+        receiveShadow
+        geometry={(nodes.Cylinder010_2 as any).geometry}
+        material={(nodes.Cylinder010_2 as any).material}
+      />
+      <mesh
+        visible={snap.items.Meuble}
+        castShadow
+        receiveShadow
+        geometry={(nodes.Cylinder010_3 as any).geometry}
+        material={(nodes.Cylinder010_3 as any).material}
+      />
     </group>
-  )
+  );
 }
-
 
 class ModelConfiguration extends React.Component<any, any> {
   constructor(props: any) {
@@ -59,13 +94,13 @@ class ModelConfiguration extends React.Component<any, any> {
     };
   }
 
-  handleSelectMurCote(event : any) {
+  handleSelectMurCote(event: any) {
     let val = event.target.value;
     console.log(val);
     state.items.MurCote = val;
   }
 
-  handleSelectMurFond(event : any) {
+  handleSelectMurFond(event: any) {
     let val = event.target.value;
     console.log(val);
     state.items.MurFond = val;
@@ -81,13 +116,13 @@ class ModelConfiguration extends React.Component<any, any> {
     try {
       const response = await apiRequest(
         `houseModel/${this.props.model.id}/conso`,
-        "POST",
-        "",
+        'POST',
+        '',
         {
           valueIds: this.props.optionValues,
         }
       );
-      if (response.status === "error") {
+      if (response.status === 'error') {
         this.setState({ error: response as ApiResponseError });
       } else {
         this.setState({ conso: response });
@@ -100,7 +135,6 @@ class ModelConfiguration extends React.Component<any, any> {
 
   componentDidMount() {
     this.fetchConso();
-
   }
 
   render() {
@@ -110,13 +144,31 @@ class ModelConfiguration extends React.Component<any, any> {
           <Col md={8} className="col">
             <div className="content CanvaContainer">
               <h5>Visualisation du modèle {this.props.model.name}</h5>
-              <Canvas shadows className="Canva" camera={{ position: [0, 0, 12], fov: 60  }}>
-                <spotLight shadow-mapSize-width={5120} shadow-mapSize-height={5120} shadowBias={-0.0000005} intensity={0.75} angle={0.1} penumbra={1} position={[40, 80, 40]} castShadow/>
+              <Canvas
+                shadows
+                className="Canva"
+                camera={{ position: [0, 0, 12], fov: 60 }}
+              >
+                <spotLight
+                  shadow-mapSize-width={5120}
+                  shadow-mapSize-height={5120}
+                  shadowBias={-0.0000005}
+                  intensity={0.75}
+                  angle={0.1}
+                  penumbra={1}
+                  position={[40, 80, 40]}
+                  castShadow
+                />
                 <ambientLight intensity={0.45} />
                 <Suspense fallback={null}>
                   <Shoe />
                 </Suspense>
-                <OrbitControls minPolarAngle={-Math.PI} maxPolarAngle={Math.PI/2} minAzimuthAngle={-Math.PI/7} maxAzimuthAngle={Math.PI/7} />
+                <OrbitControls
+                  minPolarAngle={-Math.PI}
+                  maxPolarAngle={Math.PI / 2}
+                  minAzimuthAngle={-Math.PI / 7}
+                  maxAzimuthAngle={Math.PI / 7}
+                />
               </Canvas>
             </div>
           </Col>
@@ -143,7 +195,12 @@ class ModelConfiguration extends React.Component<any, any> {
                   </Form.Control>
                 </Form.Group>
                 <Form.Group controlId="formBasicCheckbox">
-                  <Form.Check defaultChecked={state.items.Meuble} onChange={this.handleChangeCB} type="checkbox" label="Meubles" />
+                  <Form.Check
+                    defaultChecked={state.items.Meuble}
+                    onChange={this.handleChangeCB}
+                    type="checkbox"
+                    label="Meubles"
+                  />
                 </Form.Group>
               </Form>
             </div>

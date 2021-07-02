@@ -3,6 +3,7 @@ import {
   faSave,
   faTimes,
   faKeyboard,
+  faArrowCircleRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Formik } from 'formik';
@@ -103,10 +104,20 @@ class HouseModelEdit extends React.Component<
               Une erreur est survenue :<p>Message : {error.message}</p>
             </div>
           )}
-          <h3 className="mb-5">
-            <FontAwesomeIcon className="mr-2" icon={faHome} />
-            Editer une configuration
-          </h3>
+          <div className="mb-5 d-flex justify-content-between align-items-center">
+            <h3>
+              <FontAwesomeIcon className="mr-2" icon={faHome} />
+              Editer une configuration
+            </h3>
+            <Button
+              variant="primary"
+              className="p-3"
+              href={`${process.env.REACT_APP_BASE_URL}/config/${item.id}`}
+            >
+              Reprendre la configuration
+              <FontAwesomeIcon className="ml-2" icon={faArrowCircleRight} />
+            </Button>
+          </div>
           <Formik
             validationSchema={this.schema}
             onSubmit={(values) => {
