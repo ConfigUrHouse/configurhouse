@@ -25,63 +25,22 @@ const objectTest: test = {
 const state = proxy(objectTest);
 
 function Shoe() {
-  const ref = useRef();
-  const snap = useProxy(state);
-  const { nodes, materials } = useGLTF(
-    `${process.env.REACT_APP_BASE_URL}/Test9.glb`
-  ) as any;
+  const ref = useRef()
+  const snap = useProxy(state)
+  const { nodes, materials } = useGLTF("Test9.glb") as any;
+
+  console.log(nodes);
 
   return (
-    <group ref={ref} castShadow receiveShadow dispose={null}>
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={(nodes.MurCote as any).geometry}
-        material={(nodes.MurCote as any).material}
-        material-color={snap.items.MurCote}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={(nodes.MurFond as any).geometry}
-        material={(nodes.MurFond as any).material}
-        material-color={snap.items.MurFond}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={(nodes.Sol as any).geometry}
-        material={(nodes.Sol as any).material}
-        material-color={snap.items.Sol}
-      />
-      <mesh
-        visible={snap.items.Meuble}
-        castShadow
-        receiveShadow
-        geometry={(nodes.Cylinder010 as any).geometry}
-        material={(nodes.Cylinder010 as any).material}
-      />
-      <mesh
-        visible={snap.items.Meuble}
-        castShadow
-        receiveShadow
-        geometry={(nodes.Cylinder010_1 as any).geometry}
-        material={(nodes.Cylinder010_1 as any).material}
-      />
-      <mesh
-        visible={snap.items.Meuble}
-        castShadow
-        receiveShadow
-        geometry={(nodes.Cylinder010_2 as any).geometry}
-        material={(nodes.Cylinder010_2 as any).material}
-      />
-      <mesh
-        visible={snap.items.Meuble}
-        castShadow
-        receiveShadow
-        geometry={(nodes.Cylinder010_3 as any).geometry}
-        material={(nodes.Cylinder010_3 as any).material}
-      />
+    <group
+      ref={ref}
+      castShadow
+      receiveShadow
+      dispose={null}>
+      <mesh castShadow receiveShadow geometry={(nodes.MurCote as any).geometry} material={(nodes.MurCote as any).material}  material-color={snap.items.MurCote}/>
+      <mesh castShadow receiveShadow geometry={(nodes.MurFond as any).geometry} material={(nodes.MurFond as any).material} material-color={snap.items.MurFond}/>
+      <mesh castShadow receiveShadow geometry={(nodes.Sol as any).geometry} material={(nodes.Sol as any).material} material-color={snap.items.Sol}/>
+      <mesh castShadow receiveShadow geometry={(nodes.Meubles as any).geometry} material={(nodes.Meubles as any).material}/>
     </group>
   );
 }

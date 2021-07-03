@@ -30,7 +30,7 @@ class AssetList extends React.Component<
     },
     {
       name: "id_AssetType",
-      displayName: "id_AssetType",
+      displayName: "Type",
     }
   ];
 
@@ -74,7 +74,7 @@ class AssetList extends React.Component<
   }
 
   private async handleDelete(id: number): Promise<void> {
-    return apiRequest(`houseModel/${id}`, "DELETE", [])
+    return apiRequest(`asset/${id}`, "DELETE", [])
       .then((response) => {
         if (response.status === "error") {
           this.setState({ error: response as ApiResponseError });
@@ -104,7 +104,7 @@ class AssetList extends React.Component<
   }
 
   private handleSeeMore(id: number) {
-    this.props.history.push(`asset/${id}/details`);
+    this.props.history.push(`/asset/${id}/details`);
   }
 
   render() {

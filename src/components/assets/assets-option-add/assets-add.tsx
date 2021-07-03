@@ -2,7 +2,7 @@ import {
   faSave,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Formik } from "formik";
+import { faTimes, faHome, faPlus } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { apiRequest } from "../../../api/utils";
 import { ApiResponseError } from "../../../api/models";
@@ -13,6 +13,8 @@ import {
 } from "react-bootstrap";
 import { useParams, withRouter } from "react-router";
 import * as Yup from "yup";
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+
 
 class AssetAdd extends React.Component<any, any> {
   private schema = Yup.object().shape({
@@ -26,9 +28,10 @@ class AssetAdd extends React.Component<any, any> {
     this.submitForm = this.submitForm.bind(this);
     this.fetchAssetType = this.fetchAssetType.bind(this);
     this.fileInput = React.createRef();
-    
+
     this.state = {
       assetTypes: [],
+      error: undefined,
     };
   }
 
@@ -51,12 +54,91 @@ class AssetAdd extends React.Component<any, any> {
   }
 
   submitForm(event: any) {
-    const assetType = this.state.assetTypes.filter((element : any) => element.name == "Model")[0];
-    console.log(assetType);
-    alert(
-      `Fichier sélectionné - ${        this.fileInput.current.files[0].name
-      }`
-    );
+
+    const history: any = this.props.history;
+
+    if (this.fileInput?.current?.files?.[0]?.name?.includes('.glb')) {
+
+      const assetType = this.state.assetTypes.filter((element: any) => element.name == "Model")[0];
+
+      var myHeaders: any = new Headers();
+      myHeaders.append("Authorization", `Bearer ${window.localStorage.getItem('token') || 'myVerySecretAdminToken'
+        }`);
+
+      var formdata: any = new FormData();
+      formdata.append("file", this.fileInput?.current?.files?.[0], this.fileInput?.current?.files?.[0].name);
+      formdata.append("id_AssetType", assetType.id);
+
+      var requestOptions: any = {
+        method: 'POST',
+        headers: myHeaders,
+        body: formdata,
+        redirect: 'follow'
+      };
+
+      fetch("http://localhost:7000/asset", requestOptions)
+        .then(response => response.json())
+        .then((result: any) => {
+
+          let file = this.fileInput?.current?.files?.[0];
+          let reader = new FileReader();
+
+          reader.onload = function (gltfText: any) {
+
+            console.log(gltfText.target.result);
+
+            const gltfLoader = new GLTFLoader();
+            gltfLoader.parse(gltfText.target.result, '', (gltf: any) => {
+
+              const promise: Promise<any>[] = [];
+
+              gltf?.scene?.children?.forEach((parent: any) => {
+                if (parent.children.length == 0) {
+                  promise.push(apiRequest(
+                    `mesh`,
+                    'POST',
+                    '',
+                    {
+                      name: parent.name,
+                      id_Asset: result.id,
+                      same: false
+                    }
+                  ));
+                }
+                else {
+                  parent.children.forEach((child: any) => {
+                    promise.push(apiRequest(
+                      `mesh`,
+                      'POST',
+                      '',
+                      {
+                        name: child.name,
+                        id_Asset: result.id,
+                        same: true
+                      }
+                    ));
+                  })
+                }
+
+              });
+
+              Promise.allSettled(promise).then(() => {
+                history.push(`/asset/${result.id}/details`);
+              });
+              
+            });
+          };
+
+          reader.readAsArrayBuffer(file);
+
+        })
+        .catch(error => console.log('error', error));
+    }
+    else {
+      this.setState({ error: 'Vous ne pouvez importer que des fichiers glb.' });
+    }
+
+
     event.preventDefault();
   }
 
@@ -66,6 +148,13 @@ class AssetAdd extends React.Component<any, any> {
         <div className="circle1"></div>
         <div className="circle2"></div>
         <div className="p-5 form w-75 mx-auto">
+          {this.state.error && (
+            <div className="alert alert-danger m-4">
+              <FontAwesomeIcon icon={faTimes} />
+              <span> </span>Une erreur est survenue :
+              <p>Message : {this.state.error}</p>
+            </div>
+          )}
           <Form onSubmit={this.submitForm}>
             <Row>
               <Form.File
