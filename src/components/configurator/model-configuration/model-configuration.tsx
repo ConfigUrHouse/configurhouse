@@ -8,6 +8,7 @@ import { OrbitControls } from '@react-three/drei/core/OrbitControls';
 import { proxy, useProxy } from 'valtio';
 import { ApiResponseError } from '../../../api/models';
 import { apiRequest } from '../../../api/utils';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 interface test {
   items: any;
@@ -24,12 +25,32 @@ const objectTest: test = {
 
 const state = proxy(objectTest);
 
-function Shoe() {
+function modelLoader(file: any) {
+  const loader = new GLTFLoader();
+
+  return new Promise((resolve, reject) => {
+    loader.parse(file, '', data => resolve(data));
+  });
+}
+
+function Model(props: any) {
   const ref = useRef()
   const snap = useProxy(state)
-  const { nodes, materials } = useGLTF("Test9.glb") as any;
 
-  console.log(nodes);
+  const geometry: any[] = [];
+
+  props?.model?.scene?.children?.forEach((parent: any) => {
+
+    if (parent.children.length == 0) {
+      //geometry.push(<mesh castShadow receiveShadow geometry={parent.geometry} material={parent.material} material-color={snap.items.MurCote} />)
+      geometry.push(<mesh key={parent.id} castShadow receiveShadow geometry={parent.geometry} material={parent.material} />)
+    }
+    else {
+      parent.children.forEach((child: any) => {
+        geometry.push(<mesh key={child.id} castShadow receiveShadow geometry={child.geometry} material={child.material} />)
+      })
+    }
+  });
 
   return (
     <group
@@ -37,10 +58,9 @@ function Shoe() {
       castShadow
       receiveShadow
       dispose={null}>
-      <mesh castShadow receiveShadow geometry={(nodes.MurCote as any).geometry} material={(nodes.MurCote as any).material}  material-color={snap.items.MurCote}/>
-      <mesh castShadow receiveShadow geometry={(nodes.MurFond as any).geometry} material={(nodes.MurFond as any).material} material-color={snap.items.MurFond}/>
-      <mesh castShadow receiveShadow geometry={(nodes.Sol as any).geometry} material={(nodes.Sol as any).material} material-color={snap.items.Sol}/>
-      <mesh castShadow receiveShadow geometry={(nodes.Meubles as any).geometry} material={(nodes.Meubles as any).material}/>
+      {geometry && (geometry.map((mesh: any) => (
+        mesh
+      )))}
     </group>
   );
 }
@@ -49,27 +69,48 @@ class ModelConfiguration extends React.Component<any, any> {
   constructor(props: any) {
     //TODO: use this.props.updateOptionValues() + fetch conso on dropdown change
     super(props);
+
+    this.fetchModel = this.fetchModel.bind(this);
+
     this.state = {
       error: undefined,
       conso: undefined,
+      model: undefined
     };
+  }
+
+  async fetchModel() {
+
+    const REACT_APP_API_BASE_URL: any = process.env.REACT_APP_API_BASE_URL;
+    const objectJson: any = await apiRequest(
+      `asset/14`,
+      "GET",
+      []
+    );
+    const file: any = await fetch(`${REACT_APP_API_BASE_URL}/${objectJson.value}`, {
+      method: 'GET',
+    })
+      .then(response => response.arrayBuffer())
+      .catch(error => console.log('error', error));
+
+
+    const model: any = await modelLoader(file);
+
+    this.setState({ model: model });
   }
 
   handleSelectMurCote(event: any) {
     let val = event.target.value;
-    console.log(val);
     state.items.MurCote = val;
   }
 
   handleSelectMurFond(event: any) {
     let val = event.target.value;
-    console.log(val);
     state.items.MurFond = val;
   }
 
   handleChangeCB(event: any) {
     let val = event.target.checked;
-    console.log(val);
     state.items.Meuble = val;
   }
 
@@ -96,6 +137,7 @@ class ModelConfiguration extends React.Component<any, any> {
 
   componentDidMount() {
     this.fetchConso();
+    this.fetchModel();
   }
 
   render() {
@@ -122,7 +164,7 @@ class ModelConfiguration extends React.Component<any, any> {
                 />
                 <ambientLight intensity={0.45} />
                 <Suspense fallback={null}>
-                  <Shoe />
+                  <Model model={this.state.model} />
                 </Suspense>
                 <OrbitControls
                   minPolarAngle={-Math.PI}

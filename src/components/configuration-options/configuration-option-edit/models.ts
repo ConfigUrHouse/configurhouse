@@ -6,6 +6,7 @@ export interface ConfigurationOptionEditState {
   id: number;
   editMode: boolean;
   item: ConfigurationOption;
+  houseModel?: any;
   houseModels: HouseModel[];
   meshes: Mesh[];
   error?: ApiResponseError;

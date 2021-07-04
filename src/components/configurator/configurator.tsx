@@ -134,7 +134,6 @@ class Configurator extends React.Component<any, any> {
     if (this.state.step == 0) {
       // Selects the model type on the first step
       this.setState({ model: this.state.modelSelected });
-      console.log(this.state.model);
     } else if (this.state.step == 1) {
       // Moves the user to the login page if the user is not authenticated, otherwise saves the configuration
       if (!this.props.isAuthenticated) {
