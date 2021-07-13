@@ -37,7 +37,7 @@ class ConfigurationOptionEdit extends React.Component<
 > {
   private schema = Yup.object().shape({
     name: Yup.string()
-      .min(4, "Le nom doit faire plus de 3 charactères")
+      .min(3, "Le nom doit faire plus de 2 charactères")
       .required("Le nom ne peut pas être vide"),
     id_HouseModel: Yup.lazy(() =>
       Yup.number().oneOf(
@@ -57,17 +57,28 @@ class ConfigurationOptionEdit extends React.Component<
     id: 0,
     name: "",
     id_HouseModel: 0,
+    houseModel: undefined,
     id_Mesh: 0,
     values: [
     ],
   };
+
+  private reference: any = {
+    "#D36135": "Flame",
+    "#A24936": "Chestnut",
+    "#282B28": "Charleston Green",
+    "#83BCA9": "Green Sheen",
+    "#3E5641": "Hunter Green",
+    "#003459": "Prussion Blue",
+    "#00171F": "Rich Black FOGRA 29",
+    "#DAD6D6": "Ligth Gray"
+  }
 
   constructor(props: ConfigurationOptionEditProps) {
     super(props);
 
     this.fetchConfigurationOption = this.fetchConfigurationOption.bind(this);
     this.fetchValues = this.fetchValues.bind(this);
-    this.fetchHouseModels = this.fetchHouseModels.bind(this);
     this.fetchMeshes = this.fetchMeshes.bind(this);
     this.submitForm = this.submitForm.bind(this);
     this.removeValue = this.removeValue.bind(this);
@@ -78,6 +89,7 @@ class ConfigurationOptionEdit extends React.Component<
       id: id,
       editMode: id !== 0,
       item: { ...this.initialItem, id },
+      houseModel: undefined,
       houseModels: [],
       meshes: [],
       error: undefined,
@@ -85,12 +97,8 @@ class ConfigurationOptionEdit extends React.Component<
   }
 
   componentDidMount() {
-    this.fetchHouseModels();
     this.fetchMeshes();
     this.fetchValues();
-    if (this.state.editMode) {
-      this.fetchConfigurationOption();
-    }
   }
 
   async fetchConfigurationOption(): Promise<void> {
@@ -127,43 +135,59 @@ class ConfigurationOptionEdit extends React.Component<
   }
 
   async fetchMeshes(): Promise<void> {
-    try {
-      const response: Mesh[] = await apiRequest(`mesh`, "GET", []);
-      this.setState({ meshes: response });
-    } catch (error: any) {
-      console.error(error);
-      this.setState({ error: error as ApiResponseError });
+    if (this.state.editMode) {
+      await this.fetchConfigurationOption();
     }
-  }
+    let source: any = [];
 
-  async fetchHouseModels(): Promise<void> {
     try {
       const response: PaginatedResponse<HouseModel> = await apiRequest(
         `houseModel`,
         "GET",
         []
       );
-      this.setState({ houseModels: response.items });
+      await this.setState({ houseModels: response.items });
+      source = response.items;
+
+      if (this.state.item.id_HouseModel) {
+        const hm: any = source.filter((element: any) => {
+          return element.id == this.state.item.id_HouseModel
+        });
+        const response: any = await apiRequest(`mesh/by/${hm[0].id_Asset}`, "GET", []);
+        this.setState({ meshes: response });
+      }
+
     } catch (error: any) {
       console.error(error);
       this.setState({ error: error as ApiResponseError });
     }
+
   }
 
   async submitForm(values: ConfigurationOption): Promise<void> {
     try {
       const { editMode } = this.state;
-    
+
       const reponse = await (editMode
         ? apiRequest(`optionConf/${values.id}`, "PUT", "", values)
         : apiRequest(`optionConf`, "POST", "", values));
-        
-      await Promise.allSettled(values.values.forEach(async (element: any) => {
-        await (element.id
-          ? apiRequest(`value/${element.id}`, "PUT", "", element)
-          : apiRequest(`value`, "POST", "", element));
-      }));
-      
+
+      if(values.values && values.values.length > 0){
+        const ms: any = this.state.meshes.filter((element2: any) => {
+          return element2.id == values.id_Mesh
+        })[0];
+
+        await Promise.allSettled(values?.values.map(async (element: any) => {
+          element.id_Asset = ms.id_Asset;
+          element.id_OptionConf = reponse.id;
+          element.name = this.reference[element.value];
+          return (element.id
+            ? apiRequest(`value/${element.id}`, "PUT", "", element)
+            : apiRequest(`value`, "POST", "", element));
+        }));
+      }
+  
+
     } catch (error) {
       console.error(error);
       this.setState({ error: error as ApiResponseError });
@@ -174,7 +198,6 @@ class ConfigurationOptionEdit extends React.Component<
 
   render() {
     const { item, editMode, houseModels, meshes, error } = this.state;
-    console.table(houseModels);
     return (
       <main className="p-5 w-100 bg">
         <div className="circle1"></div>
@@ -241,7 +264,18 @@ class ConfigurationOptionEdit extends React.Component<
                           name="id_HouseModel"
                           as="select"
                           value={values.id_HouseModel}
-                          onChange={(e) => handleChange(e)}
+                          onChange={async (e) => {
+                            handleChange(e)
+                            const response: any = this.state.houseModels.filter((element: any) => {
+                              return element.id == e.target.value
+                            })
+                            const reponse2 = await apiRequest(`mesh/by/${response[0].id_Asset}`, "GET", []);
+
+                            this.setState({ houseModel: response[0] });
+                            this.setState({ meshes: reponse2 });
+                            console.log(response)
+                            console.log(reponse2)
+                          }}
                           isInvalid={!!(submitCount > 0 && errors.id_HouseModel)}
                         >
                           <option value={0}>Choisir un modèle</option>
@@ -342,10 +376,7 @@ class ConfigurationOptionEdit extends React.Component<
                                             <option key={7} value={"#00171F"}>
                                               Rich Black FOGRA 29
                                             </option>
-                                            <option key={8} value={"#FFFFFF"}>
-                                              White
-                                            </option>
-                                            <option key={9} value={"#DAD6D6"}>
+                                            <option key={8} value={"#DAD6D6"}>
                                               Ligth Gray
                                             </option>
                                           </FormControl>
@@ -355,24 +386,24 @@ class ConfigurationOptionEdit extends React.Component<
                                         </InputGroup>
                                       </td>
                                       <td>
-                                      <InputGroup className="mb-3">
-                                        <InputGroup.Prepend>
-                                          <InputGroup.Text id="NameIcon">
-                                            <FontAwesomeIcon icon={faKeyboard} />
-                                          </InputGroup.Text>
-                                        </InputGroup.Prepend>
-                                        <FormControl
-                                          type="number"
-                                          placeholder="Price"
-                                          name={`values.${index}.price`}
-                                          value={values.values[index].price}
-                                          onChange={(e) => handleChange(e)}
-                                          isInvalid={!!(submitCount > 0 && errors.name)}
-                                        />
-                                        <Form.Control.Feedback type="invalid">
-                                          {errors.name}
-                                        </Form.Control.Feedback>
-                                      </InputGroup>
+                                        <InputGroup className="mb-3">
+                                          <InputGroup.Prepend>
+                                            <InputGroup.Text id="NameIcon">
+                                              <FontAwesomeIcon icon={faKeyboard} />
+                                            </InputGroup.Text>
+                                          </InputGroup.Prepend>
+                                          <FormControl
+                                            type="number"
+                                            placeholder="Price"
+                                            name={`values.${index}.price`}
+                                            value={values.values[index].price}
+                                            onChange={(e) => handleChange(e)}
+                                            isInvalid={!!(submitCount > 0 && errors.name)}
+                                          />
+                                          <Form.Control.Feedback type="invalid">
+                                            {errors.name}
+                                          </Form.Control.Feedback>
+                                        </InputGroup>
                                       </td>
                                       <td>
                                         <Button
@@ -394,7 +425,7 @@ class ConfigurationOptionEdit extends React.Component<
                             <Button
                               type="button"
                               className="secondary"
-                              onClick={() => push({"name":"White","value":"#FFFFFF","price":"1054.00","is_default":0,"id_OptionConf":this.state.id,"id_Asset":null})}
+                              onClick={() => push({ "name": "White", "value": "#FFFFFF", "price": "1054.00", "is_default": 0, "id_OptionConf": this.state.id, "id_Asset": null })}
                             >
                               Ajouter
                             </Button>
@@ -403,14 +434,23 @@ class ConfigurationOptionEdit extends React.Component<
                       </FieldArray>
                     </Col>
                   </Row>
+                  <Row>
                   <Button
                     variant="primary"
-                    className="d-block mx-auto mt-3 p-3"
+                    className="mx-auto mt-3 p-3"
                     type="submit"
                     disabled={submitCount > 0 && !isValid}
                   >
                     SAUVEGARDER <FontAwesomeIcon className="ml-2" icon={faSave} />
                   </Button>
+                  <Button
+                    onClick={() => this.props.history.push('/configurationOptions')}
+                    className="mx-auto mt-3 p-3"
+                  >
+                    RETOUR
+                  </Button>
+                  </Row>
+                  
                 </Form>
               </>
             )}

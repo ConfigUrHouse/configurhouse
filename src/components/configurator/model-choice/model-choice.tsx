@@ -7,13 +7,17 @@ import { apiRequest } from '../../../api/utils';
 class ModelChoice extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
+    this.fetchHouseModels = this.fetchHouseModels.bind(this);
     this.state = { modelSelected: null, models: [] };
-    this.fetchHouseModels();
   }
 
   selectModel(model: any) {
     this.setState({ modelSelected: model });
     this.props.onChange(model);
+  }
+
+  componentDidMount() {
+    this.fetchHouseModels();
   }
 
   // Loads the list of house models
