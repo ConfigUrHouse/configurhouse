@@ -189,17 +189,17 @@ class Configurator extends React.Component<any, any> {
           />
         )}
         <Row className="justify-content-end">
-          <Col md={2} className="col next">
+          <Col md={3} className="col next">
             <div className="content">
               <Button className="mt-0" onClick={this.previous}>
-                PRECEDENT <FontAwesomeIcon icon={faArrowCircleLeft} size="lg" />
+                PRECEDENT <FontAwesomeIcon icon={faArrowCircleLeft} size="lg" className="d-block mx-auto"/>
               </Button>
             </div>
           </Col>
-          <Col md={2} className="col next">
+          <Col md={3} className="col next">
             <div className="content">
               <Button className="mt-0" onClick={this.next}>
-                SUIVANT <FontAwesomeIcon icon={faArrowCircleRight} size="lg" />
+                SUIVANT <FontAwesomeIcon icon={faArrowCircleRight} size="lg" className="d-block mx-auto"/>
               </Button>
             </div>
           </Col>
