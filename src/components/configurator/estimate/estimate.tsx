@@ -25,6 +25,7 @@ class Estimate extends Component<EstimateProps, EstimateState> {
     this.fetchEstimate();
   }
 
+  // Loads the estimate data for the configuration
   async fetchEstimate(): Promise<void> {
     try {
       const data: ConfigurationValue[] = await apiRequest(
@@ -44,7 +45,7 @@ class Estimate extends Component<EstimateProps, EstimateState> {
     const { data } = this.state;
 
     return (
-      <div className="p-5 w-100 bg-white configuration-infos">
+      <div className='p-5 w-100 bg-white configuration-infos'>
         <Modal
           show={!!this.state.modalIsOpen}
           onHide={() => this.setState({ modalIsOpen: false })}
@@ -57,22 +58,22 @@ class Estimate extends Component<EstimateProps, EstimateState> {
           </Modal.Body>
           <Modal.Footer>
             <Button
-              variant="secondary"
+              variant='secondary'
               onClick={() => this.setState({ modalIsOpen: false })}
             >
               Annuler
             </Button>
             <Button
-              variant="primary"
-              type="submit"
+              variant='primary'
+              type='submit'
               href={`${process.env.REACT_APP_API_BASE_URL}/configuration/${this.props.confId}/estimate/download?mode=csv`}
               onClick={() => this.setState({ modalIsOpen: false })}
             >
               CSV
             </Button>
             <Button
-              variant="primary"
-              type="submit"
+              variant='primary'
+              type='submit'
               href={`${process.env.REACT_APP_API_BASE_URL}/configuration/${this.props.confId}/estimate/download?mode=pdf`}
               onClick={() => this.setState({ modalIsOpen: false })}
             >
@@ -82,25 +83,25 @@ class Estimate extends Component<EstimateProps, EstimateState> {
         </Modal>
         {data && (
           <div>
-            <div className="estimate-title-container">
-              <h2 className="text-green text-center">
+            <div className='estimate-title-container'>
+              <h2 className='text-green text-center'>
                 <FontAwesomeIcon icon={faCalculator} /> Devis détaillé
               </h2>
-              <h6 className="text-center mt-2 mb-5">
+              <h6 className='text-center mt-2 mb-5'>
                 Le devis détaillé de la configuration avec le prix du modèle et
                 des options sélectionnés.
               </h6>
-              <div className="download-estimate">
+              <div className='download-estimate'>
                 <Button
-                  variant="primary"
+                  variant='primary'
                   onClick={() => this.setState({ modalIsOpen: true })}
                 >
-                  <FontAwesomeIcon className="mr-2" icon={faDownload} />
+                  <FontAwesomeIcon className='mr-2' icon={faDownload} />
                   Télécharger
                 </Button>
               </div>
             </div>
-            <Table bordered hover className="text-center my-4 mx-6">
+            <Table bordered hover className='text-center my-4 mx-6'>
               <thead>
                 <tr>
                   <td>Type d'option</td>
@@ -113,8 +114,10 @@ class Estimate extends Component<EstimateProps, EstimateState> {
                   <tr>
                     <td>Modèle</td>
                     <td>{data.houseModel.name}</td>
-                    <td className="price">
-                      {parseFloat(data.houseModel.price).toFixed(2)}
+                    <td className='price'>
+                      {parseFloat(data.houseModel.price).toLocaleString(
+                        'fr-FR'
+                      )}
                     </td>
                   </tr>
                 )}
@@ -122,15 +125,17 @@ class Estimate extends Component<EstimateProps, EstimateState> {
                   <tr key={i}>
                     <td>{e.option.name}</td>
                     <td>{e.value.name}</td>
-                    <td className="price">
-                      {parseFloat(e.value.price).toFixed(2)}
+                    <td className='price'>
+                      {parseFloat(e.value.price).toLocaleString('fr-FR')}
                     </td>
                   </tr>
                 ))}
-                <tr className="bg-lightgreen font-weight-bold">
+                <tr className='bg-lightgreen font-weight-bold'>
                   <td>Coût total des options</td>
                   <td></td>
-                  <td className="price">{parseFloat(data.total).toFixed(2)}</td>
+                  <td className='price'>
+                    {parseFloat(data.total).toLocaleString('fr-FR')}
+                  </td>
                 </tr>
               </tbody>
             </Table>
@@ -150,8 +155,8 @@ class Estimate extends Component<EstimateProps, EstimateState> {
             </Modal.Body>
           </Modal>
         )}
-        <div className="circle1"></div>
-        <div className="circle2"></div>
+        <div className='circle1'></div>
+        <div className='circle2'></div>
       </div>
     );
   }

@@ -143,12 +143,12 @@ class ModelConfiguration extends React.Component<any, any> {
     return (
       <div>
         <Row>
-          <Col md={8} className="col">
-            <div className="content CanvaContainer">
+          <Col md={8} className='col'>
+            <div className='content CanvaContainer'>
               <h5>Visualisation du modèle {this.props.model.name}</h5>
               <Canvas
                 shadows
-                className="Canva"
+                className='Canva'
                 camera={{ position: [0, 0, 12], fov: 60 }}
               >
                 <spotLight
@@ -174,34 +174,34 @@ class ModelConfiguration extends React.Component<any, any> {
               </Canvas>
             </div>
           </Col>
-          <Col md={4} className="col">
-            <div className="content options">
-              <h5 className="text-light">Options</h5>
+          <Col md={4} className='col'>
+            <div className='content options'>
+              <h5 className='text-light'>Options</h5>
               <Form>
-                <Form.Group controlId="exampleForm.ControlSelect1">
+                <Form.Group controlId='exampleForm.ControlSelect1'>
                   <Form.Label>Mur côté</Form.Label>
-                  <Form.Control onChange={this.handleSelectMurCote} as="select">
-                    <option value="#ffffff">Blanc</option>
-                    <option value="#ff0000">Rouge</option>
-                    <option value="#00ff00">Vert</option>
-                    <option value="#0000ff">Bleu</option>
+                  <Form.Control onChange={this.handleSelectMurCote} as='select'>
+                    <option value='#ffffff'>Blanc</option>
+                    <option value='#ff0000'>Rouge</option>
+                    <option value='#00ff00'>Vert</option>
+                    <option value='#0000ff'>Bleu</option>
                   </Form.Control>
                 </Form.Group>
-                <Form.Group controlId="exampleForm.ControlSelect2">
+                <Form.Group controlId='exampleForm.ControlSelect2'>
                   <Form.Label>Mur fond</Form.Label>
-                  <Form.Control onChange={this.handleSelectMurFond} as="select">
-                    <option value="#ffffff">Blanc</option>
-                    <option value="#ff0000">Rouge</option>
-                    <option value="#00ff00">Vert</option>
-                    <option value="#0000ff">Bleu</option>
+                  <Form.Control onChange={this.handleSelectMurFond} as='select'>
+                    <option value='#ffffff'>Blanc</option>
+                    <option value='#ff0000'>Rouge</option>
+                    <option value='#00ff00'>Vert</option>
+                    <option value='#0000ff'>Bleu</option>
                   </Form.Control>
                 </Form.Group>
-                <Form.Group controlId="formBasicCheckbox">
+                <Form.Group controlId='formBasicCheckbox'>
                   <Form.Check
                     defaultChecked={state.items.Meuble}
                     onChange={this.handleChangeCB}
-                    type="checkbox"
-                    label="Meubles"
+                    type='checkbox'
+                    label='Meubles'
                   />
                 </Form.Group>
               </Form>
@@ -209,43 +209,35 @@ class ModelConfiguration extends React.Component<any, any> {
           </Col>
         </Row>
         <Row>
-          <Col md={4} className="col devis">
-            <div className="content text-center">
+          <Col md={4} className='col devis'>
+            <div className='content text-center'>
               <h5>Aperçu du devis</h5>
-              <Row className="mb-0">
+              <Row className='mb-0'>
                 <Col>
-                  <h6>Bardage</h6>
-                  <p>10 343,56€</p>
+                  <h6>Modèle</h6>
+                  <p className='price'>10 343,56</p>
                 </Col>
                 <Col>
-                  <h6>Charpente</h6>
-                  <p>10 343,56€</p>
-                </Col>
-                <Col>
-                  <h6>Menuiserie</h6>
-                  <p>10 343,56€</p>
+                  <h6>Options</h6>
+                  <p className='price'>{(10343.56).toLocaleString('fr-FR')}</p>
                 </Col>
               </Row>
-              <div className="total">34 343,23€</div>
+              <div className='total price'>34 343,23</div>
             </div>
           </Col>
-          <Col md={4} className="col conso">
-            <div className="content text-center">
+          <Col md={4} className='col conso'>
+            <div className='content text-center'>
               <h5>Aperçu de la consommation</h5>
-              <Row>
-                <Col md={4}>
-                  {this.state.conso && this.state.conso.global && (
-                    <div className="percentage">
-                      {this.state.conso.global.diffPercentage}
-                    </div>
-                  )}
-                </Col>
-                <Col md={8}>
-                  <div className="conso-label">
-                    d'économie par rapport à un logement de référence.
+              <div className='conso-data'>
+                {this.state.conso && this.state.conso.global && (
+                  <div className='percentage'>
+                    {this.state.conso.global.diffPercentage}
                   </div>
-                </Col>
-              </Row>
+                )}
+                <div className='conso-label'>
+                  d'économie par rapport à un logement de référence.
+                </div>
+              </div>
             </div>
           </Col>
         </Row>

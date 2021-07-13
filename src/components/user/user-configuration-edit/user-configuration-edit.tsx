@@ -62,6 +62,7 @@ class HouseModelEdit extends React.Component<
     this.fetchConfiguration();
   }
 
+  // Loads the configuration
   async fetchConfiguration(): Promise<void> {
     apiRequest(`configuration/${this.state.item.id}`, 'GET', [])
       .then((response) => {
@@ -74,6 +75,7 @@ class HouseModelEdit extends React.Component<
       .catch((error) => console.log(error));
   }
 
+  // Updates the configuration
   async submitForm(values: Configuration): Promise<void> {
     const configurationValues =
       values.configurationValues?.map((cv) => cv.id_Value) ?? [];
@@ -94,28 +96,28 @@ class HouseModelEdit extends React.Component<
   render() {
     const { item, error } = this.state;
     return (
-      <main className="p-5 w-100 bg">
-        <div className="circle1"></div>
-        <div className="circle2"></div>
-        <div className="p-5 form w-75 mx-auto">
+      <main className='p-5 w-100 bg'>
+        <div className='circle1'></div>
+        <div className='circle2'></div>
+        <div className='p-5 form w-75 mx-auto'>
           {error && (
-            <div className="alert alert-danger m-4">
+            <div className='alert alert-danger m-4'>
               <FontAwesomeIcon icon={faTimes} />
               Une erreur est survenue :<p>Message : {error.message}</p>
             </div>
           )}
-          <div className="mb-5 d-flex justify-content-between align-items-center">
+          <div className='mb-5 d-flex justify-content-between align-items-center'>
             <h3>
-              <FontAwesomeIcon className="mr-2" icon={faHome} />
+              <FontAwesomeIcon className='mr-2' icon={faHome} />
               Editer une configuration
             </h3>
             <Button
-              variant="primary"
-              className="p-3"
+              variant='primary'
+              className='p-3'
               href={`${process.env.REACT_APP_BASE_URL}/config/${item.id}`}
             >
               Reprendre la configuration
-              <FontAwesomeIcon className="ml-2" icon={faArrowCircleRight} />
+              <FontAwesomeIcon className='ml-2' icon={faArrowCircleRight} />
             </Button>
           </div>
           <Formik
@@ -138,32 +140,32 @@ class HouseModelEdit extends React.Component<
               <Form onSubmit={handleSubmit}>
                 <Row>
                   <Col sm={12}>
-                    <InputGroup className="mb-3">
+                    <InputGroup className='mb-3'>
                       <InputGroup.Prepend>
-                        <InputGroup.Text id="NameIcon">
+                        <InputGroup.Text id='NameIcon'>
                           <FontAwesomeIcon icon={faKeyboard} />
                         </InputGroup.Text>
                       </InputGroup.Prepend>
                       <FormControl
-                        placeholder="Nom"
-                        name="name"
+                        placeholder='Nom'
+                        name='name'
                         value={values.name}
                         onChange={(e) => handleChange(e)}
                         isInvalid={!!(submitCount > 0 && errors.name)}
                       />
-                      <Form.Control.Feedback type="invalid">
+                      <Form.Control.Feedback type='invalid'>
                         {errors.name}
                       </Form.Control.Feedback>
                     </InputGroup>
                   </Col>{' '}
                 </Row>
                 <Button
-                  variant="primary"
-                  className="d-block mx-auto mt-3 p-3"
-                  type="submit"
+                  variant='primary'
+                  className='d-block mx-auto mt-3 p-3'
+                  type='submit'
                   disabled={submitCount > 0 && !isValid}
                 >
-                  SAUVEGARDER <FontAwesomeIcon className="ml-2" icon={faSave} />
+                  SAUVEGARDER <FontAwesomeIcon className='ml-2' icon={faSave} />
                 </Button>
               </Form>
             )}

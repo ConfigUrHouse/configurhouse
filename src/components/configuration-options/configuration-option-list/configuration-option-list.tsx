@@ -1,22 +1,22 @@
-import React from "react";
-import { faTimes, faHome, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { withRouter } from "react-router";
-import { ApiResponseError } from "../../../api/models";
-import { ItemsTableColumn } from "../../templates/items-table/models";
-import { ConfigurationOption } from "../../../models";
+import React from 'react';
+import { faTimes, faHome, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { withRouter } from 'react-router';
+import { ApiResponseError } from '../../../api/models';
+import { ItemsTableColumn } from '../../templates/items-table/models';
+import { ConfigurationOption } from '../../../models';
 import {
   ConfigurationOptionListProps,
   ConfigurationOptionListState,
-} from "./models";
+} from './models';
 import {
   emptyPaginatedData,
   PaginatedResponse,
-} from "../../../utils/pagination";
-import { apiRequest } from "../../../api/utils";
-import { ItemsTable } from "../../templates/items-table/items-table";
-import { Button } from "react-bootstrap";
-import "./configuration-option-list.css";
+} from '../../../utils/pagination';
+import { apiRequest } from '../../../api/utils';
+import { ItemsTable } from '../../templates/items-table/items-table';
+import { Button } from 'react-bootstrap';
+import './configuration-option-list.css';
 
 class ConfigurationOptionList extends React.Component<
   ConfigurationOptionListProps,
@@ -24,25 +24,25 @@ class ConfigurationOptionList extends React.Component<
 > {
   private columns: ItemsTableColumn<ConfigurationOption>[] = [
     {
-      name: "id",
-      displayName: "ID",
+      name: 'id',
+      displayName: 'ID',
     },
     {
-      name: "name",
-      displayName: "Nom",
+      name: 'name',
+      displayName: 'Nom',
     },
     {
-      name: "modelType",
-      displayName: "Modèle",
+      name: 'modelType',
+      displayName: 'Modèle',
       component(item) {
-        return item.houseModel?.name ?? "Inconnu";
+        return item.houseModel?.name ?? 'Inconnu';
       },
     },
     {
-      name: "mesh",
-      displayName: "Mesh",
+      name: 'mesh',
+      displayName: 'Mesh',
       component(item) {
-        return item.mesh?.name ?? "Inconnu";
+        return item.mesh?.name ?? 'Inconnu';
       },
     },
   ];
@@ -64,6 +64,7 @@ class ConfigurationOptionList extends React.Component<
     this.fetchConfigurationOptions();
   }
 
+  // Loads the list of options
   private async fetchConfigurationOptions() {
     const {
       paginatedItems: { currentPage },
@@ -71,12 +72,13 @@ class ConfigurationOptionList extends React.Component<
 
     const queryParams = [`page=${currentPage}`, `size=10`];
 
-    apiRequest("optionConf", "GET", queryParams)
+    apiRequest('optionConf', 'GET', queryParams)
       .then((response) => {
-        if (response.status === "error") {
+        if (response.status === 'error') {
           this.setState({ error: response as ApiResponseError });
         } else {
-          const paginatedItems = response as PaginatedResponse<ConfigurationOption>;
+          const paginatedItems =
+            response as PaginatedResponse<ConfigurationOption>;
           this.setState({ paginatedItems });
         }
       })
@@ -93,9 +95,9 @@ class ConfigurationOptionList extends React.Component<
 
   private async handleDelete(id: number): Promise<void> {
     try {
-      const response = await apiRequest(`optionConf/${id}`, "DELETE", []);
+      const response = await apiRequest(`optionConf/${id}`, 'DELETE', []);
 
-      if (response.status === "error") {
+      if (response.status === 'error') {
         this.setState({ error: response as ApiResponseError });
       } else {
         this.fetchConfigurationOptions();
@@ -123,24 +125,24 @@ class ConfigurationOptionList extends React.Component<
   render() {
     const { paginatedItems } = this.state;
     return (
-      <main className="p-5 w-100 bg">
-        <div className="circle1"></div>
-        <div className="circle2"></div>
-        <div className="p-5 form w-75 mx-auto">
+      <main className='p-5 w-100 bg'>
+        <div className='circle1'></div>
+        <div className='circle2'></div>
+        <div className='p-5 form w-75 mx-auto'>
           {this.state.error && (
-            <div className="alert alert-danger m-4">
+            <div className='alert alert-danger m-4'>
               <FontAwesomeIcon icon={faTimes} />
               Une erreur est survenue :
               <p>Message : {this.state.error.message}</p>
             </div>
           )}
-          <div className="d-flex justify-content-between">
-            <h3 className="mb-2">
-              <FontAwesomeIcon className="mr-2" icon={faHome} />
+          <div className='d-flex justify-content-between'>
+            <h3 className='mb-2'>
+              <FontAwesomeIcon className='mr-2' icon={faHome} />
               Liste des options de configurations
             </h3>
-            <Button variant="primary" href="/configurationOptions/add">
-              <FontAwesomeIcon className="mr-2" icon={faPlus} />
+            <Button variant='primary' href='/configurationOptions/add'>
+              <FontAwesomeIcon className='mr-2' icon={faPlus} />
               AJOUTER
             </Button>
           </div>

@@ -1,6 +1,6 @@
-import React from "react";
-import { Formik } from "formik";
-import * as Yup from "yup";
+import React from 'react';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 import {
   Button,
   Col,
@@ -9,7 +9,7 @@ import {
   InputGroup,
   Modal,
   Row,
-} from "react-bootstrap";
+} from 'react-bootstrap';
 import {
   faCheck,
   faEnvelope,
@@ -19,61 +19,61 @@ import {
   faTimes,
   faUser,
   faUserTag,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   emptyPaginatedData,
   PaginatedResponse,
-} from "../../../utils/pagination";
-import { UsersListState, FormValues, UserListProps } from "./models";
-import { apiRequest } from "../../../api/utils";
-import { ItemsTableColumn } from "../../templates/items-table/models";
-import { ItemsTable } from "../../templates/items-table/items-table";
-import { Role, User } from "../../../models";
-import { withRouter } from "react-router";
-import "./user-list.css";
-import { ApiResponseError } from "../../../api/models";
-import { EditorField } from "../../templates/editor-field/editor-field";
+} from '../../../utils/pagination';
+import { UsersListState, FormValues, UserListProps } from './models';
+import { apiRequest } from '../../../api/utils';
+import { ItemsTableColumn } from '../../templates/items-table/models';
+import { ItemsTable } from '../../templates/items-table/items-table';
+import { Role, User } from '../../../models';
+import { withRouter } from 'react-router';
+import './user-list.css';
+import { ApiResponseError } from '../../../api/models';
+import { EditorField } from '../../templates/editor-field/editor-field';
 
-const defaultRole = "Tous";
+const defaultRole = 'Tous';
 
 const initialValues: FormValues = {
-  firstName: "",
-  lastName: "",
+  firstName: '',
+  lastName: '',
   role: defaultRole,
 };
 
 const initialEmailValues = {
-  subject: "",
-  content: "",
+  subject: '',
+  content: '',
   consent: false,
 };
 
 const columns: ItemsTableColumn<User>[] = [
   {
-    name: "id",
-    displayName: "ID",
+    name: 'id',
+    displayName: 'ID',
   },
   {
-    name: "lastname",
-    displayName: "Nom",
+    name: 'lastname',
+    displayName: 'Nom',
   },
   {
-    name: "firstname",
-    displayName: "Prénom",
+    name: 'firstname',
+    displayName: 'Prénom',
   },
   {
-    name: "email",
-    displayName: "Email",
+    name: 'email',
+    displayName: 'Email',
   },
   {
-    name: "active",
-    displayName: "Vérifié",
+    name: 'active',
+    displayName: 'Vérifié',
     component(item) {
       return (
         <FontAwesomeIcon
           icon={item.active ? faCheck : faTimes}
-          color={item.active ? "green" : "red"}
+          color={item.active ? 'green' : 'red'}
         />
       );
     },
@@ -103,9 +103,9 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
   private searchSchema = Yup.object().shape({
     firstName: Yup.string().min(
       2,
-      "Le prénom doit faire au moins 2 caractères"
+      'Le prénom doit faire au moins 2 caractères'
     ),
-    lastName: Yup.string().min(2, "Le nom doit faire au moins 2 caractères"),
+    lastName: Yup.string().min(2, 'Le nom doit faire au moins 2 caractères'),
     role: Yup.lazy(() =>
       Yup.string().oneOf([
         ...this.state.roles.map((role) => role.name),
@@ -116,7 +116,7 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
 
   private emailSchema = Yup.object().shape({
     object: Yup.string(),
-    content: Yup.string().required("Veuillez saisir un message"),
+    content: Yup.string().required('Veuillez saisir un message'),
     consent: Yup.bool().isTrue("Veuillez cocher cette case avant d'envoyer"),
   });
 
@@ -125,10 +125,11 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
     this.fetchUsers();
   }
 
+  // Loads the list of roles
   private async fetchRoles() {
-    apiRequest("role", "GET", [])
+    apiRequest('role', 'GET', [])
       .then((response) => {
-        if (response.status === "error") {
+        if (response.status === 'error') {
           this.setState({ error: response as ApiResponseError });
         } else {
           const roles: any = response.items as Role[];
@@ -138,6 +139,7 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
       .catch((error) => console.log(error));
   }
 
+  // Loads the list of users
   private async fetchUsers() {
     const {
       paginatedItems: { currentPage },
@@ -155,12 +157,13 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
       queryParams.push(`role=${formValues.role}`);
     }
 
-    apiRequest("user", "GET", queryParams)
+    apiRequest('user', 'GET', queryParams)
       .then((response) => {
-        if (response.status === "error") {
+        if (response.status === 'error') {
           this.setState({ error: response as ApiResponseError });
         } else {
-          const paginatedItems: PaginatedResponse<User> = response as PaginatedResponse<User>;
+          const paginatedItems: PaginatedResponse<User> =
+            response as PaginatedResponse<User>;
           this.setState({ paginatedItems });
         }
       })
@@ -169,6 +172,7 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
     this.setState({ paginatedItems: emptyPaginatedData<User>() });
   }
 
+  // Refreshes the list of users based on the selected filters
   private async fetchAllResults(): Promise<User[]> {
     const formValues = this.state.formValues;
 
@@ -183,13 +187,14 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
       queryParams.push(`role=${formValues.role}`);
     }
 
-    return apiRequest("user", "GET", queryParams)
+    return apiRequest('user', 'GET', queryParams)
       .then((response) => {
-        if (response.status === "error") {
+        if (response.status === 'error') {
           this.setState({ error: response as ApiResponseError });
           return [];
         } else {
-          const paginatedItems: PaginatedResponse<User> = response as PaginatedResponse<User>;
+          const paginatedItems: PaginatedResponse<User> =
+            response as PaginatedResponse<User>;
           return paginatedItems.items;
         }
       })
@@ -199,15 +204,17 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
       });
   }
 
+  // Moves to the edit page for the user
   private handleEdit(id: number): void {
     let path = `user/${id}/edit`;
     this.props.history.push(path);
   }
 
+  // Deletes the user and refreshes the user list
   private async handleDelete(id: number): Promise<void> {
-    return apiRequest(`user/${id}`, "DELETE", [])
+    return apiRequest(`user/${id}`, 'DELETE', [])
       .then((response) => {
-        if (response.status === "error") {
+        if (response.status === 'error') {
           this.setState({ error: response as ApiResponseError });
         } else {
           this.fetchUsers();
@@ -238,18 +245,19 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
     this.setState({ showEmailModal: false });
   }
 
+  // Sends an email to a list of users
   private async sendEmails(
     emailList: string[],
     subject: string,
     content: string
   ) {
-    apiRequest(`utils/sendEmails`, "POST", [], {
+    apiRequest(`utils/sendEmails`, 'POST', [], {
       emails: emailList,
       subject: subject,
       content: content,
     })
       .then((response) => {
-        if (response.status === "error") {
+        if (response.status === 'error') {
           this.setState({ error: response as ApiResponseError });
         }
         this.handleEmailModalClose();
@@ -260,11 +268,11 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
   render() {
     const { paginatedItems } = this.state;
     return (
-      <main className="p-5 w-100 bg">
+      <main className='p-5 w-100 bg'>
         <Modal
           show={this.state.showEmailModal}
           onHide={this.handleEmailModalClose}
-          size="xl"
+          size='xl'
         >
           <Modal.Header closeButton>
             <Modal.Title>Envoyer un email</Modal.Title>
@@ -292,49 +300,49 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
             }) => (
               <Form noValidate onSubmit={handleSubmit}>
                 <Modal.Body>
-                  <InputGroup className="mb-3">
+                  <InputGroup className='mb-3'>
                     <InputGroup.Prepend>
                       <InputGroup.Text>
                         <FontAwesomeIcon icon={faUser} />
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
-                      placeholder="Objet"
-                      name="subject"
+                      placeholder='Objet'
+                      name='subject'
                       value={values.subject}
                       onChange={handleChange}
                       isInvalid={!!errors.subject}
                     />
-                    <Form.Control.Feedback type="invalid">
+                    <Form.Control.Feedback type='invalid'>
                       {errors.subject}
                     </Form.Control.Feedback>
                   </InputGroup>
-                  <EditorField name="content" initialValue="<p></p>" />
+                  <EditorField name='content' initialValue='<p></p>' />
                   <Form.Check>
                     <Form.Check.Input
-                      name="consent"
+                      name='consent'
                       checked={values.consent}
                       onChange={handleChange}
                       isInvalid={!!errors.consent}
                     />
                     <Form.Check.Label>
-                      Envoyer un email à {this.state.selectedUsers.length}{" "}
-                      utilisateur(s){" "}
+                      Envoyer un email à {this.state.selectedUsers.length}{' '}
+                      utilisateur(s){' '}
                       <FontAwesomeIcon icon={faExclamationTriangle} />
                     </Form.Check.Label>
                   </Form.Check>
-                  <Form.Control.Feedback type="invalid">
+                  <Form.Control.Feedback type='invalid'>
                     {errors.consent}
                   </Form.Control.Feedback>
                 </Modal.Body>
                 <Modal.Footer>
                   <Button
-                    variant="secondary"
+                    variant='secondary'
                     onClick={this.handleEmailModalClose}
                   >
                     Annuler
                   </Button>
-                  <Button variant="primary" type="submit" disabled={!isValid}>
+                  <Button variant='primary' type='submit' disabled={!isValid}>
                     ENVOYER <FontAwesomeIcon icon={faPaperPlane} />
                   </Button>
                 </Modal.Footer>
@@ -342,18 +350,18 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
             )}
           </Formik>
         </Modal>
-        <div className="circle1"></div>
-        <div className="circle2"></div>
-        <div className="p-5 form w-75 mx-auto">
+        <div className='circle1'></div>
+        <div className='circle2'></div>
+        <div className='p-5 form w-75 mx-auto'>
           {this.state.error && (
-            <div className="alert alert-danger m-4">
+            <div className='alert alert-danger m-4'>
               <FontAwesomeIcon icon={faTimes} />
               Une erreur est survenue :
               <p>Message : {this.state.error.message}</p>
             </div>
           )}
-          <h3 className="mb-3">
-            <FontAwesomeIcon className="mr-2" icon={faUser} />
+          <h3 className='mb-3'>
+            <FontAwesomeIcon className='mr-2' icon={faUser} />
             Liste des utilisateurs
           </h3>
           <Formik
@@ -370,19 +378,18 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
               isValid,
               errors,
             }) => (
-            
-            <Form noValidate className="ml-3 mr-3" onSubmit={handleSubmit}>
+              <Form noValidate className='ml-3 mr-3' onSubmit={handleSubmit}>
                 <Row>
                   <Col md={6}>
-                    <InputGroup className="mb-3">
+                    <InputGroup className='mb-3'>
                       <InputGroup.Prepend>
-                        <InputGroup.Text id="FirstnameIcon">
+                        <InputGroup.Text id='FirstnameIcon'>
                           <FontAwesomeIcon icon={faUser} />
                         </InputGroup.Text>
                       </InputGroup.Prepend>
                       <FormControl
-                        placeholder="Prénom"
-                        name="firstName"
+                        placeholder='Prénom'
+                        name='firstName'
                         value={values.firstName}
                         onChange={(e) => {
                           this.setState({
@@ -395,21 +402,21 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
                         }}
                         isInvalid={!!errors.firstName}
                       />
-                      <Form.Control.Feedback type="invalid">
+                      <Form.Control.Feedback type='invalid'>
                         {errors.firstName}
                       </Form.Control.Feedback>
                     </InputGroup>
                   </Col>
                   <Col md={6}>
-                    <InputGroup className="mb-3">
+                    <InputGroup className='mb-3'>
                       <InputGroup.Prepend>
-                        <InputGroup.Text id="LastnameIcon">
+                        <InputGroup.Text id='LastnameIcon'>
                           <FontAwesomeIcon icon={faUser} />
                         </InputGroup.Text>
                       </InputGroup.Prepend>
                       <FormControl
-                        placeholder="Nom de famille"
-                        name="lastName"
+                        placeholder='Nom de famille'
+                        name='lastName'
                         value={values.lastName}
                         onChange={(e) => {
                           this.setState({
@@ -422,21 +429,21 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
                         }}
                         isInvalid={!!errors.lastName}
                       />
-                      <Form.Control.Feedback type="invalid">
+                      <Form.Control.Feedback type='invalid'>
                         {errors.lastName}
                       </Form.Control.Feedback>
                     </InputGroup>
                   </Col>
                 </Row>
-                <InputGroup className="mb-3">
+                <InputGroup className='mb-3'>
                   <InputGroup.Prepend>
-                    <InputGroup.Text id="RoleIcon">
+                    <InputGroup.Text id='RoleIcon'>
                       <FontAwesomeIcon icon={faUserTag} />
                     </InputGroup.Text>
                   </InputGroup.Prepend>
                   <Form.Control
-                    id="role"
-                    as="select"
+                    id='role'
+                    as='select'
                     value={values.role}
                     onChange={(e) => {
                       this.setState({
@@ -454,13 +461,13 @@ export class UserList extends React.Component<UserListProps, UsersListState> {
                       <option key={role.id}>{role.name}</option>
                     ))}
                   </Form.Control>
-                  <Form.Control.Feedback type="invalid">
+                  <Form.Control.Feedback type='invalid'>
                     {errors.role}
                   </Form.Control.Feedback>
                 </InputGroup>
-                <Button variant="primary" type="submit">
-                  RECHERCHER{" "}
-                  <FontAwesomeIcon className="ml-2" icon={faSearch} />
+                <Button variant='primary' type='submit'>
+                  RECHERCHER{' '}
+                  <FontAwesomeIcon className='ml-2' icon={faSearch} />
                 </Button>
               </Form>
             )}

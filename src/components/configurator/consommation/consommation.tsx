@@ -39,6 +39,7 @@ export class Consommation extends React.Component<
   private repartitionRefChartRef = {};
   private differencesChartRef = {};
 
+  // Loads the consumption data for the configuration
   private async fetchConso() {
     try {
       let response: any;
@@ -88,18 +89,18 @@ export class Consommation extends React.Component<
   render() {
     const conso = this.state.conso;
     return (
-      <main className="p-5 w-100 bg-white m-0 consommation">
-        <h2 className="text-green text-center">
+      <main className='p-5 w-100 bg-white m-0 consommation'>
+        <h2 className='text-green text-center'>
           <FontAwesomeIcon icon={faLightbulb} /> Estimation de consommation
         </h2>
         {!this.props.optionValues && !this.props.configurationId ? (
-          <h6 className="text-center mt-2 mb-5">
+          <h6 className='text-center mt-2 mb-5'>
             Voici une estimation de la consommation du modèle avec sa
             configuration par défaut, par rapport à une consommation de
             référence.
           </h6>
         ) : (
-          <h6 className="text-center mt-2 mb-5">
+          <h6 className='text-center mt-2 mb-5'>
             Voici une estimation de la consommation de la configuration, par
             rapport à une consommation de référence.
           </h6>
@@ -107,12 +108,12 @@ export class Consommation extends React.Component<
         {this.state.conso && (
           <div>
             <Row>
-              <Col md={12} className="p-4">
-                <div className="rect">
-                  <h3 className="text-green text-center">
+              <Col md={12} className='p-4'>
+                <div className='rect'>
+                  <h3 className='text-green text-center'>
                     <FontAwesomeIcon icon={faBolt} /> Consommation par poste
                   </h3>
-                  <div className="barChart">
+                  <div className='barChart'>
                     <Bar
                       options={{
                         responsive: true,
@@ -153,13 +154,13 @@ export class Consommation extends React.Component<
               </Col>
             </Row>
             <Row>
-              <Col md={6} className="p-4">
-                <div className="rect">
-                  <h3 className="text-green text-center">
+              <Col md={6} className='p-4'>
+                <div className='rect'>
+                  <h3 className='text-green text-center'>
                     <FontAwesomeIcon icon={faChartPie} /> Répartition par poste
                     (configuration)
                   </h3>
-                  <div className="doughnutChart">
+                  <div className='doughnutChart'>
                     <Doughnut
                       options={{
                         responsive: true,
@@ -184,13 +185,13 @@ export class Consommation extends React.Component<
                   </div>
                 </div>
               </Col>
-              <Col md={6} className="p-4">
-                <div className="rect">
-                  <h3 className="text-green text-center">
+              <Col md={6} className='p-4'>
+                <div className='rect'>
+                  <h3 className='text-green text-center'>
                     <FontAwesomeIcon icon={faChartPie} /> Répartition par poste
                     (référence)
                   </h3>
-                  <div className="doughnutChart">
+                  <div className='doughnutChart'>
                     <Doughnut
                       options={{
                         responsive: true,
@@ -220,17 +221,17 @@ export class Consommation extends React.Component<
               </Col>
             </Row>
             <Row>
-              <Col md={6} className="p-4">
-                <div className="rect">
-                  <h3 className="text-green text-center">
+              <Col md={6} className='p-4'>
+                <div className='rect'>
+                  <h3 className='text-green text-center'>
                     <FontAwesomeIcon icon={faHome} /> Contexte
                   </h3>
                   <span>
                     Consommation d'énergie par an, pour{' '}
                     {this.state.conso.context.occupants} personnes
                   </span>
-                  <Table bordered hover className="mt-5 text-center">
-                    <caption className="text-green">Options choisies</caption>
+                  <Table bordered hover className='mt-5 text-center'>
+                    <caption className='text-green'>Options choisies</caption>
                     <thead>
                       <tr>
                         <th>Option</th>
@@ -252,16 +253,16 @@ export class Consommation extends React.Component<
                   </Table>
                 </div>
               </Col>
-              <Col md={6} className="p-4">
-                <div className="rect">
-                  <h3 className="text-green text-center">
+              <Col md={6} className='p-4'>
+                <div className='rect'>
+                  <h3 className='text-green text-center'>
                     <FontAwesomeIcon icon={faList} /> Postes de consommation
                   </h3>
-                  <ListGroup variant="flush">
+                  <ListGroup variant='flush'>
                     {this.state.conso.byPosteConso.reference.map(
                       (conso: any, index: any) => (
                         <ListGroup.Item key={index}>
-                          <span className="text-green">
+                          <span className='text-green'>
                             {conso.posteConso.name}
                           </span>
                           <br />
@@ -275,8 +276,8 @@ export class Consommation extends React.Component<
             </Row>
           </div>
         )}
-        <div className="circle1"></div>
-        <div className="circle2"></div>
+        <div className='circle1'></div>
+        <div className='circle2'></div>
       </main>
     );
   }

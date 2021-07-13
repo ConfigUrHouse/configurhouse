@@ -1,13 +1,13 @@
-import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faUserShield,
   faCheck,
   faTimes,
-} from "@fortawesome/free-solid-svg-icons";
-import { Form, Row, Col } from "react-bootstrap";
-import { apiRequest } from "../../../api/utils";
-import { ApiResponseError } from "../../../api/models";
+} from '@fortawesome/free-solid-svg-icons';
+import { Form, Row, Col } from 'react-bootstrap';
+import { apiRequest } from '../../../api/utils';
+import { ApiResponseError } from '../../../api/models';
 
 class UserPolicies extends React.Component<any, any> {
   constructor(props: any) {
@@ -24,9 +24,10 @@ class UserPolicies extends React.Component<any, any> {
     this.fetchUserPolice();
   }
 
+  // Loads the list of policies
   async fetchPolice() {
     try {
-      const polices: any = await apiRequest("police", "GET");
+      const polices: any = await apiRequest('police', 'GET');
 
       this.setState({ polices: polices });
     } catch (error) {
@@ -34,26 +35,29 @@ class UserPolicies extends React.Component<any, any> {
     }
   }
 
+  // Loads the list of policies accepted by the user
   async fetchUserPolice() {
     try {
-      const userId = await window.localStorage.getItem("userId");
+      const userId = await window.localStorage.getItem('userId');
 
-      const userPolices: any = await apiRequest("userPolice/" + userId, "GET");
+      const userPolices: any = await apiRequest('userPolice/' + userId, 'GET');
       this.setState({ userPolices: userPolices });
     } catch (error) {
       this.setState({ userPolices: [] });
     }
   }
+
+  // Updates whether the user has accepted or not the selected policy
   async handleChange(event: any) {
-    if (event.target.value == "false") {
+    if (event.target.value == 'false') {
       try {
         const response = await apiRequest(
           `userPolice/${event.target.name}`,
-          "DELETE",
+          'DELETE',
           []
         );
 
-        if (response.status === "error") {
+        if (response.status === 'error') {
           this.setState({ error: response as ApiResponseError });
         } else {
           this.fetchUserPolice();
@@ -63,14 +67,14 @@ class UserPolicies extends React.Component<any, any> {
         this.setState({ success: -1 });
       }
     } else {
-      const userId = await window.localStorage.getItem("userId");
+      const userId = await window.localStorage.getItem('userId');
 
-      apiRequest(`userPolice`, "POST", "", {
+      apiRequest(`userPolice`, 'POST', '', {
         id_User: userId,
         id_Police: event.target.name,
       })
         .then((response) => {
-          if (response.status === "error") {
+          if (response.status === 'error') {
             this.setState({ error: response as ApiResponseError });
           } else {
             this.fetchUserPolice();
@@ -84,13 +88,13 @@ class UserPolicies extends React.Component<any, any> {
     let alertDiv;
     if (this.state.success == 1) {
       alertDiv = (
-        <div className="alert alert-success mb-4">
+        <div className='alert alert-success mb-4'>
           <FontAwesomeIcon icon={faCheck} /> Préférences changées avec succès
         </div>
       );
     } else if (this.state.success == -1) {
       alertDiv = (
-        <div className="alert alert-danger m-4">
+        <div className='alert alert-danger m-4'>
           <FontAwesomeIcon icon={faTimes} /> Une erreur est survenue lors du
           changement des préférences
         </div>
@@ -98,17 +102,17 @@ class UserPolicies extends React.Component<any, any> {
     }
 
     return (
-      <main className="p-5 w-100 bg-white m-0 user-policies">
-        <h2 className="text-green text-center">
+      <main className='p-5 w-100 bg-white m-0 user-policies'>
+        <h2 className='text-green text-center'>
           <FontAwesomeIcon icon={faUserShield} /> Mes politiques de
           confidentialité
         </h2>
-        <h6 className="text-center mt-2 mb-5">
+        <h6 className='text-center mt-2 mb-5'>
           Vous pouvez ici gérer votre préférences de confidentialité
           (utilisation de vos données, ...).
         </h6>
         <hr />
-        <h4 className="mt-5 text-green mb-4">
+        <h4 className='mt-5 text-green mb-4'>
           <FontAwesomeIcon icon={faUserShield} /> Gérer mes préférences de
           gestion de mes données :
         </h4>
@@ -121,12 +125,12 @@ class UserPolicies extends React.Component<any, any> {
             </Col>
             <Col md={2}>
               <Form.Check
-                type="radio"
-                label="Oui"
+                type='radio'
+                label='Oui'
                 name={police.id}
                 inline
-                id={police.name + "_yes"}
-                value="true"
+                id={police.name + '_yes'}
+                value='true'
                 checked={
                   this.state.userPolices.filter(
                     (p: any) => p.id_Police == police.id
@@ -135,12 +139,12 @@ class UserPolicies extends React.Component<any, any> {
                 onChange={this.handleChange.bind(this)}
               />
               <Form.Check
-                type="radio"
-                label="Non"
+                type='radio'
+                label='Non'
                 inline
                 name={police.id}
-                id={police.name + "_no"}
-                value="false"
+                id={police.name + '_no'}
+                value='false'
                 checked={
                   this.state.userPolices.filter(
                     (p: any) => p.id_Police == police.id
@@ -152,8 +156,8 @@ class UserPolicies extends React.Component<any, any> {
           </Row>
         ))}
 
-        <div className="circle1"></div>
-        <div className="circle2"></div>
+        <div className='circle1'></div>
+        <div className='circle2'></div>
       </main>
     );
   }

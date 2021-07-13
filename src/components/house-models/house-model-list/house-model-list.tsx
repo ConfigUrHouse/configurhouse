@@ -1,19 +1,19 @@
-import React from "react";
-import { faTimes, faHome, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { withRouter } from "react-router";
-import "./house-model-list.css";
-import { ApiResponseError } from "../../../api/models";
-import { ItemsTableColumn } from "../../templates/items-table/models";
-import { HouseModel } from "../../../models";
-import { HouseModelsProps, HouseModelsState } from "./models";
+import React from 'react';
+import { faTimes, faHome, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { withRouter } from 'react-router';
+import './house-model-list.css';
+import { ApiResponseError } from '../../../api/models';
+import { ItemsTableColumn } from '../../templates/items-table/models';
+import { HouseModel } from '../../../models';
+import { HouseModelsProps, HouseModelsState } from './models';
 import {
   emptyPaginatedData,
   PaginatedResponse,
-} from "../../../utils/pagination";
-import { apiRequest } from "../../../api/utils";
-import { ItemsTable } from "../../templates/items-table/items-table";
-import { Button } from "react-bootstrap";
+} from '../../../utils/pagination';
+import { apiRequest } from '../../../api/utils';
+import { ItemsTable } from '../../templates/items-table/items-table';
+import { Button } from 'react-bootstrap';
 
 class HouseModelList extends React.Component<
   HouseModelsProps,
@@ -21,18 +21,18 @@ class HouseModelList extends React.Component<
 > {
   private columns: ItemsTableColumn<HouseModel>[] = [
     {
-      name: "id",
-      displayName: "ID",
+      name: 'id',
+      displayName: 'ID',
     },
     {
-      name: "name",
-      displayName: "Nom",
+      name: 'name',
+      displayName: 'Nom',
     },
     {
-      name: "modelType",
-      displayName: "Type de Modèle",
+      name: 'modelType',
+      displayName: 'Type de Modèle',
       component(item) {
-        return item.modelType?.name ?? "Inconnu";
+        return item.modelType?.name ?? 'Inconnu';
       },
     },
   ];
@@ -55,6 +55,7 @@ class HouseModelList extends React.Component<
     this.fetchHouseModels();
   }
 
+  // Loads the list of house models
   private async fetchHouseModels() {
     const {
       paginatedItems: { currentPage },
@@ -62,9 +63,9 @@ class HouseModelList extends React.Component<
 
     const queryParams = [`page=${currentPage}`, `size=10`];
 
-    apiRequest("houseModel", "GET", queryParams)
+    apiRequest('houseModel', 'GET', queryParams)
       .then((response) => {
-        if (response.status === "error") {
+        if (response.status === 'error') {
           this.setState({ error: response as ApiResponseError });
         } else {
           const paginatedItems = response as PaginatedResponse<HouseModel>;
@@ -81,9 +82,9 @@ class HouseModelList extends React.Component<
   }
 
   private async handleDelete(id: number): Promise<void> {
-    return apiRequest(`houseModel/${id}`, "DELETE", [])
+    return apiRequest(`houseModel/${id}`, 'DELETE', [])
       .then((response) => {
-        if (response.status === "error") {
+        if (response.status === 'error') {
           this.setState({ error: response as ApiResponseError });
         } else {
           this.fetchHouseModels();
@@ -117,24 +118,24 @@ class HouseModelList extends React.Component<
   render() {
     const { paginatedItems } = this.state;
     return (
-      <main className="p-5 w-100 bg">
-        <div className="circle1"></div>
-        <div className="circle2"></div>
-        <div className="p-5 form w-75 mx-auto">
+      <main className='p-5 w-100 bg'>
+        <div className='circle1'></div>
+        <div className='circle2'></div>
+        <div className='p-5 form w-75 mx-auto'>
           {this.state.error && (
-            <div className="alert alert-danger m-4">
+            <div className='alert alert-danger m-4'>
               <FontAwesomeIcon icon={faTimes} />
               Une erreur est survenue :
               <p>Message : {this.state.error.message}</p>
             </div>
           )}
-          <div className="d-flex justify-content-between">
-            <h3 className="mb-2">
-              <FontAwesomeIcon className="mr-2" icon={faHome} />
+          <div className='d-flex justify-content-between'>
+            <h3 className='mb-2'>
+              <FontAwesomeIcon className='mr-2' icon={faHome} />
               Liste des modèles
             </h3>
-            <Button variant="primary" href="/houseModels/add">
-              <FontAwesomeIcon className="mr-2" icon={faPlus} />
+            <Button variant='primary' href='/houseModels/add'>
+              <FontAwesomeIcon className='mr-2' icon={faPlus} />
               AJOUTER
             </Button>
           </div>

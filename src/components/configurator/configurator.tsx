@@ -13,15 +13,14 @@ import {
   faPaperPlane,
   faMousePointer,
   faHouseUser,
-  faMailBulk
-
+  faMailBulk,
 } from '@fortawesome/free-solid-svg-icons';
 import { ICurrent } from '../../types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { apiRequest } from '../../api/utils';
 import { Configuration } from '../../models';
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 import { ApiResponseError } from '../../api/models';
 
 class Configurator extends React.Component<any, any> {
@@ -59,6 +58,8 @@ class Configurator extends React.Component<any, any> {
   private handleModalClose(): void {
     this.setState({ error: undefined });
   }
+
+  // Loads the configuration
   async fetchConfiguration(confId: number | null = null) {
     const id = confId || this.state.id;
     try {
@@ -97,6 +98,7 @@ class Configurator extends React.Component<any, any> {
     this.setState({ modelSelected: model });
   }
 
+  // Saves the configuration
   async saveConfiguration() {
     try {
       const {
@@ -127,11 +129,14 @@ class Configurator extends React.Component<any, any> {
     }
   }
 
+  // Moves on to the next step and executes any specific actions if needed
   async next() {
     if (this.state.step == 0) {
+      // Selects the model type on the first step
       this.setState({ model: this.state.modelSelected });
       console.log(this.state.model);
     } else if (this.state.step == 1) {
+      // Moves the user to the login page if the user is not authenticated, otherwise saves the configuration
       if (!this.props.isAuthenticated) {
         this.props.history.push('/login', {
           from: '/config',
@@ -145,6 +150,7 @@ class Configurator extends React.Component<any, any> {
     this.setState({ step: this.state.step + 1 });
   }
 
+  // Moves to the previous step
   previous() {
     this.setState({ step: this.state.step - 1 });
   }
@@ -157,38 +163,39 @@ class Configurator extends React.Component<any, any> {
       'Validation',
     ];
     return (
-      <main className="configurator p-5 w-100">
-        <div className="circle1"></div>
-        <div className="circle2"></div>
-        <div className="timeline">
+      <main className='configurator p-5 w-100'>
+        <div className='circle1'></div>
+        <div className='circle2'></div>
+        <div className='timeline'>
           <div className={`step ${this.state.step == 0 ? 'active' : ''}`}>
             <span>1</span>Choix
           </div>
-          <div className="line">
+          <div className='line'>
             <hr />
           </div>
           <div className={`step ${this.state.step == 1 ? 'active' : ''}`}>
             <span>2</span>Configuration
           </div>
-          <div className="line">
+          <div className='line'>
             <hr />
           </div>
           <div className={`step ${this.state.step == 2 ? 'active' : ''}`}>
             <span>3</span>Devis détaillé
           </div>
-          <div className="line">
+          <div className='line'>
             <hr />
           </div>
           <div className={`step ${this.state.step == 3 ? 'active' : ''}`}>
             <span>4</span>Consommation
           </div>
-          <div className="line">
+          <div className='line'>
             <hr />
           </div>
           <div className={`step ${this.state.step == 4 ? 'active' : ''}`}>
             <span>5</span>Validation
           </div>
         </div>
+        <h5 className='mb-1'>{stepName[this.state.step]}</h5>
         {this.state.step == 0 && (
           <ModelChoice
             model={this.state.model}
@@ -212,59 +219,69 @@ class Configurator extends React.Component<any, any> {
           />
         )}
         {this.state.step == 4 && (
-            
-            <div className="content CanvaContainer mt-5">
-                
-                <h3 className="text-center mt-5">Bravo, votre futur logement est maintenant configuré !</h3>
-                <p className="text-center mt-4 text-green">
-                    Une fois votre configuration envoyée à l'aide du bouton ci-dessous,<br></br>nous vous rappelerons dès que possible afin de discuter de votre futur logement ensemble.
-                </p>
+          <div className='content CanvaContainer mt-5'>
+            <h3 className='text-center mt-5'>
+              Bravo, votre futur logement est maintenant configuré !
+            </h3>
+            <p className='text-center mt-4 text-green'>
+              Une fois votre configuration envoyée à l'aide du bouton
+              ci-dessous,<br></br>nous vous rappelerons dès que possible afin de
+              discuter de votre futur logement ensemble.
+            </p>
 
-                <div className="rect">
-                {this.state.error && (
+            <div className='rect'>
+              {this.state.error && (
                 <Modal show={!!this.state.error} onHide={this.handleModalClose}>
-                    <Modal.Header closeButton>
+                  <Modal.Header closeButton>
                     <Modal.Title>Erreur</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
+                  </Modal.Header>
+                  <Modal.Body>
                     <p>Une erreur est survenue :</p>
                     <p>{this.state.error.message}</p>
-                    </Modal.Body>
+                  </Modal.Body>
                 </Modal>
-                )}
+              )}
 
-              <div className="d-flex justify-content-center mt-4">
+              <div className='d-flex justify-content-center mt-4'>
                 <Button
-                  variant="primary"
-                  className="p-3"
+                  variant='primary'
+                  className='p-3'
                   onClick={this.sendConfiguration}
                 >
-                  <FontAwesomeIcon className="mr-2" icon={faMailBulk} />
+                  <FontAwesomeIcon className='mr-2' icon={faMailBulk} />
                   Envoyer ma configuration à Deschamps
                 </Button>
               </div>
-              
             </div>
-            </div>
+          </div>
         )}
-        <Row className="justify-content-end">
-          <Col md={3} className="col next">
-            <div className="content">
-              <Button className="mt-0" onClick={this.previous}>
-                PRECEDENT <FontAwesomeIcon icon={faArrowCircleLeft} size="lg" className="d-block mx-auto"/>
+        <Row className='justify-content-end'>
+          <Col md={3} className='col next'>
+            <div className='content'>
+              <Button className='mt-0' onClick={this.previous}>
+                PRECEDENT{' '}
+                <FontAwesomeIcon
+                  icon={faArrowCircleLeft}
+                  size='lg'
+                  className='d-block mx-auto'
+                />
               </Button>
             </div>
           </Col>
           {this.state.step <= 3 && (
-           <Col md={3} className="col next">
-           <div className="content">
-             <Button className="mt-0" onClick={this.next}>
-               SUIVANT <FontAwesomeIcon icon={faArrowCircleRight} size="lg" className="d-block mx-auto"/>
-             </Button>
-           </div>
-         </Col>
-        )}
-         
+            <Col md={3} className='col next'>
+              <div className='content'>
+                <Button className='mt-0' onClick={this.next}>
+                  SUIVANT{' '}
+                  <FontAwesomeIcon
+                    icon={faArrowCircleRight}
+                    size='lg'
+                    className='d-block mx-auto'
+                  />
+                </Button>
+              </div>
+            </Col>
+          )}
         </Row>
       </main>
     );

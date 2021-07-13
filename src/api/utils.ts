@@ -4,14 +4,17 @@ export async function apiRequest(
   params: string[] | string = '',
   body: Record<string, any> | string = ''
 ) {
+  // Include auth token if authenticated
   const Authorization = `Bearer ${
     window.localStorage.getItem('token') || 'myVerySecretAdminToken'
   }`;
 
+  // Convert request query if exists
   const queryParams = `?${
     typeof params === 'string' ? params : params.filter((p) => p).join('&')
   }`;
 
+  // Convert request body if exists
   let queryBody = (!['GET', 'DELETE'].includes(method) && body) || null;
   if (queryBody && typeof queryBody !== 'string') {
     queryBody = JSON.stringify(queryBody);

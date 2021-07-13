@@ -90,6 +90,7 @@ class UserConfigurations extends React.Component<
     this.fetchConfigurations();
   }
 
+  // Loads the list of house models
   async fetchHouseModels() {
     try {
       const paginatedHouseModels: PaginatedResponse<HouseModel> =
@@ -101,6 +102,7 @@ class UserConfigurations extends React.Component<
     }
   }
 
+  // Loads the list of the filtered user's configurations
   async fetchConfigurations() {
     const {
       paginatedItems: { currentPage },
@@ -167,19 +169,19 @@ class UserConfigurations extends React.Component<
     } = this;
 
     return (
-      <main className="p-5 w-100 bg-white m-0 user-configurations">
-        <h2 className="text-green text-center">
+      <main className='p-5 w-100 bg-white m-0 user-configurations'>
+        <h2 className='text-green text-center'>
           <FontAwesomeIcon icon={faCogs} /> Mes configurations
         </h2>
-        <h6 className="text-center mt-2 mb-5">
+        <h6 className='text-center mt-2 mb-5'>
           Vous pouvez ici gérer vos configurations sauvegardées.
         </h6>
         <hr />
 
         <div>
-          <div className="addNew">
-            <Button variant="primary" href="/config">
-              <FontAwesomeIcon className="mr-2" icon={faPlus} />
+          <div className='addNew'>
+            <Button variant='primary' href='/config'>
+              <FontAwesomeIcon className='mr-2' icon={faPlus} />
               AJOUTER
             </Button>
           </div>
@@ -200,15 +202,15 @@ class UserConfigurations extends React.Component<
               <Form noValidate onSubmit={handleSubmit}>
                 <Row>
                   <Col md={6} sm={12}>
-                    <InputGroup className="mb-3">
+                    <InputGroup className='mb-3'>
                       <InputGroup.Prepend>
-                        <InputGroup.Text id="NameIcon">
+                        <InputGroup.Text id='NameIcon'>
                           <FontAwesomeIcon icon={faKeyboard} />
                         </InputGroup.Text>
                       </InputGroup.Prepend>
                       <FormControl
-                        placeholder="Nom"
-                        name="name"
+                        placeholder='Nom'
+                        name='name'
                         value={values.name}
                         onChange={(e) => {
                           this.setState({
@@ -221,22 +223,22 @@ class UserConfigurations extends React.Component<
                         }}
                         isInvalid={!!errors.name}
                       />
-                      <Form.Control.Feedback type="invalid">
+                      <Form.Control.Feedback type='invalid'>
                         {errors.name}
                       </Form.Control.Feedback>
                     </InputGroup>
                   </Col>
                   <Col md={6} sm={12}>
-                    <InputGroup className="mb-3">
+                    <InputGroup className='mb-3'>
                       <InputGroup.Prepend>
-                        <InputGroup.Text id="ModelIcon">
+                        <InputGroup.Text id='ModelIcon'>
                           <FontAwesomeIcon icon={faHome} />
                         </InputGroup.Text>
                       </InputGroup.Prepend>
                       <Form.Control
-                        placeholder="Modèle"
-                        name="houseModelId"
-                        as="select"
+                        placeholder='Modèle'
+                        name='houseModelId'
+                        as='select'
                         value={values.houseModelId}
                         onChange={(e) => {
                           this.setState({
@@ -255,15 +257,15 @@ class UserConfigurations extends React.Component<
                           </option>
                         ))}
                       </Form.Control>
-                      <Form.Control.Feedback type="invalid">
+                      <Form.Control.Feedback type='invalid'>
                         {errors.houseModelId}
                       </Form.Control.Feedback>
                     </InputGroup>
                   </Col>
                 </Row>
-                <Button variant="primary" type="submit">
+                <Button variant='primary' type='submit'>
                   RECHERCHER{' '}
-                  <FontAwesomeIcon className="ml-2" icon={faSearch} />
+                  <FontAwesomeIcon className='ml-2' icon={faSearch} />
                 </Button>
               </Form>
             )}
@@ -280,8 +282,8 @@ class UserConfigurations extends React.Component<
           ></ItemsTable>
         </div>
 
-        <div className="circle1"></div>
-        <div className="circle2"></div>
+        <div className='circle1'></div>
+        <div className='circle2'></div>
       </main>
     );
   }

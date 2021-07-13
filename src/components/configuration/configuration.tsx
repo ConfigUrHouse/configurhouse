@@ -2,8 +2,8 @@ import React from 'react';
 import { ApiResponseError } from '../../api/models';
 import { apiRequest } from '../../api/utils';
 import {
+  faCogs,
   faDownload,
-  faEuroSign,
   faHome,
   faLightbulb,
   faMousePointer,
@@ -162,7 +162,7 @@ class Configuration extends React.Component<any, any> {
   render() {
     const conso = this.state.conso;
     return (
-      <main className="p-5 w-100 bg configuration-infos">
+      <main className='p-5 w-100 bg configuration-infos'>
         <Modal
           show={!!this.state.estimateModalIsOpen}
           onHide={() => this.setState({ estimateModalIsOpen: false })}
@@ -175,22 +175,22 @@ class Configuration extends React.Component<any, any> {
           </Modal.Body>
           <Modal.Footer>
             <Button
-              variant="secondary"
+              variant='secondary'
               onClick={() => this.setState({ estimateModalIsOpen: false })}
             >
               Annuler
             </Button>
             <Button
-              variant="primary"
-              type="submit"
+              variant='primary'
+              type='submit'
               href={`${process.env.REACT_APP_API_BASE_URL}/configuration/${this.state.id}/estimate/download?mode=csv`}
               onClick={() => this.setState({ estimateModalIsOpen: false })}
             >
               CSV
             </Button>
             <Button
-              variant="primary"
-              type="submit"
+              variant='primary'
+              type='submit'
               href={`${process.env.REACT_APP_API_BASE_URL}/configuration/${this.state.id}/estimate/download?mode=pdf`}
               onClick={() => this.setState({ estimateModalIsOpen: false })}
             >
@@ -198,17 +198,17 @@ class Configuration extends React.Component<any, any> {
             </Button>
           </Modal.Footer>
         </Modal>
-        <h2 className="text-green mb-2">
+        <h2 className='text-green mb-2'>
           <FontAwesomeIcon icon={faSearchPlus} /> Détails de votre configuration
           : <strong>{this.state.configuration.name}</strong>
         </h2>
         <Row>
-          <Col md={6} className="p-4">
-            <div className="rect">
-              <h3 className="text-green text-center">
-                <FontAwesomeIcon icon={faEuroSign} /> Vos options
+          <Col md={6} className='p-4'>
+            <div className='rect'>
+              <h3 className='text-green text-center'>
+                <FontAwesomeIcon icon={faCogs} /> Vos options
               </h3>
-              <Table bordered hover className="text-center mt-4">
+              <Table bordered hover className='text-center mt-4'>
                 <thead>
                   <tr>
                     <td>Nom de l'option</td>
@@ -219,48 +219,48 @@ class Configuration extends React.Component<any, any> {
                   {this.state.options.map((option: any, i: number) => (
                     <tr key={i}>
                       <td>{option.name}</td>
-                      <td className="price">
-                        {parseFloat(option.price).toFixed(2)}
+                      <td className='price'>
+                        {parseFloat(option.price).toLocaleString('fr-FR')}
                       </td>
                     </tr>
                   ))}
-                  <tr className="bg-lightgreen font-weight-bold">
+                  <tr className='bg-lightgreen font-weight-bold'>
                     <td>Coût total des options</td>
-                    <td className="price">
+                    <td className='price'>
                       {parseFloat(
                         this.state.options.reduce(
                           (a: any, b: any) =>
                             parseInt(a) + (parseInt(b['price']) || 0),
                           0
                         )
-                      ).toFixed(2)}
+                      ).toLocaleString('fr-FR')}
                     </td>
                   </tr>
                 </tbody>
               </Table>
-              <div className="d-flex justify-content-center mt-4">
+              <div className='d-flex justify-content-center mt-4'>
                 <Button
-                  variant="primary"
-                  className="p-3"
+                  variant='primary'
+                  className='p-3'
                   onClick={() =>
                     this.props.history.push(
                       `${this.state.id}/details?tab=estimate`
                     )
                   }
                 >
-                  <FontAwesomeIcon className="mr-2" icon={faSearchPlus} />
+                  <FontAwesomeIcon className='mr-2' icon={faSearchPlus} />
                   Voir le détail
                 </Button>
               </div>
             </div>
           </Col>
-          <Col md={6} className="p-4">
-            <div className="rect">
-              <h3 className="text-green text-center">
+          <Col md={6} className='p-4'>
+            <div className='rect'>
+              <h3 className='text-green text-center'>
                 <FontAwesomeIcon icon={faLightbulb} /> Bilan energétique
               </h3>
               {this.state.conso && (
-                <div className="barChart">
+                <div className='barChart'>
                   <Bar
                     options={{
                       responsive: true,
@@ -300,24 +300,24 @@ class Configuration extends React.Component<any, any> {
                   />
                 </div>
               )}
-              <div className="d-flex justify-content-center mt-4">
+              <div className='d-flex justify-content-center mt-4'>
                 <Button
-                  variant="primary"
-                  className="p-3"
+                  variant='primary'
+                  className='p-3'
                   onClick={this.seeConsoDetails}
                 >
-                  <FontAwesomeIcon className="mr-2" icon={faSearchPlus} />
+                  <FontAwesomeIcon className='mr-2' icon={faSearchPlus} />
                   Voir le détail
                 </Button>
               </div>
             </div>
           </Col>
-          <Col md={6} className="p-4">
-            <div className="rect">
-              <h3 className="text-green text-center">
+          <Col md={6} className='p-4'>
+            <div className='rect'>
+              <h3 className='text-green text-center'>
                 <FontAwesomeIcon icon={faHome} /> Modèle choisi
               </h3>
-              <Table bordered hover className="text-center mt-4">
+              <Table bordered hover className='text-center mt-4'>
                 <thead>
                   <tr>
                     <td>Nom</td>
@@ -331,46 +331,48 @@ class Configuration extends React.Component<any, any> {
                     <td>{this.state.houseModel.name}</td>
                     <td>{this.state.houseModel.modelName}</td>
                     <td>{this.state.houseModel.modelDescription}</td>
-                    <td className="price">
-                      {parseFloat(this.state.houseModel.price).toFixed(2)}
+                    <td className='price'>
+                      {parseFloat(this.state.houseModel.price).toLocaleString(
+                        'fr-FR'
+                      )}
                     </td>
                   </tr>
                 </tbody>
               </Table>
             </div>
           </Col>
-          <Col md={6} className="p-4">
-            <div className="rect">
-              <h3 className="text-green text-center">
+          <Col md={6} className='p-4'>
+            <div className='rect'>
+              <h3 className='text-green text-center'>
                 <FontAwesomeIcon icon={faMousePointer} /> Actions
               </h3>
-              <div className="d-flex justify-content-center mt-4">
+              <div className='d-flex justify-content-center mt-4'>
                 <Button
-                  variant="primary"
-                  className="p-3"
+                  variant='primary'
+                  className='p-3'
                   onClick={() => this.setState({ estimateModalIsOpen: true })}
                 >
-                  <FontAwesomeIcon className="mr-2" icon={faDownload} />
+                  <FontAwesomeIcon className='mr-2' icon={faDownload} />
                   Télécharger le devis
                 </Button>
               </div>
-              <div className="d-flex justify-content-center mt-4">
+              <div className='d-flex justify-content-center mt-4'>
                 <Button
-                  variant="primary"
-                  className="p-3"
+                  variant='primary'
+                  className='p-3'
                   href={`${process.env.REACT_APP_API_BASE_URL}/configuration/${this.state.id}/conso/download`}
                 >
-                  <FontAwesomeIcon className="mr-2" icon={faDownload} />
+                  <FontAwesomeIcon className='mr-2' icon={faDownload} />
                   Télécharger la consommation détaillée
                 </Button>
               </div>
-              <div className="d-flex justify-content-center mt-4">
+              <div className='d-flex justify-content-center mt-4'>
                 <Button
-                  variant="primary"
-                  className="p-3"
+                  variant='primary'
+                  className='p-3'
                   onClick={this.sendConfiguration}
                 >
-                  <FontAwesomeIcon className="mr-2" icon={faPaperPlane} />
+                  <FontAwesomeIcon className='mr-2' icon={faPaperPlane} />
                   Envoyer la configuration à Deschampignons
                 </Button>
               </div>
@@ -388,8 +390,8 @@ class Configuration extends React.Component<any, any> {
             </Modal.Body>
           </Modal>
         )}
-        <div className="circle1"></div>
-        <div className="circle2"></div>
+        <div className='circle1'></div>
+        <div className='circle2'></div>
       </main>
     );
   }

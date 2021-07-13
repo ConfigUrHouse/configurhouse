@@ -22,6 +22,7 @@ class Estimate extends React.Component<EstimateProps, EstimateState> {
     this.fetchEstimate();
   }
 
+  // Loads the house model estimate data
   private async fetchEstimate() {
     try {
       const response = await apiRequest(
@@ -41,27 +42,27 @@ class Estimate extends React.Component<EstimateProps, EstimateState> {
   render() {
     const { data } = this.state;
     return (
-      <main className="p-5 w-100 bg-white m-0">
-        <div className="estimate-title-container">
-          <h2 className="text-green text-center">
+      <main className='p-5 w-100 bg-white m-0'>
+        <div className='estimate-title-container'>
+          <h2 className='text-green text-center'>
             <FontAwesomeIcon icon={faCalculator} /> Devis détaillé
           </h2>
-          <h6 className="text-center mt-2 mb-5">
+          <h6 className='text-center mt-2 mb-5'>
             Le devis détaillé du modèle avec sa configuration par défaut.
           </h6>
-          <div className="download-estimate">
+          <div className='download-estimate'>
             <Button
-              variant="primary"
+              variant='primary'
               href={`${process.env.REACT_APP_API_BASE_URL}/houseModel/${this.props.match.params.id}/estimate/download`}
             >
-              <FontAwesomeIcon className="mr-2" icon={faDownload} />
+              <FontAwesomeIcon className='mr-2' icon={faDownload} />
               Télécharger
             </Button>
           </div>
         </div>
         <hr />
         {data && (
-          <Table bordered hover className="text-center mt-4">
+          <Table bordered hover className='text-center mt-4'>
             <thead>
               <tr>
                 <td>Type d'option</td>
@@ -74,26 +75,33 @@ class Estimate extends React.Component<EstimateProps, EstimateState> {
                 <tr>
                   <td>Modèle</td>
                   <td>{data.houseModel.name}</td>
-                  <td className="price">{data.houseModel.price}</td>
+                  <td className='price'>
+                    {parseFloat(data.houseModel.price).toLocaleString('fr-FR')}
+                  </td>
                 </tr>
               )}
               {data.estimate.map((e: any, i: number) => (
                 <tr key={i}>
                   <td>{e.option.name}</td>
                   <td>{e.value.name}</td>
-                  <td className="price">{e.value.price}</td>
+                  <td className='price'>
+                    {parseFloat(e.value.price).toLocaleString('fr-FR')}
+                  </td>
                 </tr>
               ))}
-              <tr className="bg-lightgreen font-weight-bold">
+              <tr className='bg-lightgreen font-weight-bold'>
                 <td>Coût total des options</td>
                 <td></td>
-                <td className="price"> {data.total} </td>
+                <td className='price'>
+                  {' '}
+                  {parseFloat(data.total).toLocaleString('fr-FR')}{' '}
+                </td>
               </tr>
             </tbody>
           </Table>
         )}
-        <div className="circle1"></div>
-        <div className="circle2"></div>
+        <div className='circle1'></div>
+        <div className='circle2'></div>
       </main>
     );
   }

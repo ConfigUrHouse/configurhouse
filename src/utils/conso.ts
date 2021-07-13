@@ -1,3 +1,4 @@
+// Organise data to be used in consumption charts
 export function getChartData(response: any) {
   const repartition = {
     labels: response.byPosteConso.config.map((item: any) => item.posteConso),

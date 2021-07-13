@@ -10,11 +10,13 @@ class ModelChoice extends React.Component<any, any> {
     this.state = { modelSelected: null, models: [] };
     this.fetchHouseModels();
   }
+
   selectModel(model: any) {
     this.setState({ modelSelected: model });
     this.props.onChange(model);
   }
 
+  // Loads the list of house models
   async fetchHouseModels(): Promise<void> {
     apiRequest(`houseModel`, 'GET', [])
       .then((response) => {
@@ -34,7 +36,7 @@ class ModelChoice extends React.Component<any, any> {
   render() {
     const { models } = this.state;
     return (
-      <div className="models-choice">
+      <div className='models-choice'>
         <Row>
           {models.map((item: any) => {
             return (
@@ -46,8 +48,8 @@ class ModelChoice extends React.Component<any, any> {
                   onClick={(e) => this.selectModel(item)}
                 >
                   <h4>Modèle {item.name}</h4>
-                  <img src={home_3D} alt="Home config" className="w-100" />
-                  <Table bordered hover className="mt-5 text-center">
+                  <img src={home_3D} alt='Home config' className='w-100' />
+                  <Table bordered hover className='mt-5 text-center'>
                     <thead>
                       <tr>
                         <th colSpan={2}>
@@ -56,7 +58,7 @@ class ModelChoice extends React.Component<any, any> {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr className="sub">
+                      <tr className='sub'>
                         <td colSpan={2}>Informations</td>
                       </tr>
                       <tr>
@@ -65,7 +67,7 @@ class ModelChoice extends React.Component<any, any> {
                       </tr>
                       <tr>
                         <td>Prix de base</td>
-                        <td>{item.price} €</td>
+                        <td className='price'>{item.price}</td>
                       </tr>
                     </tbody>
                   </Table>

@@ -39,6 +39,9 @@ class Login extends React.Component<any, any> {
     email: '',
     password: '',
   };
+
+  // Attempts to log the user in
+  // If success, gets whether or not the user is an admin, otherwise shows an error
   login(values: FormValues) {
     const { location, history } = this.props;
 
@@ -92,14 +95,14 @@ class Login extends React.Component<any, any> {
     let alertDiv;
     if (this.state.success == 1) {
       alertDiv = (
-        <div className="alert alert-success mb-4">
+        <div className='alert alert-success mb-4'>
           <FontAwesomeIcon icon={faCheck} /> Connexion réussie, vous allez être
           redirigé...
         </div>
       );
     } else if (this.state.success == -1) {
       alertDiv = (
-        <div className="alert alert-danger m-4">
+        <div className='alert alert-danger m-4'>
           <FontAwesomeIcon icon={faTimes} /> L'identifiant ou le mot de passe
           est incorrect.
         </div>
@@ -108,14 +111,14 @@ class Login extends React.Component<any, any> {
 
     return (
       <>
-        <main className="p-5 w-100">
-          <div className="row justify-content-center mt-5">
-            <div className="col-md-5 login mt-5">
-              <h1 className="text-center text-green">
+        <main className='p-5 w-100'>
+          <div className='row justify-content-center mt-5'>
+            <div className='col-md-5 login mt-5'>
+              <h1 className='text-center text-green'>
                 <FontAwesomeIcon icon={faKey} />
               </h1>
-              <h2 className="text-center text-green">Connexion</h2>
-              <h6 className="text-center mb-5 text-green">
+              <h2 className='text-center text-green'>Connexion</h2>
+              <h6 className='text-center mb-5 text-green'>
                 Veuillez vous connecter afin d'accéder à votre espace personnel
               </h6>
               {alertDiv}
@@ -135,18 +138,18 @@ class Login extends React.Component<any, any> {
                 {({ handleSubmit, handleChange, values, errors }) => (
                   <Form
                     noValidate
-                    className="form shadow-none"
+                    className='form shadow-none'
                     onSubmit={handleSubmit}
                   >
-                    <InputGroup className="mb-3">
+                    <InputGroup className='mb-3'>
                       <InputGroup.Prepend>
-                        <InputGroup.Text id="EMailIcon">
+                        <InputGroup.Text id='EMailIcon'>
                           <FontAwesomeIcon icon={faAt} />
                         </InputGroup.Text>
                       </InputGroup.Prepend>
                       <FormControl
-                        placeholder="Adresse email"
-                        name="email"
+                        placeholder='Adresse email'
+                        name='email'
                         value={values.email}
                         onChange={(e) => {
                           this.setState({ formValues: values });
@@ -154,20 +157,20 @@ class Login extends React.Component<any, any> {
                         }}
                         isInvalid={!!errors.email}
                       />
-                      <Form.Control.Feedback type="invalid">
+                      <Form.Control.Feedback type='invalid'>
                         {errors.email}
                       </Form.Control.Feedback>
                     </InputGroup>
-                    <InputGroup className="mb-3">
+                    <InputGroup className='mb-3'>
                       <InputGroup.Prepend>
-                        <InputGroup.Text id="PasswordIcon">
+                        <InputGroup.Text id='PasswordIcon'>
                           <FontAwesomeIcon icon={faLock} />
                         </InputGroup.Text>
                       </InputGroup.Prepend>
                       <FormControl
-                        placeholder="Mot de passe"
-                        name="password"
-                        type="password"
+                        placeholder='Mot de passe'
+                        name='password'
+                        type='password'
                         value={values.password}
                         onChange={(e) => {
                           this.setState({ formValues: values });
@@ -175,7 +178,7 @@ class Login extends React.Component<any, any> {
                         }}
                         isInvalid={!!errors.password}
                       />
-                      <Form.Control.Feedback type="invalid">
+                      <Form.Control.Feedback type='invalid'>
                         {errors.password}
                       </Form.Control.Feedback>
                     </InputGroup>
@@ -188,17 +191,17 @@ class Login extends React.Component<any, any> {
                             }
                           : '/register'
                       }
-                      className="text-center"
+                      className='text-center'
                     >
                       <p>Je m'inscris</p>
                     </Link>
                     <Button
-                      variant="primary"
-                      className="d-block mx-auto mt-3 p-3"
-                      type="submit"
+                      variant='primary'
+                      className='d-block mx-auto mt-3 p-3'
+                      type='submit'
                     >
                       SE CONNECTER
-                      <FontAwesomeIcon className="ml-2" icon={faSignInAlt} />
+                      <FontAwesomeIcon className='ml-2' icon={faSignInAlt} />
                     </Button>
                   </Form>
                 )}
