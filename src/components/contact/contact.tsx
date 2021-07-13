@@ -115,10 +115,10 @@ class Contact extends React.Component<any, any> {
 
   render() {
     return (
-      <main className="p-5 w-100 bg">
+      <main className="p-5 w-100 bg contact-main">
         <div className="circle1"></div>
         <div className="circle2"></div>
-        <div className="p-5 form w-75 mx-auto">
+        <div className="form form-contact mx-auto">
           <h3 className="mb-2">
             <FontAwesomeIcon className="mr-2" icon={faPaperPlane} /> Nous
             contacter

@@ -17,6 +17,8 @@ import {
   faBriefcase,
   faNewspaper,
   faUserShield,
+  faHome,
+  faMailBulk,
 } from "@fortawesome/free-solid-svg-icons";
 import { Col, Row } from "react-bootstrap";
 import ScrollAnimation from "react-animate-on-scroll";
@@ -36,17 +38,14 @@ function Home() {
               votre espace modulaire
             </h1>
             <h5 className="w-75 text-justify mx-auto mt-5 text-green">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit,
-              accusamus. Officiis mollitia placeat eaque reprehenderit culpa
-              adipisci facilis. Omnis numquam at possimus incidunt atque
-              quisquam quos ipsam nesciunt magnam alias.
+              Grâce à l'outil ConfigUrHouse proposé par la société Deschamps, vous pouvez configurer directement votre logement selon vos goûts afin d'obtenir un devis détaillé des options choisies et une estimation de la consommation énergétique de votre futur logement.
             </h5>
             <div className="row justify-content-center m-0 mt-5">
-              <div className="col-md-2">
-                <div className="btn w-100 btn-green">Let's go !</div>
+              <div className="col-md-3 mt-2">
+              <Link to="/config"><div className="btn w-100 btn-green"> <FontAwesomeIcon icon={faHome} /> Je configure mon logement</div></Link>
               </div>
-              <div className="col-md-2">
-                <div className="btn btn-out w-100">Let's go !</div>
+              <div className="col-md-3 mt-2">
+              <Link to="/contact"><div className="btn btn-out w-100"><FontAwesomeIcon icon={faMailBulk} /> Nous contacter</div></Link>
               </div>
             </div>
           </div>
@@ -67,13 +66,11 @@ function Home() {
       <ScrollAnimation animateIn="fadeIn">
         <Row className="justify-content-md-center m-0 mt-5 mb-5">
           <Col md={4}>
-            <h1 className="font-weight-bold mt-3">
-              Visualiser en direct vos configurations en 3D et 2D
-            </h1>
+            <h2 className="font-weight-bold mt-3">
+              Visualiser en direct vos configurations en 3D
+            </h2>
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              EarumLorem ipsum dolor sit amet consectetur adipisicing elit.
-              Earum
+              A l'aide du configurateur vous pouvez visualiser directement les options choisies pour votre logement selon vos goûts.
             </p>
           </Col>
           <Col md={5}>
@@ -95,17 +92,15 @@ function Home() {
           ></path>
         </svg>
         <Row className="justify-content-md-center m-0 pt-5 pb-5 bg-lightgreen">
-          <Col md={5}>
+          <Col md={4}>
             <img src={home_devis} alt="Home Devis" className="w-100" />
           </Col>
           <Col md={4}>
-            <h1 className="font-weight-bold mt-3">
+            <h2 className="font-weight-bold mt-3">
               Obtenez votre devis détaillé instantanément
-            </h1>
+            </h2>
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              EarumLorem ipsum dolor sit amet consectetur adipisicing elit.
-              Earum
+              Une fois votre logement configuré selon vos goûts, vous pouvez obtenir un devis détaillé des options choisies.
             </p>
           </Col>
         </Row>
@@ -128,13 +123,11 @@ function Home() {
             <img src={home_conso} alt="Home conso" className="w-100" />
           </Col>
           <Col md={4}>
-            <h1 className="font-weight-bold mt-3">
+            <h2 className="font-weight-bold mt-3">
               Prévisualiser les consommations de votre futur logement
-            </h1>
+            </h2>
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              EarumLorem ipsum dolor sit amet consectetur adipisicing elit.
-              Earum
+              Vous pouvez aussi obtenir une consommation énergétique estimée selon les options choisies à la fin de votre configuration.
             </p>
           </Col>
         </Row>
