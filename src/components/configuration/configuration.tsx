@@ -77,7 +77,9 @@ class Configuration extends React.Component<any, any> {
             this.setState({
               houseModel: {
                 id: model.id,
-                name: model.name,
+                name: `${model.name} (${
+                  this.state.configuration.has_furniture ? '' : 'non '
+                }meublé)`,
                 price: (
                   parseFloat(model.price) -
                   (this.state.configuration.has_furniture ? 0 : 11250)

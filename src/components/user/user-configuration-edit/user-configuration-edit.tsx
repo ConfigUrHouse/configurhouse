@@ -40,6 +40,7 @@ class HouseModelEdit extends React.Component<
   private initialItem: Configuration = {
     id: 0,
     name: '',
+    has_furniture: true,
     id_User: 0,
     id_HouseModel: 0,
   };
