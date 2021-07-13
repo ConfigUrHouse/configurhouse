@@ -35,8 +35,9 @@ class Configurator extends React.Component<any, any> {
       model: null,
       modelSelected: null,
       step: 0,
-      optionValues: [4,2], //TODO: use values from state
+      optionValues: [],
       id,
+      has_furniture: true,
       configuration: {},
       error: null,
       ...existingState,
@@ -70,6 +71,7 @@ class Configurator extends React.Component<any, any> {
       );
       this.setState({
         model: configuration.houseModel,
+        has_furniture: configuration.has_furniture,
         optionValues:
           configuration.configurationValues?.map((cv) => cv.id_Value) ?? [],
         id,
@@ -104,6 +106,7 @@ class Configurator extends React.Component<any, any> {
       const {
         id,
         model,
+        has_furniture,
         configuration,
         optionValues: configurationValues,
       } = this.state;
@@ -111,11 +114,13 @@ class Configurator extends React.Component<any, any> {
       if (id) {
         await apiRequest(`configuration/${id}`, 'PUT', '', {
           ...configuration,
+          has_furniture,
           configurationValues,
           id_HouseModel: model.id,
         });
       } else {
         await apiRequest('configuration', 'POST', '', {
+          has_furniture,
           configurationValues,
           id_HouseModel: model.id,
         }).then(
@@ -208,6 +213,10 @@ class Configurator extends React.Component<any, any> {
             updateOptionValues={(optionValues: number[]) => {
               this.setState({ optionValues });
             }}
+            hasFurniture={this.state.has_furniture}
+            updateHasFurniture={(has_furniture: boolean) =>
+              this.setState({ has_furniture })
+            }
           />
         )}
         {this.state.step == 2 && <Estimate confId={this.state.id as number} />}

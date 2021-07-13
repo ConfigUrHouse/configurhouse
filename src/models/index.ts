@@ -19,6 +19,7 @@ export interface ConfigurationValue {
 export interface Configuration {
   id: number;
   name: string;
+  has_furniture: boolean;
   id_User: number;
   id_HouseModel: number;
   user?: User;
