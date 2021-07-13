@@ -37,7 +37,7 @@ class ConfigurationOptionEdit extends React.Component<
 > {
   private schema = Yup.object().shape({
     name: Yup.string()
-      .min(4, "Le nom doit faire plus de 3 charactères")
+      .min(3, "Le nom doit faire plus de 2 charactères")
       .required("Le nom ne peut pas être vide"),
     id_HouseModel: Yup.lazy(() =>
       Yup.number().oneOf(
@@ -62,6 +62,17 @@ class ConfigurationOptionEdit extends React.Component<
     values: [
     ],
   };
+
+  private reference: any = {
+    "#D36135": "Flame",
+    "#A24936": "Chestnut",
+    "#282B28": "Charleston Green",
+    "#83BCA9": "Green Sheen",
+    "#3E5641": "Hunter Green",
+    "#003459": "Prussion Blue",
+    "#00171F": "Rich Black FOGRA 29",
+    "#DAD6D6": "Ligth Gray"
+  }
 
   constructor(props: ConfigurationOptionEditProps) {
     super(props);
@@ -169,6 +180,7 @@ class ConfigurationOptionEdit extends React.Component<
         await Promise.allSettled(values?.values.map(async (element: any) => {
           element.id_Asset = ms.id_Asset;
           element.id_OptionConf = reponse.id;
+          element.name = this.reference[element.value];
           return (element.id
             ? apiRequest(`value/${element.id}`, "PUT", "", element)
             : apiRequest(`value`, "POST", "", element));
@@ -181,7 +193,7 @@ class ConfigurationOptionEdit extends React.Component<
       this.setState({ error: error as ApiResponseError });
     }
 
-    //this.props.history.push('/configurationOptions');
+    this.props.history.push('/configurationOptions');
   }
 
   render() {
@@ -364,10 +376,7 @@ class ConfigurationOptionEdit extends React.Component<
                                             <option key={7} value={"#00171F"}>
                                               Rich Black FOGRA 29
                                             </option>
-                                            <option key={8} value={"#FFFFFF"}>
-                                              White
-                                            </option>
-                                            <option key={9} value={"#DAD6D6"}>
+                                            <option key={8} value={"#DAD6D6"}>
                                               Ligth Gray
                                             </option>
                                           </FormControl>

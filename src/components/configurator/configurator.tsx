@@ -35,7 +35,7 @@ class Configurator extends React.Component<any, any> {
       model: null,
       modelSelected: null,
       step: 0,
-      optionValues: [2, 4], //TODO: use values from state
+      optionValues: [4,2], //TODO: use values from state
       id,
       configuration: {},
       error: null,

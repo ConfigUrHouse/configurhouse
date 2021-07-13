@@ -3,7 +3,7 @@ import { Col, Row, Form } from 'react-bootstrap';
 import './model-configuration.css';
 import { Suspense, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { useGLTF } from '@react-three/drei/core/useGLTF';
+import { useParams, withRouter } from "react-router";
 import { OrbitControls } from '@react-three/drei/core/OrbitControls';
 import { proxy, useProxy } from 'valtio';
 import { ApiResponseError } from '../../../api/models';
@@ -16,10 +16,7 @@ interface test {
 
 const objectTest: test = {
   items: {
-    MurCote: '#ffffff',
-    MurFond: '#ffffff',
-    Sol: '#ffffff',
-    Meuble: true,
+    same: true
   },
 };
 
@@ -42,12 +39,11 @@ function Model(props: any) {
   props?.model?.scene?.children?.forEach((parent: any) => {
 
     if (parent.children.length == 0) {
-      //geometry.push(<mesh castShadow receiveShadow geometry={parent.geometry} material={parent.material} material-color={snap.items.MurCote} />)
-      geometry.push(<mesh key={parent.id} castShadow receiveShadow geometry={parent.geometry} material={parent.material} />)
+      geometry.push(<mesh key={parent.id} castShadow receiveShadow geometry={parent.geometry} material={parent.material} material-color={snap.items[parent.name]} />)
     }
     else {
       parent.children.forEach((child: any) => {
-        geometry.push(<mesh key={child.id} castShadow receiveShadow geometry={child.geometry} material={child.material} />)
+        geometry.push(<mesh key={child.id} visible={snap.items.same} castShadow receiveShadow geometry={child.geometry} material={child.material} />)
       })
     }
   });
@@ -71,19 +67,143 @@ class ModelConfiguration extends React.Component<any, any> {
     super(props);
 
     this.fetchModel = this.fetchModel.bind(this);
+    this.fetchConso = this.fetchConso.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
+    const id = parseInt(props.match.params.id ?? 0);
 
     this.state = {
+      confId: id,
       error: undefined,
+      editMode: id !== 0,
       conso: undefined,
-      model: undefined
+      model: undefined,
+      options: undefined,
+      savedValue: []
     };
   }
 
   async fetchModel() {
 
+    if(this.state.editMode){
+      const conf: any = await apiRequest(
+        `configuration/${this.state.confId}`,
+        "GET",
+        []
+      );
+
+      console.log(conf)
+
+      let mapped: any = await Promise.all(conf?.configurationValues?.map(async (element: any) => {
+          const val: any = await apiRequest(
+            `value/${element.id_Value}`,
+            "GET",
+            []
+          );
+          return {
+            ...element,
+            value: {
+              ...val
+            }
+          }
+      }));
+
+      mapped = await Promise.all(mapped.map(async (element: any) => {
+          const val: any = await apiRequest(
+            `optionConf/${element.value.id_OptionConf}`,
+            "GET",
+            []
+          );
+          return {
+            ...element,
+            optionConf: {
+              ...val
+            }
+          }
+      }));
+
+      mapped = await Promise.all(mapped.map(async (element: any) => {
+          const val: any = await apiRequest(
+            `mesh/${element.optionConf.id_Mesh}`,
+            "GET",
+            []
+          );
+          return {
+            ...element,
+            mesh: {
+              ...val
+            }
+          }
+      }));
+
+      conf.configurationValues = mapped;
+      
+      const tmpArray: any[] = [];
+
+      conf?.configurationValues?.forEach((element: any) => {
+        tmpArray.push(element.id_Value)
+        state.items[element.mesh.name] = element.value.value;
+      });
+      this.setState({savedValue: tmpArray});
+      
+      console.log(this.state.savedValue)
+    }
+
+    const opc: any = await apiRequest(
+      `optionConf/by/${this.props.model.id}`,
+      "GET",
+      []
+    );
+
+    let items: any = await Promise.all(opc.map(async(element: any) => {
+      const values: any = await apiRequest(
+        `value/byOption/${element.id}`,
+        "GET",
+        []
+      );
+      return {
+        ...element,
+        values
+      }
+    }));
+
+    items = await Promise.all(items.map(async(element: any) => {
+      const values: any = await apiRequest(
+        `mesh/${element.id_Mesh}`,
+        "GET",
+        []
+      );
+      return {
+        ...element,
+        same: values.same,
+        nameMesh: values.name,
+        id_Asset: values.id_Asset
+      }
+    }));
+
+    this.setState({options: items});
+
+    if(!opc[0]){
+      this.props.history.push('/');
+    }
+
+    const hml: any = await apiRequest(
+      `housemodel/${opc[0].id_HouseModel}`,
+      "GET",
+      []
+    );
+    const msh: any = await apiRequest(
+      `mesh/by/${hml.id_Asset}`,
+      "GET",
+      []
+    );
+    msh.forEach((value: any) => {
+      if(!value.same && !state.items[value.name])
+        state.items[value.name] = '#FFFFFF';
+    });
+
     const REACT_APP_API_BASE_URL: any = process.env.REACT_APP_API_BASE_URL;
     const objectJson: any = await apiRequest(
-      `asset/14`,
+      `asset/${hml.id_Asset}`,
       "GET",
       []
     );
@@ -99,19 +219,26 @@ class ModelConfiguration extends React.Component<any, any> {
     this.setState({ model: model });
   }
 
-  handleSelectMurCote(event: any) {
+  handleSelect(event: any) {
+    let id = event.target.id;
     let val = event.target.value;
-    state.items.MurCote = val;
-  }
+    state.items[id] = val;
 
-  handleSelectMurFond(event: any) {
-    let val = event.target.value;
-    state.items.MurFond = val;
+    const index = event.target.selectedIndex;
+    const optionElement = event.target.childNodes[index];
+    const optionElementId = optionElement.getAttribute('id');
+    console.log(event.target.name, optionElementId);
+
+    const tmpArray = [...this.state.savedValue];
+    tmpArray[event.target.name] = Number(optionElementId);
+    this.setState({savedValue: tmpArray});
+
+    this.props.updateOptionValues(tmpArray);
   }
 
   handleChangeCB(event: any) {
     let val = event.target.checked;
-    state.items.Meuble = val;
+    state.items.same = val;
   }
 
   async fetchConso() {
@@ -175,31 +302,25 @@ class ModelConfiguration extends React.Component<any, any> {
               </Canvas>
             </div>
           </Col>
-          <Col md={4} className='col'>
-            <div className='content options'>
-              <h5 className='text-light'>Options</h5>
+          <Col md={4} className="col">
+            <div className="content options">
+              <h5 className="text-light">Options</h5>
+              {this.state.options && this.state.options.map((option: any, index: any) => (
+                <Form.Group key={option.id} controlId={option.nameMesh}>
+                  <Form.Label>{option.name}</Form.Label>
+                  <Form.Control name={index} defaultValue={state.items[option.nameMesh]} onChange={this.handleSelect} as="select">
+                      <option key={0} value="#FFFFFF">Sélectionner une option</option>
+                    {option.values && option.values.map((value: any) => (
+                      <option id={value.id} key={value.id} value={value.value}>{value.name}</option>
+                    ))}
+                  </Form.Control>
+                </Form.Group>
+                ))}
               <Form>
-                <Form.Group controlId='exampleForm.ControlSelect1'>
-                  <Form.Label>Mur côté</Form.Label>
-                  <Form.Control onChange={this.handleSelectMurCote} as='select'>
-                    <option value='#ffffff'>Blanc</option>
-                    <option value='#ff0000'>Rouge</option>
-                    <option value='#00ff00'>Vert</option>
-                    <option value='#0000ff'>Bleu</option>
-                  </Form.Control>
-                </Form.Group>
-                <Form.Group controlId='exampleForm.ControlSelect2'>
-                  <Form.Label>Mur fond</Form.Label>
-                  <Form.Control onChange={this.handleSelectMurFond} as='select'>
-                    <option value='#ffffff'>Blanc</option>
-                    <option value='#ff0000'>Rouge</option>
-                    <option value='#00ff00'>Vert</option>
-                    <option value='#0000ff'>Bleu</option>
-                  </Form.Control>
-                </Form.Group>
-                <Form.Group controlId='formBasicCheckbox'>
+                
+                <Form.Group controlId="formBasicCheckbox">
                   <Form.Check
-                    defaultChecked={state.items.Meuble}
+                    defaultChecked={state.items.same}
                     onChange={this.handleChangeCB}
                     type='checkbox'
                     label='Meubles'
@@ -247,4 +368,4 @@ class ModelConfiguration extends React.Component<any, any> {
   }
 }
 
-export default ModelConfiguration;
+export default withRouter(ModelConfiguration);
