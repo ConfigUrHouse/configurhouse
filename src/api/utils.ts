@@ -2,7 +2,8 @@ export async function apiRequest(
   url: string,
   method = 'GET',
   params: string[] | string = '',
-  body: Record<string, any> | string = ''
+  body: Record<string, any> | string = '',
+  json: boolean = true
 ) {
   // Include auth token if authenticated
   const Authorization = `Bearer ${
@@ -20,12 +21,16 @@ export async function apiRequest(
     queryBody = JSON.stringify(queryBody);
   }
 
+  const headers: any = json ? {
+    Authorization,
+    'Content-Type': 'application/json',
+  } : {
+    Authorization
+  };
+
   return fetch(`${process.env.REACT_APP_API_BASE_URL}/${url}${queryParams}`, {
     method,
-    headers: {
-      Authorization,
-      'Content-Type': 'application/json',
-    },
+    headers,
     body: queryBody || null,
   })
     .then((response) => response.json())
