@@ -57,34 +57,15 @@ class ModelChoice extends React.Component<any, any> {
                     </thead>
                     <tbody>
                       <tr className="sub">
-                        <td colSpan={2}>Dimensions</td>
+                        <td colSpan={2}>Informations</td>
                       </tr>
                       <tr>
-                        <td>Longueur</td>
-                        <td>12.53m</td>
+                        <td>Nombre d'occupants</td>
+                        <td>{item.occupants}</td>
                       </tr>
                       <tr>
-                        <td>Largeur</td>
-                        <td>12.53m</td>
-                      </tr>
-                      <tr>
-                        <td>Hauteur sous plafond</td>
-                        <td>2.53m</td>
-                      </tr>
-                      <tr className="sub">
-                        <td colSpan={2}>Autres</td>
-                      </tr>
-                      <tr>
-                        <td>Longueur</td>
-                        <td>12.53m</td>
-                      </tr>
-                      <tr>
-                        <td>Largeur</td>
-                        <td>12.53m</td>
-                      </tr>
-                      <tr>
-                        <td>Hauteur sous plafond</td>
-                        <td>2.53m</td>
+                        <td>Prix de base</td>
+                        <td>{item.price} €</td>
                       </tr>
                     </tbody>
                   </Table>
