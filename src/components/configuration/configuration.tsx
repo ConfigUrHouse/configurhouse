@@ -78,7 +78,10 @@ class Configuration extends React.Component<any, any> {
               houseModel: {
                 id: model.id,
                 name: model.name,
-                price: model.price,
+                price: (
+                  parseFloat(model.price) -
+                  (this.state.configuration.has_furniture ? 0 : 11250)
+                ).toFixed(2),
                 modelName: modelDetails.name,
                 modelDescription: modelDetails.description,
                 modelId: modelDetails.id,
