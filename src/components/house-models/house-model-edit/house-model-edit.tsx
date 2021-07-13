@@ -92,6 +92,7 @@ class HouseModelEdit extends React.Component<
     }
   }
 
+  // Loads the house model
   async fetchHouseModel(): Promise<void> {
     apiRequest(`houseModel/${this.state.item.id}`, 'GET', [])
       .then((response) => {
@@ -104,6 +105,7 @@ class HouseModelEdit extends React.Component<
       .catch((error) => console.log(error));
   }
 
+  // Loads the house model types
   async fetchModelTypes(): Promise<void> {
     apiRequest(`modelType`, 'GET', [])
       .then((response) => {
@@ -116,6 +118,7 @@ class HouseModelEdit extends React.Component<
       .catch((error) => console.log(error));
   }
 
+  // Loads the assets
   async fetchAssets(): Promise<void> {
     apiRequest(`asset`, 'GET', [])
       .then((response) => {
@@ -128,6 +131,7 @@ class HouseModelEdit extends React.Component<
       .catch((error) => console.log(error));
   }
 
+  // Saves the house model
   async submitForm(values: HouseModel): Promise<void> {
     const { editMode } = this.state;
 
@@ -148,18 +152,18 @@ class HouseModelEdit extends React.Component<
   render() {
     const { item, editMode, modelTypes, assets, error } = this.state;
     return (
-      <main className="p-5 w-100 bg">
-        <div className="circle1"></div>
-        <div className="circle2"></div>
-        <div className="p-5 form w-75 mx-auto">
+      <main className='p-5 w-100 bg'>
+        <div className='circle1'></div>
+        <div className='circle2'></div>
+        <div className='p-5 form w-75 mx-auto'>
           {error && (
-            <div className="alert alert-danger m-4">
+            <div className='alert alert-danger m-4'>
               <FontAwesomeIcon icon={faTimes} />
               Une erreur est survenue :<p>Message : {error.message}</p>
             </div>
           )}
-          <h3 className="mb-5">
-            <FontAwesomeIcon className="mr-2" icon={faHome} />
+          <h3 className='mb-5'>
+            <FontAwesomeIcon className='mr-2' icon={faHome} />
             {editMode ? 'Editer' : 'Ajouter'} un modèle
           </h3>
           <Formik
@@ -182,35 +186,35 @@ class HouseModelEdit extends React.Component<
               <Form onSubmit={handleSubmit}>
                 <Row>
                   <Col md={4} sm={12}>
-                    <InputGroup className="mb-3">
+                    <InputGroup className='mb-3'>
                       <InputGroup.Prepend>
-                        <InputGroup.Text id="NameIcon">
+                        <InputGroup.Text id='NameIcon'>
                           <FontAwesomeIcon icon={faKeyboard} />
                         </InputGroup.Text>
                       </InputGroup.Prepend>
                       <FormControl
-                        placeholder="Nom"
-                        name="name"
+                        placeholder='Nom'
+                        name='name'
                         value={values.name}
                         onChange={(e) => handleChange(e)}
                         isInvalid={!!(submitCount > 0 && errors.name)}
                       />
-                      <Form.Control.Feedback type="invalid">
+                      <Form.Control.Feedback type='invalid'>
                         {errors.name}
                       </Form.Control.Feedback>
                     </InputGroup>
                   </Col>
                   <Col md={4} sm={12}>
-                    <InputGroup className="mb-3">
+                    <InputGroup className='mb-3'>
                       <InputGroup.Prepend>
-                        <InputGroup.Text id="ModelIcon">
+                        <InputGroup.Text id='ModelIcon'>
                           <FontAwesomeIcon icon={faHome} />
                         </InputGroup.Text>
                       </InputGroup.Prepend>
                       <FormControl
-                        placeholder="Type de modèle"
-                        name="id_ModelType"
-                        as="select"
+                        placeholder='Type de modèle'
+                        name='id_ModelType'
+                        as='select'
                         value={values.id_ModelType}
                         onChange={(e) => handleChange(e)}
                         isInvalid={!!(submitCount > 0 && errors.id_ModelType)}
@@ -222,22 +226,22 @@ class HouseModelEdit extends React.Component<
                           </option>
                         ))}
                       </FormControl>
-                      <Form.Control.Feedback type="invalid">
+                      <Form.Control.Feedback type='invalid'>
                         {errors.id_ModelType}
                       </Form.Control.Feedback>
                     </InputGroup>
                   </Col>
                   <Col md={4} sm={12}>
-                    <InputGroup className="mb-3">
+                    <InputGroup className='mb-3'>
                       <InputGroup.Prepend>
-                        <InputGroup.Text id="ModelIcon">
+                        <InputGroup.Text id='ModelIcon'>
                           <FontAwesomeIcon icon={faImage} />
                         </InputGroup.Text>
                       </InputGroup.Prepend>
                       <FormControl
-                        placeholder="Asset"
-                        name="id_Asset"
-                        as="select"
+                        placeholder='Asset'
+                        name='id_Asset'
+                        as='select'
                         value={values.id_Asset}
                         onChange={(e) => handleChange(e)}
                         isInvalid={!!(submitCount > 0 && errors.id_Asset)}
@@ -249,59 +253,59 @@ class HouseModelEdit extends React.Component<
                           </option>
                         ))}
                       </FormControl>
-                      <Form.Control.Feedback type="invalid">
+                      <Form.Control.Feedback type='invalid'>
                         {errors.id_Asset}
                       </Form.Control.Feedback>
                     </InputGroup>
                   </Col>
                   <Col md={6} sm={12}>
-                    <InputGroup className="mb-3">
+                    <InputGroup className='mb-3'>
                       <InputGroup.Prepend>
-                        <InputGroup.Text id="UsersIcon">
+                        <InputGroup.Text id='UsersIcon'>
                           <FontAwesomeIcon icon={faUsers} />
                         </InputGroup.Text>
                       </InputGroup.Prepend>
                       <FormControl
-                        type="number"
-                        placeholder="Habitants"
-                        name="occupants"
+                        type='number'
+                        placeholder='Habitants'
+                        name='occupants'
                         value={values.occupants}
                         onChange={(e) => handleChange(e)}
                         isInvalid={!!(submitCount > 0 && errors.occupants)}
                       />
-                      <Form.Control.Feedback type="invalid">
+                      <Form.Control.Feedback type='invalid'>
                         {errors.occupants}
                       </Form.Control.Feedback>
                     </InputGroup>
                   </Col>
                   <Col md={6} sm={12}>
-                    <InputGroup className="mb-3">
+                    <InputGroup className='mb-3'>
                       <InputGroup.Prepend>
-                        <InputGroup.Text id="PriceIcon">
+                        <InputGroup.Text id='PriceIcon'>
                           <FontAwesomeIcon icon={faEuroSign} />
                         </InputGroup.Text>
                       </InputGroup.Prepend>
                       <FormControl
-                        type="number"
-                        placeholder="Prix"
-                        name="price"
+                        type='number'
+                        placeholder='Prix'
+                        name='price'
                         value={values.price}
                         onChange={(e) => handleChange(e)}
                         isInvalid={!!(submitCount > 0 && errors.price)}
                       />
-                      <Form.Control.Feedback type="invalid">
+                      <Form.Control.Feedback type='invalid'>
                         {errors.price}
                       </Form.Control.Feedback>
                     </InputGroup>
                   </Col>
                 </Row>
                 <Button
-                  variant="primary"
-                  className="d-block mx-auto mt-3 p-3"
-                  type="submit"
+                  variant='primary'
+                  className='d-block mx-auto mt-3 p-3'
+                  type='submit'
                   disabled={submitCount > 0 && !isValid}
                 >
-                  SAUVEGARDER <FontAwesomeIcon className="ml-2" icon={faSave} />
+                  SAUVEGARDER <FontAwesomeIcon className='ml-2' icon={faSave} />
                 </Button>
               </Form>
             )}

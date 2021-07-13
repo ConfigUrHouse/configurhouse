@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Button,
   Modal,
@@ -7,16 +7,17 @@ import {
   Pagination,
   Row,
   Table,
-} from "react-bootstrap";
+} from 'react-bootstrap';
 import {
   faPen,
   faSearchPlus,
   faTrash,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ItemsTableProps, ItemsTableState } from "./models";
-import "./items-table.css";
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ItemsTableProps, ItemsTableState } from './models';
+import './items-table.css';
 
+// Generic table component
 export class ItemsTable<T extends Record<string, any>> extends React.Component<
   ItemsTableProps<T>,
   ItemsTableState<T>
@@ -37,12 +38,14 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
     this.deselectAll = this.deselectAll.bind(this);
   }
 
+  // Selects all items if option exists
   private async selectAllResults(): Promise<void> {
     this.setState({
       selectedItems: (await this.props.globalActions?.fetchAll()) || [],
     });
   }
 
+  // Selects all items on the page
   private selectCurrentPage(): void {
     const newItems: T[] = [];
     this.props.paginatedItems.items.forEach((item) => {
@@ -56,10 +59,12 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
     this.setState({ selectedItems: this.state.selectedItems.concat(newItems) });
   }
 
+  // Empties selection
   private deselectAll(): void {
     this.setState({ selectedItems: [] });
   }
 
+  // Unselect the current page of items
   private deselectCurrentPage(): void {
     const newItems: T[] = this.state.selectedItems;
     this.props.paginatedItems.items.forEach((item) => {
@@ -102,7 +107,7 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
     const canSelectItems = !!globalActions?.actions.length;
 
     return (
-      <div className="items w-100 p-3 d-flex flex-column align-items-center">
+      <div className='items w-100 p-3 d-flex flex-column align-items-center'>
         {handleDelete && itemToDelete && (
           <Modal show={!!itemToDelete} onHide={this.handleModalClose}>
             <Modal.Header closeButton>
@@ -114,11 +119,11 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
                 : "Supprimer l'objet ?"}
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={this.handleModalClose}>
+              <Button variant='secondary' onClick={this.handleModalClose}>
                 Annuler
               </Button>
               <Button
-                variant="danger"
+                variant='danger'
                 onClick={() => {
                   handleDelete(itemToDelete.id);
                   this.handleModalClose();
@@ -130,11 +135,11 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
           </Modal>
         )}
         {canSelectItems && (
-          <div className="w-100 p-3 mt-3 d-flex justify-content-between">
-            <span className="selectedItems">
+          <div className='w-100 p-3 mt-3 d-flex justify-content-between'>
+            <span className='selectedItems'>
               {this.state.selectedItems.length} élément(s) sélectionné(s)
             </span>
-            <span className="globalActions">
+            <span className='globalActions'>
               {globalActions?.actions.map((action, index) => (
                 <FontAwesomeIcon
                   key={index}
@@ -148,15 +153,15 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
         <Table
           bordered
           hover
-          className={`${canSelectItems ? "" : "mt-5"} items-table text-center`}
+          className={`${canSelectItems ? '' : 'mt-5'} items-table text-center`}
         >
           <thead>
             <tr>
               {canSelectItems && (
                 <th>
-                  <Row className="d-flex align-items-center justify-content-center">
+                  <Row className='d-flex align-items-center justify-content-center'>
                     <Form.Check
-                      name="selectAll"
+                      name='selectAll'
                       checked={items.every((item) =>
                         this.state.selectedItems.some(
                           (selectedItem) => selectedItem.id === item.id
@@ -170,28 +175,28 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
                         }
                       }}
                     />
-                    <Dropdown id="selectionDropdown">
-                      <Dropdown.Toggle as="span" variant="success" />
+                    <Dropdown id='selectionDropdown'>
+                      <Dropdown.Toggle as='span' variant='success' />
                       <Dropdown.Menu>
                         <Dropdown.Item
-                          as="button"
+                          as='button'
                           onClick={this.selectAllResults}
                         >
                           Sélectionner toutes les pages
                         </Dropdown.Item>
                         <Dropdown.Item
-                          as="button"
+                          as='button'
                           onClick={this.selectCurrentPage}
                         >
                           Sélectionner cette page
                         </Dropdown.Item>
                         <Dropdown.Item
-                          as="button"
+                          as='button'
                           onClick={this.deselectCurrentPage}
                         >
                           Désélectionner cette page
                         </Dropdown.Item>
-                        <Dropdown.Item as="button" onClick={this.deselectAll}>
+                        <Dropdown.Item as='button' onClick={this.deselectAll}>
                           Désélectionner tout
                         </Dropdown.Item>
                       </Dropdown.Menu>
@@ -212,7 +217,7 @@ export class ItemsTable<T extends Record<string, any>> extends React.Component<
                   {canSelectItems && (
                     <td>
                       <Form.Check
-                        name="selectOne"
+                        name='selectOne'
                         checked={this.state.selectedItems.some(
                           (selectedItem) => selectedItem.id === item.id
                         )}

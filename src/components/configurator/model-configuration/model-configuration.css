@@ -1,13 +1,45 @@
 .CanvaContainer {
-    position: relative !important;
-    height: 400px;
+  position: relative !important;
+  height: 400px;
 }
 
 .Canva {
-    position: absolute !important;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-} 
+  position: absolute !important;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
 
+.conso .content {
+  display: flex;
+  flex-direction: column;
+}
+
+.conso .content .conso-data {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.conso .content .conso-data > * {
+  margin: 1rem;
+}
+
+.conso-label {
+  font-size: 13px;
+}
+
+.conso .percentage {
+  font-size: x-large;
+  background-color: var(--main-green);
+  border: 5px solid var(--main-lightgreen);
+  border-radius: 50%;
+  font-weight: bold;
+  color: #fff;
+  height: 70px;
+  width: 70px;
+  line-height: 2.5;
+  text-align: center;
+}

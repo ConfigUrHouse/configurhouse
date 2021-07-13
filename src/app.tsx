@@ -22,15 +22,15 @@ import LoggedOutRoute from './routes/logged-out-route';
 import AdminRoute from './routes/admin-route';
 import Login from './components/login/login';
 import { useEffect } from 'react';
-import Asset from "./components/assets/assets-model-list/assets-model-list"
-import AssetDetails from "./components/assets/assets-model-details/assets-model-details"
+import Asset from './components/assets/assets-model-list/assets-model-list';
+import AssetDetails from './components/assets/assets-model-details/assets-model-details';
 import ConfigurationOptionList from './components/configuration-options/configuration-option-list/configuration-option-list';
 import ConfigurationOptionEdit from './components/configuration-options/configuration-option-edit/configuration-option-edit';
 import Configuration from './components/configuration/configuration';
 import Register from './components/register/register';
 import { apiRequest } from './api/utils';
 import ConfigurationDetails from './components/configuration/configuration-details/configuration-details';
-import AssetAddWithRouter from "./components/assets/assets-option-add/assets-add";
+import AssetAddWithRouter from './components/assets/assets-option-add/assets-add';
 
 interface IProps {
   checkAuthenticationConnect: () => void;
@@ -53,6 +53,7 @@ const App = ({
     checkAdmin();
   }, []);
 
+  // Refreshes the user's token if connected
   useEffect(() => {
     refreshInterval = setInterval(async () => {
       if (isAuthenticated) {
@@ -69,108 +70,103 @@ const App = ({
       <Router>
         <Sidebar />
         <Switch>
-
           <LoggedInRoute
-            path="/config_edit/:id"
+            path='/config_edit/:id'
             exact={true}
             component={UserConfigurationEdit}
           />
-          <Route path="/config/:id?">
+          <Route path='/config/:id?'>
             <Configurator />
           </Route>
-          <Route path="/contact">
+          <Route path='/contact'>
             <Contact />
           </Route>
-          <Route path="/policies">
+          <Route path='/policies'>
             <Policies />
           </Route>
-          <Route path="/mentions">
+          <Route path='/mentions'>
             <Mentions />
           </Route>
-          <LoggedOutRoute path="/register" exact={true} component={Register} />
-          <LoggedOutRoute path="/login" exact={true} component={Login} />
-          <LoggedInRoute path="/account" exact={true} component={User} />
+          <LoggedOutRoute path='/register' exact={true} component={Register} />
+          <LoggedOutRoute path='/login' exact={true} component={Login} />
+          <LoggedInRoute path='/account' exact={true} component={User} />
 
           <LoggedInRoute
-            path="/configuration/:id"
+            path='/configuration/:id'
             exact={true}
             component={Configuration}
           />
           <LoggedInRoute
-            path="/configuration/:id/details"
+            path='/configuration/:id/details'
             exact={true}
             component={ConfigurationDetails}
           />
-          <AdminRoute path="/roles" exact={true} component={RoleList} />
+          <AdminRoute path='/roles' exact={true} component={RoleList} />
           <AdminRoute
-            path="/users"
+            path='/users'
             exact={true}
             component={UserListWithRouter}
           />
           <AdminRoute
-            path="/user/:id/edit"
+            path='/user/:id/edit'
             exact={true}
             component={UserEditWithRouter}
           />
           <AdminRoute
-            path="/configurationOptions/add"
+            path='/configurationOptions/add'
             exact={true}
             component={ConfigurationOptionEdit}
           />
           <AdminRoute
-            path="/configurationOptions/:id"
+            path='/configurationOptions/:id'
             exact={true}
             component={ConfigurationOptionEdit}
           />
           <AdminRoute
-            path="/configurationOptions"
+            path='/configurationOptions'
             exact={true}
             component={ConfigurationOptionList}
           />
 
           <AdminRoute
-            path="/houseModels/add"
+            path='/houseModels/add'
             exact={true}
             component={HouseModelEdit}
           />
           <AdminRoute
-            path="/houseModels/:id"
+            path='/houseModels/:id'
             exact={true}
             component={HouseModelEdit}
           />
           <AdminRoute
-            path="/houseModels/:id/details"
+            path='/houseModels/:id/details'
             exact={true}
             component={HouseModelDetails}
           />
           <AdminRoute
-            path="/houseModels"
+            path='/houseModels'
             exact={true}
             component={HouseModelList}
           />
+          <AdminRoute path='/asset' exact={true} component={Asset} />
           <AdminRoute
-            path="/asset"
-            exact={true}
-            component={Asset}
-          />
-          <AdminRoute
-            path="/asset/add"
+            path='/asset/add'
             exact={true}
             component={AssetAddWithRouter}
           />
           <AdminRoute
-            path="/asset/:id/details"
+            path='/asset/:id/details'
             exact={true}
             component={AssetDetails}
           />
-          <Route path="/">
+          <Route path='/'>
             <Home />
           </Route>
         </Switch>
       </Router>
     ) : null;
 
-  return <div className="App">{app}</div>;
+  return <div className='App'>{app}</div>;
 };
 
 const mapStateToProps = (state: ICurrent) => ({

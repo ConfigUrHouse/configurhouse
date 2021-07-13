@@ -59,6 +59,10 @@ class Register extends React.Component<any, any> {
     confirmpassword: '',
     phone: '',
   };
+
+  // Tries to register the user
+  // If success & there is a state waiting in navigation then moves to the desired page, otherwise moves to the login page
+  // Shows an error if the registration failed
   register(values: FormValues) {
     const { location, history } = this.props;
     console.log(values);
@@ -96,14 +100,14 @@ class Register extends React.Component<any, any> {
     let alertDiv;
     if (this.state.success == 1) {
       alertDiv = (
-        <div className="alert alert-success mb-4">
+        <div className='alert alert-success mb-4'>
           <FontAwesomeIcon icon={faCheck} /> Inscription réussie, vous allez
           être redirigé...
         </div>
       );
     } else if (this.state.success == -1) {
       alertDiv = (
-        <div className="alert alert-danger m-4">
+        <div className='alert alert-danger m-4'>
           <FontAwesomeIcon icon={faTimes} /> Une erreur est survenue, veuillez
           réessayer plus tard
         </div>
@@ -112,14 +116,14 @@ class Register extends React.Component<any, any> {
 
     return (
       <>
-        <main className="p-5 w-100">
-          <div className="row justify-content-center mt-5">
-            <div className="col-md-5 login mt-5">
-              <h1 className="text-center text-green">
+        <main className='p-5 w-100'>
+          <div className='row justify-content-center mt-5'>
+            <div className='col-md-5 login mt-5'>
+              <h1 className='text-center text-green'>
                 <FontAwesomeIcon icon={faUserPlus} />
               </h1>
-              <h2 className="text-center text-green">Inscription</h2>
-              <h6 className="text-center mb-5 text-green">
+              <h2 className='text-center text-green'>Inscription</h2>
+              <h6 className='text-center mb-5 text-green'>
                 Inscrivez vous pour sauvegarder vos configurations
               </h6>
               {alertDiv}
@@ -143,18 +147,18 @@ class Register extends React.Component<any, any> {
                 {({ handleSubmit, handleChange, values, errors, isValid }) => (
                   <Form
                     noValidate
-                    className="form shadow-none"
+                    className='form shadow-none'
                     onSubmit={handleSubmit}
                   >
-                    <InputGroup className="mb-3">
+                    <InputGroup className='mb-3'>
                       <InputGroup.Prepend>
-                        <InputGroup.Text id="EMailIcon">
+                        <InputGroup.Text id='EMailIcon'>
                           <FontAwesomeIcon icon={faAt} />
                         </InputGroup.Text>
                       </InputGroup.Prepend>
                       <FormControl
-                        placeholder="Adresse email"
-                        name="email"
+                        placeholder='Adresse email'
+                        name='email'
                         value={values.email}
                         onChange={(e) => {
                           this.setState({ formValues: values });
@@ -162,20 +166,20 @@ class Register extends React.Component<any, any> {
                         }}
                         isInvalid={!!errors.email}
                       />
-                      <Form.Control.Feedback type="invalid">
+                      <Form.Control.Feedback type='invalid'>
                         {errors.email}
                       </Form.Control.Feedback>
                     </InputGroup>
-                    <InputGroup className="mb-3">
+                    <InputGroup className='mb-3'>
                       <InputGroup.Prepend>
-                        <InputGroup.Text id="PasswordIcon">
+                        <InputGroup.Text id='PasswordIcon'>
                           <FontAwesomeIcon icon={faLock} />
                         </InputGroup.Text>
                       </InputGroup.Prepend>
                       <FormControl
-                        placeholder="Mot de passe"
-                        name="password"
-                        type="password"
+                        placeholder='Mot de passe'
+                        name='password'
+                        type='password'
                         value={values.password}
                         onChange={(e) => {
                           this.setState({ formValues: values });
@@ -183,20 +187,20 @@ class Register extends React.Component<any, any> {
                         }}
                         isInvalid={!!errors.password}
                       />
-                      <Form.Control.Feedback type="invalid">
+                      <Form.Control.Feedback type='invalid'>
                         {errors.password}
                       </Form.Control.Feedback>
                     </InputGroup>
-                    <InputGroup className="mb-3">
+                    <InputGroup className='mb-3'>
                       <InputGroup.Prepend>
-                        <InputGroup.Text id="ConfirmPasswordIcon">
+                        <InputGroup.Text id='ConfirmPasswordIcon'>
                           <FontAwesomeIcon icon={faLock} />
                         </InputGroup.Text>
                       </InputGroup.Prepend>
                       <FormControl
-                        placeholder="Confirmer votre mot de passe"
-                        name="confirmpassword"
-                        type="password"
+                        placeholder='Confirmer votre mot de passe'
+                        name='confirmpassword'
+                        type='password'
                         value={values.confirmpassword}
                         onChange={(e) => {
                           this.setState({ formValues: values });
@@ -204,19 +208,19 @@ class Register extends React.Component<any, any> {
                         }}
                         isInvalid={!!errors.confirmpassword}
                       />
-                      <Form.Control.Feedback type="invalid">
+                      <Form.Control.Feedback type='invalid'>
                         {errors.confirmpassword}
                       </Form.Control.Feedback>
                     </InputGroup>
-                    <InputGroup className="mb-3">
+                    <InputGroup className='mb-3'>
                       <InputGroup.Prepend>
-                        <InputGroup.Text id="FirstnameIcon">
+                        <InputGroup.Text id='FirstnameIcon'>
                           <FontAwesomeIcon icon={faUser} />
                         </InputGroup.Text>
                       </InputGroup.Prepend>
                       <FormControl
-                        placeholder="Prénom"
-                        name="firstname"
+                        placeholder='Prénom'
+                        name='firstname'
                         value={values.firstname}
                         onChange={(e) => {
                           this.setState({ formValues: values });
@@ -224,19 +228,19 @@ class Register extends React.Component<any, any> {
                         }}
                         isInvalid={!!errors.firstname}
                       />
-                      <Form.Control.Feedback type="invalid">
+                      <Form.Control.Feedback type='invalid'>
                         {errors.firstname}
                       </Form.Control.Feedback>
                     </InputGroup>
-                    <InputGroup className="mb-3">
+                    <InputGroup className='mb-3'>
                       <InputGroup.Prepend>
-                        <InputGroup.Text id="LastnameIcon">
+                        <InputGroup.Text id='LastnameIcon'>
                           <FontAwesomeIcon icon={faUser} />
                         </InputGroup.Text>
                       </InputGroup.Prepend>
                       <FormControl
-                        placeholder="Nom de famille"
-                        name="lastname"
+                        placeholder='Nom de famille'
+                        name='lastname'
                         value={values.lastname}
                         onChange={(e) => {
                           this.setState({ formValues: values });
@@ -244,19 +248,19 @@ class Register extends React.Component<any, any> {
                         }}
                         isInvalid={!!errors.lastname}
                       />
-                      <Form.Control.Feedback type="invalid">
+                      <Form.Control.Feedback type='invalid'>
                         {errors.lastname}
                       </Form.Control.Feedback>
                     </InputGroup>
-                    <InputGroup className="mb-3">
+                    <InputGroup className='mb-3'>
                       <InputGroup.Prepend>
-                        <InputGroup.Text id="PhoneIcon">
+                        <InputGroup.Text id='PhoneIcon'>
                           <FontAwesomeIcon icon={faPhone} />
                         </InputGroup.Text>
                       </InputGroup.Prepend>
                       <FormControl
-                        placeholder="Téléphone"
-                        name="phone"
+                        placeholder='Téléphone'
+                        name='phone'
                         value={values.phone}
                         onChange={(e) => {
                           this.setState({ formValues: values });
@@ -264,7 +268,7 @@ class Register extends React.Component<any, any> {
                         }}
                         isInvalid={!!errors.phone}
                       />
-                      <Form.Control.Feedback type="invalid">
+                      <Form.Control.Feedback type='invalid'>
                         {errors.phone}
                       </Form.Control.Feedback>
                     </InputGroup>
@@ -273,13 +277,13 @@ class Register extends React.Component<any, any> {
                       onChange={(recaptcha) => this.setState({ recaptcha })}
                     />
                     <Button
-                      variant="primary"
-                      className="d-block mx-auto mt-3 p-3"
-                      type="submit"
+                      variant='primary'
+                      className='d-block mx-auto mt-3 p-3'
+                      type='submit'
                       disabled={!this.state.recaptcha || !isValid}
                     >
                       S'INSCRIRE
-                      <FontAwesomeIcon className="ml-2" icon={faUserPlus} />
+                      <FontAwesomeIcon className='ml-2' icon={faUserPlus} />
                     </Button>
                   </Form>
                 )}

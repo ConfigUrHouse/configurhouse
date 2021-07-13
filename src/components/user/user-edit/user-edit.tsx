@@ -59,6 +59,7 @@ export class UserEdit extends React.Component<UserEditProps, UserEditState> {
     this.fetchAvailableRoles();
   }
 
+  // Loads the user
   async fetchUser(): Promise<void> {
     apiRequest(`user/${this.state.id}`, 'GET', [])
       .then((response) => {
@@ -78,6 +79,7 @@ export class UserEdit extends React.Component<UserEditProps, UserEditState> {
       .catch((error) => console.log(error));
   }
 
+  // Loads the user's roles
   async fetchUserRoles(): Promise<void> {
     apiRequest(`userRole/${this.state.id}`, 'GET', [])
       .then((response) => {
@@ -93,6 +95,7 @@ export class UserEdit extends React.Component<UserEditProps, UserEditState> {
       .catch((error) => console.log(error));
   }
 
+  // Loads the list of roles
   async fetchAvailableRoles(): Promise<void> {
     apiRequest('role', 'GET', [])
       .then((response) => {
@@ -106,6 +109,7 @@ export class UserEdit extends React.Component<UserEditProps, UserEditState> {
       .catch((error) => console.log(error));
   }
 
+  // Updates the user
   async submitForm(values: FormValues): Promise<void> {
     apiRequest(`user/${this.state.id}/update-roles`, 'PUT', '', {
       roles: values.roles.filter((role) => role),
@@ -122,19 +126,19 @@ export class UserEdit extends React.Component<UserEditProps, UserEditState> {
 
   render() {
     return (
-      <main className="p-5 w-100 bg">
-        <div className="circle1"></div>
-        <div className="circle2"></div>
-        <div className="p-5 form w-75 mx-auto">
+      <main className='p-5 w-100 bg'>
+        <div className='circle1'></div>
+        <div className='circle2'></div>
+        <div className='p-5 form w-75 mx-auto'>
           {this.state.error && (
-            <div className="alert alert-danger m-4">
+            <div className='alert alert-danger m-4'>
               <FontAwesomeIcon icon={faTimes} />
               Une erreur est survenue :
               <p>Message : {this.state.error.message}</p>
             </div>
           )}
-          <h3 className="mb-2">
-            <FontAwesomeIcon className="mr-2" icon={faUser} />
+          <h3 className='mb-2'>
+            <FontAwesomeIcon className='mr-2' icon={faUser} />
             Editer un utilisateur
           </h3>
           <Formik
@@ -156,67 +160,67 @@ export class UserEdit extends React.Component<UserEditProps, UserEditState> {
               <Form noValidate onSubmit={handleSubmit}>
                 <Row>
                   <Col md={6}>
-                    <InputGroup className="mb-3">
+                    <InputGroup className='mb-3'>
                       <InputGroup.Prepend>
-                        <InputGroup.Text id="FirstnameIcon">
+                        <InputGroup.Text id='FirstnameIcon'>
                           <FontAwesomeIcon icon={faUser} />
                         </InputGroup.Text>
                       </InputGroup.Prepend>
                       <FormControl
-                        placeholder="Prénom"
-                        name="firstname"
+                        placeholder='Prénom'
+                        name='firstname'
                         value={values.firstname}
                         onChange={handleChange}
                         isInvalid={!!errors.firstname}
                         disabled
                       />
-                      <Form.Control.Feedback type="invalid">
+                      <Form.Control.Feedback type='invalid'>
                         {errors.firstname}
                       </Form.Control.Feedback>
                     </InputGroup>
                   </Col>
                   <Col md={6}>
-                    <InputGroup className="mb-3">
+                    <InputGroup className='mb-3'>
                       <InputGroup.Prepend>
-                        <InputGroup.Text id="LastnameIcon">
+                        <InputGroup.Text id='LastnameIcon'>
                           <FontAwesomeIcon icon={faUser} />
                         </InputGroup.Text>
                       </InputGroup.Prepend>
                       <FormControl
-                        placeholder="Nom de famille"
-                        name="lastname"
+                        placeholder='Nom de famille'
+                        name='lastname'
                         value={values.lastname}
                         onChange={handleChange}
                         isInvalid={!!errors.lastname}
                         disabled
                       />
-                      <Form.Control.Feedback type="invalid">
+                      <Form.Control.Feedback type='invalid'>
                         {errors.lastname}
                       </Form.Control.Feedback>
                     </InputGroup>
                   </Col>
                 </Row>
 
-                <InputGroup className="mb-3">
+                <InputGroup className='mb-3'>
                   <InputGroup.Prepend>
-                    <InputGroup.Text id="MailIcon">
+                    <InputGroup.Text id='MailIcon'>
                       <FontAwesomeIcon icon={faAt} />
                     </InputGroup.Text>
                   </InputGroup.Prepend>
                   <FormControl
-                    placeholder="Adresse email"
-                    name="email"
+                    placeholder='Adresse email'
+                    name='email'
                     value={values.email}
                     onChange={handleChange}
                     isInvalid={!!errors.email}
                     disabled
                   />
-                  <Form.Control.Feedback type="invalid">
+                  <Form.Control.Feedback type='invalid'>
                     {errors.email}
                   </Form.Control.Feedback>
                 </InputGroup>
                 <FieldArray
-                  name="roles"
+                  name='roles'
                   render={(arrayHelpers) => (
                     <div>
                       {this.state.availableRoles.map((role, index) => (
@@ -224,7 +228,7 @@ export class UserEdit extends React.Component<UserEditProps, UserEditState> {
                           <Form.Check>
                             <Form.Check.Input
                               key={role.id}
-                              name="roles"
+                              name='roles'
                               value={role.id}
                               checked={values.roles.includes(role.id)}
                               onChange={(e: any) => {
@@ -239,7 +243,7 @@ export class UserEdit extends React.Component<UserEditProps, UserEditState> {
                             />
                             <Form.Check.Label>{role.name}</Form.Check.Label>
                             {index === this.state.availableRoles.length - 1 && (
-                              <Form.Control.Feedback type="invalid">
+                              <Form.Control.Feedback type='invalid'>
                                 {errors.roles}
                               </Form.Control.Feedback>
                             )}
@@ -250,12 +254,12 @@ export class UserEdit extends React.Component<UserEditProps, UserEditState> {
                   )}
                 />
                 <Button
-                  variant="primary"
-                  className="d-block mx-auto mt-3 p-3"
-                  type="submit"
+                  variant='primary'
+                  className='d-block mx-auto mt-3 p-3'
+                  type='submit'
                   disabled={!isValid}
                 >
-                  SAUVEGARDER <FontAwesomeIcon className="ml-2" icon={faSave} />
+                  SAUVEGARDER <FontAwesomeIcon className='ml-2' icon={faSave} />
                 </Button>
               </Form>
             )}
