@@ -154,7 +154,7 @@ class ConfigurationOptionEdit extends React.Component<
           return element.id == this.state.item.id_HouseModel
         });
         const response: any = await apiRequest(`mesh/by/${hm[0].id_Asset}`, "GET", []);
-        this.setState({ meshes: response });
+        this.setState({ meshes: response.filter((element: any) => !element.same) });
       }
 
     } catch (error: any) {
@@ -272,7 +272,7 @@ class ConfigurationOptionEdit extends React.Component<
                             const reponse2 = await apiRequest(`mesh/by/${response[0].id_Asset}`, "GET", []);
 
                             this.setState({ houseModel: response[0] });
-                            this.setState({ meshes: reponse2 });
+                            this.setState({ meshes: reponse2.filter((element: any) => !element.same)  });
                             console.log(response)
                             console.log(reponse2)
                           }}
