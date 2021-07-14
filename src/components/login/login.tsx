@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import { apiRequest } from '../../api/utils';
 import { logIn } from '../../actions/current';
 import { connect } from 'react-redux';
-import { Link, withRouter } from 'react-router-dom';
+import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faAt,
@@ -18,9 +18,11 @@ import React from 'react';
 import { Formik } from 'formik';
 import { FormValues } from './form-value';
 import { ApiResponseError } from '../../api/models';
+
 interface IProps {
   logInConnect: () => void;
 }
+
 class Login extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
@@ -28,6 +30,7 @@ class Login extends React.Component<any, any> {
       success: 0,
       email: null,
       password: null,
+      error_message: '',
     };
   }
 
@@ -42,55 +45,60 @@ class Login extends React.Component<any, any> {
 
   // Attempts to log the user in
   // If success, gets whether or not the user is an admin, otherwise shows an error
-  login(values: FormValues) {
+  async login(values: FormValues) {
     const { location, history } = this.props;
 
-    fetch(`${process.env.REACT_APP_API_BASE_URL}/user/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: values.email,
-        password: values.password,
-      }),
-    })
-      .then((response) => response.json())
-      .then((datas) => {
-        console.log(datas);
-        if (datas.success) {
-          this.setState({ success: 1 });
-          apiRequest('userRole/' + datas.userId, 'GET', [])
-            .then((response) => {
-              if (response.status === 'error') {
-                this.setState({ error: response as ApiResponseError });
-              } else {
-                let isAdmin = false;
-                if (
-                  response.filter(
-                    (role: any) =>
-                      role.id_Role == process.env.REACT_APP_ADMIN_ROLE_NUMBER
-                  ).length > 0
-                ) {
-                  isAdmin = true;
-                }
-                this.props.logInConnect(datas.token, isAdmin, datas.userId);
-                if (location.state?.from) {
-                  history.push(location.state.from, location.state.state);
-                }
-              }
-            })
-            .catch((error) => console.log(error));
-        } else {
-          this.setState({ success: -1 });
+    try {
+      const { success, message, userId, token } = await apiRequest(
+        'user/login',
+        'POST',
+        '',
+        {
+          email: values.email,
+          password: values.password,
         }
-      });
+      );
+
+      if (!success) {
+        throw { message };
+      }
+
+      this.setState({ success: 1 });
+      apiRequest('userRole/' + userId, 'GET', [])
+        .then((response) => {
+          if (response.status === 'error') {
+            this.setState({ error: response as ApiResponseError });
+          } else {
+            let isAdmin = false;
+            if (
+              response.find(
+                (role: any) =>
+                  role.id_Role == process.env.REACT_APP_ADMIN_ROLE_NUMBER
+              )
+            ) {
+              isAdmin = true;
+            }
+            this.props.logInConnect(token, isAdmin, userId);
+            if (location.state?.from) {
+              history.push(location.state.from, location.state.state);
+            }
+          }
+        })
+        .catch((error) => console.log(error));
+    } catch (error) {
+      this.setState({ success: -1, error_message: error.message });
+    }
   }
+
   handleChange(event: any) {
     let nam = event.target.name;
     let val = event.target.value;
     this.setState({ [nam]: val });
   }
+
   render() {
     const { location } = this.props;
+    const { success, error_message } = this.state;
 
     let alertDiv;
     if (this.state.success == 1) {
@@ -100,14 +108,16 @@ class Login extends React.Component<any, any> {
           redirigé...
         </div>
       );
-    } else if (this.state.success == -1) {
+    } else if (success == -1 && error_message) {
       alertDiv = (
         <div className='alert alert-danger m-4'>
-          <FontAwesomeIcon icon={faTimes} /> L'identifiant ou le mot de passe
-          est incorrect.
+          <FontAwesomeIcon icon={faTimes} /> {error_message}
         </div>
       );
     }
+
+    let is_verified = location.search.match(/verified=([^&]*)/);
+    is_verified = is_verified ? is_verified[1] : false;
 
     return (
       <>
@@ -121,6 +131,11 @@ class Login extends React.Component<any, any> {
               <h6 className='text-center mb-5 text-green'>
                 Veuillez vous connecter afin d'accéder à votre espace personnel
               </h6>
+              {is_verified && !success && (
+                <div className='alert alert-success mb-4'>
+                  <FontAwesomeIcon icon={faCheck} /> Email vérifié !
+                </div>
+              )}
               {alertDiv}
               <Formik
                 validationSchema={this.schema}
