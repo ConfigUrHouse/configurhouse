@@ -5,10 +5,10 @@ import {
   faKeyboard,
   faCube,
   faTrash,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Formik, Field, Form as Form2, ErrorMessage, FieldArray } from "formik";
-import React from "react";
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Formik, Field, Form as Form2, ErrorMessage, FieldArray } from 'formik';
+import React from 'react';
 import {
   Button,
   Col,
@@ -17,19 +17,19 @@ import {
   Table,
   InputGroup,
   Row,
-} from "react-bootstrap";
-import { useParams, withRouter } from "react-router";
-import * as Yup from "yup";
-import { ApiResponseError } from "../../../api/models";
-import { apiRequest } from "../../../api/utils";
+} from 'react-bootstrap';
+import { useParams, withRouter } from 'react-router';
+import * as Yup from 'yup';
+import { ApiResponseError } from '../../../api/models';
+import { apiRequest } from '../../../api/utils';
 import {
   ConfigurationOptionEditProps,
   ConfigurationOptionEditState,
-} from "./models";
-import { ConfigurationOption, HouseModel, Mesh } from "../../../models";
-import "./configuration-option-edit.css";
-import { PaginatedResponse } from "../../../utils/pagination";
-import { addListener } from "process";
+} from './models';
+import { ConfigurationOption, HouseModel, Mesh } from '../../../models';
+import './configuration-option-edit.css';
+import { PaginatedResponse } from '../../../utils/pagination';
+import { addListener } from 'process';
 
 class ConfigurationOptionEdit extends React.Component<
   ConfigurationOptionEditProps,
@@ -37,42 +37,41 @@ class ConfigurationOptionEdit extends React.Component<
 > {
   private schema = Yup.object().shape({
     name: Yup.string()
-      .min(3, "Le nom doit faire plus de 2 charactères")
-      .required("Le nom ne peut pas être vide"),
+      .min(3, 'Le nom doit faire plus de 2 charactères')
+      .required('Le nom ne peut pas être vide'),
     id_HouseModel: Yup.lazy(() =>
       Yup.number().oneOf(
         [...this.state.houseModels.map((houseModel) => houseModel.id)],
-        "Le modèle ne peut pas être vide"
+        'Le modèle ne peut pas être vide'
       )
     ),
     id_Mesh: Yup.lazy(() =>
       Yup.number().oneOf(
         [...this.state.meshes.map((mesh) => mesh.id)],
-        "Le mesh ne peut pas être vide"
+        'Le mesh ne peut pas être vide'
       )
     ),
   });
 
   private initialItem: ConfigurationOption = {
     id: 0,
-    name: "",
+    name: '',
     id_HouseModel: 0,
     houseModel: undefined,
     id_Mesh: 0,
-    values: [
-    ],
+    values: [],
   };
 
   private reference: any = {
-    "#D36135": "Flame",
-    "#A24936": "Chestnut",
-    "#282B28": "Charleston Green",
-    "#83BCA9": "Green Sheen",
-    "#3E5641": "Hunter Green",
-    "#003459": "Prussion Blue",
-    "#00171F": "Rich Black FOGRA 29",
-    "#DAD6D6": "Ligth Gray"
-  }
+    '#D36135': 'Flame',
+    '#A24936': 'Chestnut',
+    '#282B28': 'Charleston Green',
+    '#83BCA9': 'Green Sheen',
+    '#3E5641': 'Hunter Green',
+    '#003459': 'Prussion Blue',
+    '#00171F': 'Rich Black FOGRA 29',
+    '#DAD6D6': 'Ligth Gray',
+  };
 
   constructor(props: ConfigurationOptionEditProps) {
     super(props);
@@ -105,7 +104,7 @@ class ConfigurationOptionEdit extends React.Component<
     try {
       const response: ConfigurationOption = await apiRequest(
         `optionConf/${this.state.item.id}`,
-        "GET",
+        'GET',
         []
       );
       this.setState({ item: { ...response, values: this.state.item.values } });
@@ -117,7 +116,7 @@ class ConfigurationOptionEdit extends React.Component<
 
   async removeValue(index: number): Promise<void> {
     try {
-      await apiRequest(`value/${index}`, "DELETE", []);
+      await apiRequest(`value/${index}`, 'DELETE', []);
     } catch (error: any) {
       console.error(error);
       this.setState({ error: error as ApiResponseError });
@@ -126,7 +125,11 @@ class ConfigurationOptionEdit extends React.Component<
 
   async fetchValues(): Promise<void> {
     try {
-      const response: Mesh[] = await apiRequest(`value/byOption/${this.state.id}`, "GET", []);
+      const response: Mesh[] = await apiRequest(
+        `value/byOption/${this.state.id}`,
+        'GET',
+        []
+      );
       this.setState({ item: { ...this.state.item, values: response } });
     } catch (error: any) {
       console.error(error);
@@ -143,7 +146,7 @@ class ConfigurationOptionEdit extends React.Component<
     try {
       const response: PaginatedResponse<HouseModel> = await apiRequest(
         `houseModel`,
-        "GET",
+        'GET',
         []
       );
       await this.setState({ houseModels: response.items });
@@ -151,17 +154,21 @@ class ConfigurationOptionEdit extends React.Component<
 
       if (this.state.item.id_HouseModel) {
         const hm: any = source.filter((element: any) => {
-          return element.id == this.state.item.id_HouseModel
+          return element.id == this.state.item.id_HouseModel;
         });
-        const response: any = await apiRequest(`mesh/by/${hm[0].id_Asset}`, "GET", []);
-        this.setState({ meshes: response });
+        const response: any = await apiRequest(
+          `mesh/by/${hm[0].id_Asset}`,
+          'GET',
+          []
+        );
+        this.setState({
+          meshes: response.filter((element: any) => !element.same),
+        });
       }
-
     } catch (error: any) {
       console.error(error);
       this.setState({ error: error as ApiResponseError });
     }
-
   }
 
   async submitForm(values: ConfigurationOption): Promise<void> {
@@ -169,25 +176,25 @@ class ConfigurationOptionEdit extends React.Component<
       const { editMode } = this.state;
 
       const reponse = await (editMode
-        ? apiRequest(`optionConf/${values.id}`, "PUT", "", values)
-        : apiRequest(`optionConf`, "POST", "", values));
+        ? apiRequest(`optionConf/${values.id}`, 'PUT', '', values)
+        : apiRequest(`optionConf`, 'POST', '', values));
 
-      if(values.values && values.values.length > 0){
+      if (values.values && values.values.length > 0) {
         const ms: any = this.state.meshes.filter((element2: any) => {
-          return element2.id == values.id_Mesh
+          return element2.id == values.id_Mesh;
         })[0];
 
-        await Promise.allSettled(values?.values.map(async (element: any) => {
-          element.id_Asset = ms.id_Asset;
-          element.id_OptionConf = reponse.id;
-          element.name = this.reference[element.value];
-          return (element.id
-            ? apiRequest(`value/${element.id}`, "PUT", "", element)
-            : apiRequest(`value`, "POST", "", element));
-        }));
+        await Promise.allSettled(
+          values?.values.map(async (element: any) => {
+            element.id_Asset = ms.id_Asset;
+            element.id_OptionConf = reponse.id;
+            element.name = this.reference[element.value];
+            return element.id
+              ? apiRequest(`value/${element.id}`, 'PUT', '', element)
+              : apiRequest(`value`, 'POST', '', element);
+          })
+        );
       }
-  
-
     } catch (error) {
       console.error(error);
       this.setState({ error: error as ApiResponseError });
@@ -211,7 +218,7 @@ class ConfigurationOptionEdit extends React.Component<
           )}
           <h3 className="mb-5">
             <FontAwesomeIcon className="mr-2" icon={faHome} />
-            {editMode ? "Editer" : "Ajouter"} une option
+            {editMode ? 'Editer' : 'Ajouter'} une option
           </h3>
           <Formik
             validationSchema={this.schema}
@@ -265,18 +272,30 @@ class ConfigurationOptionEdit extends React.Component<
                           as="select"
                           value={values.id_HouseModel}
                           onChange={async (e) => {
-                            handleChange(e)
-                            const response: any = this.state.houseModels.filter((element: any) => {
-                              return element.id == e.target.value
-                            })
-                            const reponse2 = await apiRequest(`mesh/by/${response[0].id_Asset}`, "GET", []);
+                            handleChange(e);
+                            const response: any = this.state.houseModels.filter(
+                              (element: any) => {
+                                return element.id == e.target.value;
+                              }
+                            );
+                            const reponse2 = await apiRequest(
+                              `mesh/by/${response[0].id_Asset}`,
+                              'GET',
+                              []
+                            );
 
                             this.setState({ houseModel: response[0] });
-                            this.setState({ meshes: reponse2 });
-                            console.log(response)
-                            console.log(reponse2)
+                            this.setState({
+                              meshes: reponse2.filter(
+                                (element: any) => !element.same
+                              ),
+                            });
+                            console.log(response);
+                            console.log(reponse2);
                           }}
-                          isInvalid={!!(submitCount > 0 && errors.id_HouseModel)}
+                          isInvalid={
+                            !!(submitCount > 0 && errors.id_HouseModel)
+                          }
                         >
                           <option value={0}>Choisir un modèle</option>
                           {houseModels.map((houseModel) => (
@@ -334,98 +353,125 @@ class ConfigurationOptionEdit extends React.Component<
                               </thead>
                               <tbody>
                                 {values.values.length > 0 &&
-                                  values.values.map((friend: any, index: any) => (
-                                    <tr>
-                                      <td>
-                                        {values.values[index].id}
-                                      </td>
-                                      <td>
-                                        <InputGroup className="mb-3">
-                                          <InputGroup.Prepend>
-                                            <InputGroup.Text id="ModelIcon">
-                                              <FontAwesomeIcon icon={faHome} />
-                                            </InputGroup.Text>
-                                          </InputGroup.Prepend>
-                                          <FormControl
-                                            placeholder="Nom"
-                                            name={`values.${index}.value`}
-                                            value={values.values[index].value}
-                                            onChange={(e) => handleChange(e)}
-                                            isInvalid={!!(submitCount > 0 && errors.name)}
-                                            as="select"
+                                  values.values.map(
+                                    (friend: any, index: any) => (
+                                      <tr>
+                                        <td>{values.values[index].id}</td>
+                                        <td>
+                                          <InputGroup className="mb-3">
+                                            <InputGroup.Prepend>
+                                              <InputGroup.Text id="ModelIcon">
+                                                <FontAwesomeIcon
+                                                  icon={faHome}
+                                                />
+                                              </InputGroup.Text>
+                                            </InputGroup.Prepend>
+                                            <FormControl
+                                              placeholder="Nom"
+                                              name={`values.${index}.value`}
+                                              value={values.values[index].value}
+                                              onChange={(e) => handleChange(e)}
+                                              isInvalid={
+                                                !!(
+                                                  submitCount > 0 && errors.name
+                                                )
+                                              }
+                                              as="select"
+                                            >
+                                              <option value={0}>
+                                                Choisir une couleur
+                                              </option>
+                                              <option key={1} value={'#D36135'}>
+                                                Flame
+                                              </option>
+                                              <option key={2} value={'#A24936'}>
+                                                Chestnut
+                                              </option>
+                                              <option key={3} value={'#282B28'}>
+                                                Charleston Green
+                                              </option>
+                                              <option key={4} value={'#83BCA9'}>
+                                                Green Sheen
+                                              </option>
+                                              <option key={5} value={'#3E5641'}>
+                                                Hunter Green
+                                              </option>
+                                              <option key={6} value={'#003459'}>
+                                                Prussion Blue
+                                              </option>
+                                              <option key={7} value={'#00171F'}>
+                                                Rich Black FOGRA 29
+                                              </option>
+                                              <option key={8} value={'#DAD6D6'}>
+                                                Ligth Gray
+                                              </option>
+                                            </FormControl>
+                                            <Form.Control.Feedback type="invalid">
+                                              {errors.id_HouseModel}
+                                            </Form.Control.Feedback>
+                                          </InputGroup>
+                                        </td>
+                                        <td>
+                                          <InputGroup className="mb-3">
+                                            <InputGroup.Prepend>
+                                              <InputGroup.Text id="NameIcon">
+                                                <FontAwesomeIcon
+                                                  icon={faKeyboard}
+                                                />
+                                              </InputGroup.Text>
+                                            </InputGroup.Prepend>
+                                            <FormControl
+                                              type="number"
+                                              placeholder="Price"
+                                              name={`values.${index}.price`}
+                                              value={values.values[index].price}
+                                              onChange={(e) => handleChange(e)}
+                                              isInvalid={
+                                                !!(
+                                                  submitCount > 0 && errors.name
+                                                )
+                                              }
+                                            />
+                                            <Form.Control.Feedback type="invalid">
+                                              {errors.name}
+                                            </Form.Control.Feedback>
+                                          </InputGroup>
+                                        </td>
+                                        <td>
+                                          <Button
+                                            type="button"
+                                            className="secondary"
+                                            onClick={async () => {
+                                              await this.removeValue(
+                                                values.values[index].id
+                                              );
+                                              remove(index);
+                                            }}
                                           >
-                                            <option value={0}>Choisir une couleur</option>
-                                            <option key={1} value={"#D36135"}>
-                                              Flame
-                                            </option>
-                                            <option key={2} value={"#A24936"}>
-                                              Chestnut
-                                            </option>
-                                            <option key={3} value={"#282B28"}>
-                                              Charleston Green
-                                            </option>
-                                            <option key={4} value={"#83BCA9"}>
-                                              Green Sheen
-                                            </option>
-                                            <option key={5} value={"#3E5641"}>
-                                              Hunter Green
-                                            </option>
-                                            <option key={6} value={"#003459"}>
-                                              Prussion Blue
-                                            </option>
-                                            <option key={7} value={"#00171F"}>
-                                              Rich Black FOGRA 29
-                                            </option>
-                                            <option key={8} value={"#DAD6D6"}>
-                                              Ligth Gray
-                                            </option>
-                                          </FormControl>
-                                          <Form.Control.Feedback type="invalid">
-                                            {errors.id_HouseModel}
-                                          </Form.Control.Feedback>
-                                        </InputGroup>
-                                      </td>
-                                      <td>
-                                        <InputGroup className="mb-3">
-                                          <InputGroup.Prepend>
-                                            <InputGroup.Text id="NameIcon">
-                                              <FontAwesomeIcon icon={faKeyboard} />
-                                            </InputGroup.Text>
-                                          </InputGroup.Prepend>
-                                          <FormControl
-                                            type="number"
-                                            placeholder="Price"
-                                            name={`values.${index}.price`}
-                                            value={values.values[index].price}
-                                            onChange={(e) => handleChange(e)}
-                                            isInvalid={!!(submitCount > 0 && errors.name)}
-                                          />
-                                          <Form.Control.Feedback type="invalid">
-                                            {errors.name}
-                                          </Form.Control.Feedback>
-                                        </InputGroup>
-                                      </td>
-                                      <td>
-                                        <Button
-                                          type="button"
-                                          className="secondary"
-                                          onClick={async () => {
-                                            await this.removeValue(values.values[index].id);
-                                            remove(index)
-                                          }}
-                                        >
-                                          <FontAwesomeIcon className="ml-2" icon={faTrash} />
-                                        </Button>
-                                      </td>
-                                    </tr>
-                                  ))}
-
+                                            <FontAwesomeIcon
+                                              className="ml-2"
+                                              icon={faTrash}
+                                            />
+                                          </Button>
+                                        </td>
+                                      </tr>
+                                    )
+                                  )}
                               </tbody>
                             </Table>
                             <Button
                               type="button"
                               className="secondary"
-                              onClick={() => push({ "name": "White", "value": "#FFFFFF", "price": "1054.00", "is_default": 0, "id_OptionConf": this.state.id, "id_Asset": null })}
+                              onClick={() =>
+                                push({
+                                  name: 'White',
+                                  value: '#FFFFFF',
+                                  price: '1054.00',
+                                  is_default: 0,
+                                  id_OptionConf: this.state.id,
+                                  id_Asset: null,
+                                })
+                              }
                             >
                               Ajouter
                             </Button>
@@ -435,22 +481,24 @@ class ConfigurationOptionEdit extends React.Component<
                     </Col>
                   </Row>
                   <Row>
-                  <Button
-                    variant="primary"
-                    className="mx-auto mt-3 p-3"
-                    type="submit"
-                    disabled={submitCount > 0 && !isValid}
-                  >
-                    SAUVEGARDER <FontAwesomeIcon className="ml-2" icon={faSave} />
-                  </Button>
-                  <Button
-                    onClick={() => this.props.history.push('/configurationOptions')}
-                    className="mx-auto mt-3 p-3"
-                  >
-                    RETOUR
-                  </Button>
+                    <Button
+                      variant="primary"
+                      className="mx-auto mt-3 p-3"
+                      type="submit"
+                      disabled={submitCount > 0 && !isValid}
+                    >
+                      SAUVEGARDER{' '}
+                      <FontAwesomeIcon className="ml-2" icon={faSave} />
+                    </Button>
+                    <Button
+                      onClick={() =>
+                        this.props.history.push('/configurationOptions')
+                      }
+                      className="mx-auto mt-3 p-3"
+                    >
+                      RETOUR
+                    </Button>
                   </Row>
-                  
                 </Form>
               </>
             )}
