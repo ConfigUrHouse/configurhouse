@@ -32,6 +32,7 @@ class Login extends React.Component<any, any> {
       password: null,
       error_message: '',
     };
+    console.log(props);
   }
 
   schema = Yup.object().shape({
@@ -80,7 +81,7 @@ class Login extends React.Component<any, any> {
             }
             this.props.logInConnect(token, isAdmin, userId);
             if (location.state?.from) {
-              history.push(location.state.from, location.state.state);
+              history.push(location.state.from);
             }
           }
         })
@@ -202,7 +203,7 @@ class Login extends React.Component<any, any> {
                         location.state?.from
                           ? {
                               pathname: '/register',
-                              state: location.state.state,
+                              state: location.state,
                             }
                           : '/register'
                       }

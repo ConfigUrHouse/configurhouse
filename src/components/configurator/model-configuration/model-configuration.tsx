@@ -216,9 +216,21 @@ class ModelConfiguration extends React.Component<any, any> {
     );
     const msh: any = await apiRequest(`mesh/by/${hml.id_Asset}`, 'GET', []);
     msh.forEach((value: any) => {
-      if (!value.same && !state.items[value.name])
+      if (!value.same && !state.items[value.name]) {
         state.items[value.name] = '#FFFFFF';
+      }
     });
+
+    this.props.optionValues
+      ?.filter((ov: number) => ov)
+      .forEach((ov: number) => {
+        items.forEach((item: any) => {
+          const value = item.values.find((v: Value) => v.id === ov);
+          if (value) {
+            state.items[item.nameMesh] = value.value;
+          }
+        });
+      });
 
     const REACT_APP_API_BASE_URL: any = process.env.REACT_APP_API_BASE_URL;
     const objectJson: any = await apiRequest(
@@ -358,7 +370,7 @@ class ModelConfiguration extends React.Component<any, any> {
                     <Form.Label>{option.name}</Form.Label>
                     <Form.Control
                       name={index}
-                      defaultValue={state.items[option.nameMesh]}
+                      value={state.items[option.nameMesh]}
                       onChange={this.handleSelect}
                       as='select'
                     >

@@ -9,10 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowCircleLeft,
   faArrowCircleRight,
-  faDownload,
-  faPaperPlane,
-  faMousePointer,
-  faHouseUser,
+  faCheck,
   faMailBulk,
 } from '@fortawesome/free-solid-svg-icons';
 import { ICurrent } from '../../types';
@@ -20,7 +17,6 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { apiRequest } from '../../api/utils';
 import { Configuration } from '../../models';
-import { Link } from 'react-router-dom';
 import { ApiResponseError } from '../../api/models';
 
 class Configurator extends React.Component<any, any> {
@@ -29,7 +25,9 @@ class Configurator extends React.Component<any, any> {
 
     const id = parseInt(props.match.params.id ?? 0);
 
-    const existingState = props.location.state || {};
+    const existingState = JSON.parse(
+      localStorage.getItem('configuration_state') || '{}'
+    );
 
     this.state = {
       model: null,
@@ -40,6 +38,7 @@ class Configurator extends React.Component<any, any> {
       has_furniture: true,
       configuration: {},
       error: null,
+      configuration_sent: false,
       ...existingState,
     };
 
@@ -56,6 +55,7 @@ class Configurator extends React.Component<any, any> {
       this.setState({ step: 1 });
     }
   }
+
   private handleModalClose(): void {
     this.setState({ error: undefined });
   }
@@ -82,6 +82,7 @@ class Configurator extends React.Component<any, any> {
       this.setState({ error });
     }
   }
+
   private async sendConfiguration(): Promise<void> {
     try {
       const response = await apiRequest(
@@ -90,12 +91,15 @@ class Configurator extends React.Component<any, any> {
         []
       );
       if (response.status === 'error') {
-        this.setState({ error: response as ApiResponseError });
+        throw response;
       }
+
+      this.setState({ configuration_sent: true });
     } catch (error) {
       this.setState({ error: error as ApiResponseError });
     }
   }
+
   changeModelChoice(model: any) {
     this.setState({ modelSelected: model });
   }
@@ -128,6 +132,7 @@ class Configurator extends React.Component<any, any> {
             await this.fetchConfiguration(config.id as number)
         );
       }
+      localStorage.removeItem('configuration_state');
     } catch (error) {
       console.log(error);
       this.setState({ error });
@@ -142,9 +147,9 @@ class Configurator extends React.Component<any, any> {
     } else if (this.state.step == 1) {
       // Moves the user to the login page if the user is not authenticated, otherwise saves the configuration
       if (!this.props.isAuthenticated) {
+        localStorage.setItem('configuration_state', JSON.stringify(this.state));
         this.props.history.push('/login', {
           from: '/config',
-          state: this.state,
         });
       } else {
         await this.saveConfiguration();
@@ -156,8 +161,13 @@ class Configurator extends React.Component<any, any> {
 
   // Moves to the previous step
   previous() {
-    this.setState({ step: this.state.step - 1 });
+    this.setState({
+      step: this.state.step - 1,
+      configuration_sent:
+        this.state.step < 3 ? false : this.state.configuration_sent,
+    });
   }
+
   render() {
     const stepName = [
       'Choix du modèle',
@@ -199,7 +209,6 @@ class Configurator extends React.Component<any, any> {
             <span>5</span>Validation
           </div>
         </div>
-        <h5 className='mb-1'>{stepName[this.state.step]}</h5>
         {this.state.step == 0 && (
           <ModelChoice
             model={this.state.model}
@@ -251,14 +260,21 @@ class Configurator extends React.Component<any, any> {
               )}
 
               <div className='d-flex justify-content-center mt-4'>
-                <Button
-                  variant='primary'
-                  className='p-3'
-                  onClick={this.sendConfiguration}
-                >
-                  <FontAwesomeIcon className='mr-2' icon={faMailBulk} />
-                  Envoyer ma configuration à Deschamps
-                </Button>
+                {this.state.configuration_sent ? (
+                  <FontAwesomeIcon
+                    icon={faCheck}
+                    className='d-block mx-auto text-green check-icon'
+                  />
+                ) : (
+                  <Button
+                    variant='primary'
+                    className='p-3'
+                    onClick={this.sendConfiguration}
+                  >
+                    <FontAwesomeIcon className='mr-2' icon={faMailBulk} />
+                    Envoyer ma configuration à Deschamps
+                  </Button>
+                )}
               </div>
             </div>
           </div>

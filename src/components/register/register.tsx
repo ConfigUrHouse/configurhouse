@@ -77,15 +77,10 @@ class Register extends React.Component<any, any> {
       }),
     })
       .then((response) => response.json())
-      .then((datas) => {
-        console.log(datas);
-        if (datas.success) {
+      .then(({ success }) => {
+        if (success) {
           this.setState({ success: 1 });
-          if (location.state?.from) {
-            history.push(location.state.from, location.state.state);
-          } else {
-            history.push('/login');
-          }
+          history.push('/login', location.state);
         } else {
           this.setState({ success: -1 });
         }

@@ -55,6 +55,10 @@
   font-size: 0.8rem;
 }
 
+.check-icon {
+  font-size: xx-large;
+}
+
 .next Button {
   background: rgb(19, 91, 100);
   background: -moz-linear-gradient(

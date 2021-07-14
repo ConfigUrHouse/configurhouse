@@ -1,7 +1,6 @@
 import React from 'react';
 import { ApiResponseError } from '../../../api/models';
 import { Col, Row, Table } from 'react-bootstrap';
-import home_3D from '../../../assets/images/home-3D.png';
 import './model-choice.css';
 import { apiRequest } from '../../../api/utils';
 class ModelChoice extends React.Component<any, any> {
@@ -52,7 +51,6 @@ class ModelChoice extends React.Component<any, any> {
                   onClick={(e) => this.selectModel(item)}
                 >
                   <h4>Modèle {item.name}</h4>
-                  <img src={home_3D} alt='Home config' className='w-100' />
                   <Table bordered hover className='mt-5 text-center'>
                     <thead>
                       <tr>
