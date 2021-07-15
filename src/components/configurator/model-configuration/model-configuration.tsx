@@ -205,7 +205,7 @@ class ModelConfiguration extends React.Component<any, any> {
 
     this.setState({ options: items }, this.updateOptionsPrice);
 
-    if (!opc[0]) {
+    if (!opc[0] || !opc[0].id_HouseModel) {
       this.props.history.push('/');
     }
 
