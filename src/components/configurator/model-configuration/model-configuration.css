@@ -32,14 +32,13 @@
 }
 
 .conso .percentage {
-  font-size: x-large;
+  font-size: 1.3rem;
   background-color: var(--main-green);
   border: 5px solid var(--main-lightgreen);
   border-radius: 50%;
   font-weight: bold;
   color: #fff;
-  height: 70px;
-  width: 70px;
+  width: 130px;
   line-height: 2.5;
   text-align: center;
 }

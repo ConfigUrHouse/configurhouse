@@ -74,7 +74,6 @@ function Model(props: any) {
 
 class ModelConfiguration extends React.Component<any, any> {
   constructor(props: any) {
-    //TODO: use this.props.updateOptionValues() + fetch conso on dropdown change
     super(props);
 
     this.fetchModel = this.fetchModel.bind(this);
@@ -97,6 +96,21 @@ class ModelConfiguration extends React.Component<any, any> {
       savedValue: [],
       optionsPrice: 0,
     };
+  }
+
+  componentDidUpdate(prevProps: any, prevState: any) {
+    if (
+      !(
+        prevProps.optionValues.every((optionValue: any) =>
+          this.props.optionValues.includes(optionValue)
+        ) &&
+        this.props.optionValues.every((optionValue: any) =>
+          prevProps.optionValues.includes(optionValue)
+        )
+      )
+    ) {
+      this.fetchConso();
+    }
   }
 
   async fetchModel() {
@@ -205,7 +219,7 @@ class ModelConfiguration extends React.Component<any, any> {
 
     this.setState({ options: items }, this.updateOptionsPrice);
 
-    if (!opc[0]) {
+    if (!opc[0] || !opc[0].id_HouseModel) {
       this.props.history.push('/');
     }
 
@@ -216,9 +230,21 @@ class ModelConfiguration extends React.Component<any, any> {
     );
     const msh: any = await apiRequest(`mesh/by/${hml.id_Asset}`, 'GET', []);
     msh.forEach((value: any) => {
-      if (!value.same && !state.items[value.name])
+      if (!value.same && !state.items[value.name]) {
         state.items[value.name] = '#FFFFFF';
+      }
     });
+
+    this.props.optionValues
+      ?.filter((ov: number) => ov)
+      .forEach((ov: number) => {
+        items.forEach((item: any) => {
+          const value = item.values.find((v: Value) => v.id === ov);
+          if (value) {
+            state.items[item.nameMesh] = value.value;
+          }
+        });
+      });
 
     const REACT_APP_API_BASE_URL: any = process.env.REACT_APP_API_BASE_URL;
     const objectJson: any = await apiRequest(
@@ -279,6 +305,7 @@ class ModelConfiguration extends React.Component<any, any> {
     tmpArray[event.target.name] = Number(optionElementId);
     this.setState({ savedValue: tmpArray }, this.updateOptionsPrice);
 
+    // this.fetchConso(tmpArray);
     this.props.updateOptionValues(tmpArray);
   }
 
@@ -318,12 +345,12 @@ class ModelConfiguration extends React.Component<any, any> {
     return (
       <div>
         <Row>
-          <Col md={8} className='col'>
-            <div className='content CanvaContainer'>
+          <Col md={8} className="col">
+            <div className="content CanvaContainer">
               <h5>Visualisation du modèle {this.props.model.name}</h5>
               <Canvas
                 shadows
-                className='Canva'
+                className="Canva"
                 camera={{ position: [0, 0, 12], fov: 60 }}
               >
                 <spotLight
@@ -349,20 +376,20 @@ class ModelConfiguration extends React.Component<any, any> {
               </Canvas>
             </div>
           </Col>
-          <Col md={4} className='col'>
-            <div className='content options'>
-              <h5 className='text-light'>Options</h5>
+          <Col md={4} className="col">
+            <div className="content options">
+              <h5 className="text-light">Options</h5>
               {this.state.options &&
                 this.state.options.map((option: any, index: any) => (
                   <Form.Group key={option.id} controlId={option.nameMesh}>
                     <Form.Label>{option.name}</Form.Label>
                     <Form.Control
                       name={index}
-                      defaultValue={state.items[option.nameMesh]}
+                      value={state.items[option.nameMesh]}
                       onChange={this.handleSelect}
-                      as='select'
+                      as="select"
                     >
-                      <option key={0} value='#FFFFFF'>
+                      <option key={0} value="#FFFFFF">
                         Sélectionner une option
                       </option>
                       {option.values &&
@@ -379,12 +406,12 @@ class ModelConfiguration extends React.Component<any, any> {
                   </Form.Group>
                 ))}
               <Form>
-                <Form.Group controlId='formBasicCheckbox'>
+                <Form.Group controlId="formBasicCheckbox">
                   <Form.Check
                     defaultChecked={state.items.same}
                     onChange={this.handleChangeCB}
-                    type='checkbox'
-                    label='Meubles'
+                    type="checkbox"
+                    label="Meubles"
                   />
                 </Form.Group>
               </Form>
@@ -392,13 +419,13 @@ class ModelConfiguration extends React.Component<any, any> {
           </Col>
         </Row>
         <Row>
-          <Col md={4} className='col devis'>
-            <div className='content text-center'>
+          <Col md={4} className="col devis">
+            <div className="content text-center">
               <h5>Aperçu du devis</h5>
-              <Row className='mb-0'>
+              <Row className="mb-0">
                 <Col>
                   <h6>Modèle</h6>
-                  <p className='price'>
+                  <p className="price">
                     {(
                       this.props.model.price - (state.items.same ? 0 : 11250)
                     ).toLocaleString('fr-FR')}
@@ -406,12 +433,12 @@ class ModelConfiguration extends React.Component<any, any> {
                 </Col>
                 <Col>
                   <h6>Options</h6>
-                  <p className='price'>
+                  <p className="price">
                     {this.state.optionsPrice.toLocaleString('fr-FR')}
                   </p>
                 </Col>
               </Row>
-              <div className='total price'>
+              <div className="total price">
                 {(
                   this.props.model.price -
                   (state.items.same ? 0 : 11250) +
@@ -420,16 +447,18 @@ class ModelConfiguration extends React.Component<any, any> {
               </div>
             </div>
           </Col>
-          <Col md={4} className='col conso'>
-            <div className='content text-center'>
+          <Col md={4} className="col conso">
+            <div className="content text-center">
               <h5>Aperçu de la consommation</h5>
-              <div className='conso-data'>
+              <div className="conso-data">
                 {this.state.conso && this.state.conso.global && (
-                  <div className='percentage'>
-                    {this.state.conso.global.diffPercentage}
+                  <div className="percentage">
+                    {this.state.conso.global.diffPercentage === 'NaN%'
+                      ? '0%'
+                      : this.state.conso.global.diffPercentage}
                   </div>
                 )}
-                <div className='conso-label'>
+                <div className="conso-label">
                   d'économie par rapport à un logement de référence.
                 </div>
               </div>

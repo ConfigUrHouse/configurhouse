@@ -1,7 +1,7 @@
-import * as React from "react";
-import { connect } from "react-redux";
-import { Redirect, Route } from "react-router-dom";
-import { ICurrent } from "../types";
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { Redirect, Route, useLocation } from 'react-router-dom';
+import { ICurrent } from '../types';
 
 interface IProps {
   exact?: boolean;
@@ -14,8 +14,17 @@ const LoggedInRoute = ({
   isAuthenticated,
   ...otherProps
 }: IProps) => {
+  const { pathname } = useLocation();
+
   if (isAuthenticated === false) {
-    return <Redirect to="/login" />;
+    return (
+      <Redirect
+        to={{
+          pathname: '/login',
+          state: { from: pathname },
+        }}
+      />
+    );
   }
   return <Route {...otherProps} render={(props) => <Component {...props} />} />;
 };
