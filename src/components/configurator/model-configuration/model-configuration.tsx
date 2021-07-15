@@ -453,7 +453,9 @@ class ModelConfiguration extends React.Component<any, any> {
               <div className="conso-data">
                 {this.state.conso && this.state.conso.global && (
                   <div className="percentage">
-                    {this.state.conso.global.diffPercentage}
+                    {this.state.conso.global.diffPercentage === 'NaN%'
+                      ? '0%'
+                      : this.state.conso.global.diffPercentage}
                   </div>
                 )}
                 <div className="conso-label">
